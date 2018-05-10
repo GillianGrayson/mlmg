@@ -99,3 +99,13 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+*.txt
+
+data/D1/
+
+*.xml
+
+*.iml
+
+*.asv
