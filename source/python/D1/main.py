@@ -8,8 +8,9 @@ import scipy.stats as stats
 from cpg_gene_dict import get_dict_cpg_gene
 
 type = FSType.local
-pval_lim = 1.0e-12
+pval_lim = 1.0e-10
 print_rate = 1000
+num_pval_genes = 1000
 
 dict_cpg_gene = get_dict_cpg_gene(type)
 
@@ -84,7 +85,7 @@ for line in f:
                 else:
                     genes_rate_dict[gene] = 1
 
-            approved_genes.append(' '.join(genes))
+            approved_genes.append(';'.join(genes))
 
     num_lines += 1
 
@@ -92,11 +93,11 @@ for line in f:
         print('num_lines: ' + str(num_lines))
         print('num_CpGs: ' + str(len(approved_CpGs)))
 
-info = np.zeros(len(approved_CpGs), dtype=[('var1', 'U50'), ('var2', 'U50'), ('var3', float)])
-fmt = "%s %s %18e"
+info = np.zeros(len(approved_CpGs), dtype=[('var1', 'U50'), ('var2', float), ('var3', 'U50')])
+fmt = "%s %18e %s"
 info['var1'] = approved_CpGs
-info['var2'] = approved_genes
-info['var3'] = approved_pvals
+info['var2'] = approved_pvals
+info['var3'] = approved_genes
 np.savetxt('approved_CpGs.txt', info, fmt=fmt)
 
 info = np.zeros(len(list(genes_rate_dict.keys())), dtype=[('var1', 'U50'), ('var2', int)])
@@ -104,3 +105,23 @@ fmt = "%s %d"
 info['var1'] = list(genes_rate_dict.keys())
 info['var2'] = list(genes_rate_dict.values())
 np.savetxt('genes_rate.txt', info, fmt=fmt)
+
+order = np.argsort(approved_pvals)
+min_pvals = sorted(approved_pvals)[0:num_pval_genes]
+min_genes = list(np.array(approved_genes)[order[0:num_pval_genes]])
+min_genes_dict = {}
+for i in range(0, len(min_pvals)):
+    curr_genes = min_genes[i]
+    curr_pval = min_pvals[i]
+    curr_min_genes = list(set(curr_genes.split(';')))
+    for gene in curr_min_genes:
+        if gene in min_genes_dict:
+            min_genes_dict[gene] += 1
+        else:
+            min_genes_dict[gene] = 1
+
+info = np.zeros(len(list(min_genes_dict.keys())), dtype=[('var1', 'U50'), ('var2', int)])
+fmt = "%s %d"
+info['var1'] = list(min_genes_dict.keys())
+info['var2'] = list(min_genes_dict.values())
+np.savetxt('pvals_genes.txt', info, fmt=fmt)
