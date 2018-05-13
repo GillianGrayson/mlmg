@@ -14,7 +14,7 @@ top_genes = {};
 top_rates = [];
 
 for i = 1:num_genes
-    if ((rates(order(i+1)) > 1))
+    if ((rates(order(i+1)) > 0))
         
         top_genes{i} = names{order(i+1)};
         top_rates = vertcat(top_rates, rates(order(i+1)));
