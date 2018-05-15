@@ -51,4 +51,20 @@ for line in f:
     if num_lines == 1000:
         break
 
-ololo = 1000
+gene_mean_dict = {}
+gene_std_dict = {}
+for gene in gene_raw_dict:
+    mean_list = []
+    std_list = []
+    for curr_list in gene_raw_dict[gene]:
+        mean_list.append(np.mean(curr_list))
+        std_list.append(np.std(curr_list))
+    gene_mean_dict[gene] = mean_list
+    gene_std_dict[gene] = std_list
+
+
+
+ololo = 5
+
+
+
