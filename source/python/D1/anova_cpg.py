@@ -5,11 +5,11 @@ import math
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-from cpg_gene_dict import get_dict_cpg_gene
+from dicts import get_dict_cpg_gene
 
-type = FSType.local
+type = FSType.local_msi
 pval_lim = 1.0e-10
-print_rate = 1000
+print_rate = 3000
 num_pval_genes = 1000
 
 dict_cpg_gene = get_dict_cpg_gene(type)
@@ -92,6 +92,7 @@ for line in f:
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
         print('num_CpGs: ' + str(len(approved_CpGs)))
+        break
 
 info = np.zeros(len(approved_CpGs), dtype=[('var1', 'U50'), ('var2', float), ('var3', 'U50')])
 fmt = "%s %18e %s"
