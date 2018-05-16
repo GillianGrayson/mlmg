@@ -7,8 +7,8 @@ import pandas as pd
 import scipy.stats as stats
 from dicts import get_dict_cpg_gene
 
-type = FSType.local_msi
-print_rate = 3000
+type = FSType.local_big
+print_rate = 1000
 
 dict_cpg_gene = get_dict_cpg_gene(type)
 
@@ -48,23 +48,37 @@ for line in f:
     num_lines += 1
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
-    if num_lines == 1000:
-        break
 
 gene_mean_dict = {}
 gene_std_dict = {}
+gene_mean_str_list = []
+gene_std_str_list = []
+num_genes = 0
 for gene in gene_raw_dict:
+
     mean_list = []
     std_list = []
     for curr_list in gene_raw_dict[gene]:
         mean_list.append(np.mean(curr_list))
         std_list.append(np.std(curr_list))
+
     gene_mean_dict[gene] = mean_list
     gene_std_dict[gene] = std_list
 
+    curr_mean_str = gene
+    curr_std_str = gene
+    for id in range(0, len(mean_list)):
+        curr_mean_str += (' ' + str(format(mean_list[id], '0.8e')))
+        curr_std_str += (' ' + str(format(std_list[id], '0.8e')))
 
+    gene_mean_str_list.append(curr_mean_str)
+    gene_std_str_list.append(curr_std_str)
 
-ololo = 5
+    num_genes += 1
+    if num_genes % print_rate == 0:
+        print('num_genes: ' + str(num_genes))
 
+np.savetxt('gene_mean.txt', gene_mean_str_list, fmt="%s")
+np.savetxt('gene_std.txt', gene_std_str_list, fmt="%s")
 
 
