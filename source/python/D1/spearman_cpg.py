@@ -154,15 +154,23 @@ info['var1'] = list(cpgs_opt)
 info['var2'] = list(genes_opt)
 info['var3'] = list(rhos_opt)
 info['var4'] = list(pvals_opt)
-np.savetxt('opt.txt', info, fmt=fmt)
+np.savetxt('spearman_full.txt', info, fmt=fmt)
 
 genes_set = []
-for gene in genes_opt:
+rhos_set = []
+for gene_id in range(0, len(genes_opt)):
+    gene = genes_opt[gene_id]
+    rho = rhos_opt[gene_id]
     if gene not in genes_set:
         genes_set.append(gene)
+        rhos_set.append(rho)
+np.savetxt('spearman_genes.txt', genes_set[0:num_top], fmt="%s")
+np.savetxt('spearman_rhos.txt', rhos_set[0:num_top], fmt="%0.18e")
 
-top = 0
+genes_match = []
 for gene in genes_set[0:num_top]:
     if gene in table:
-        top += 1
-print('top: ' + str(top))
+        genes_match.append(gene)
+np.savetxt('spearman_match.txt', genes_match, fmt="%s")
+
+print('top: ' + str(len(genes_match)))
