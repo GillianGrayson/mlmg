@@ -9,7 +9,7 @@ from dicts import *
 
 type = FSType.local_big
 print_rate = 1000
-suffix = '_ws'
+suffix = ''
 
 dict_cpg_gene = get_dict_cpg_gene(type, suffix)
 
