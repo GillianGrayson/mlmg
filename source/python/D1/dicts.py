@@ -1,15 +1,15 @@
 from Infrastructure.file_system import *
 
-def get_dict_cpg_gene(type):
+def get_dict_cpg_gene(type, suffix):
 
-    fn = 'cpg.txt'
+    fn = 'cpg' + suffix + '.txt'
     cpg = []
     full_path = get_full_path(type, fn)
     with open(full_path) as f:
         for line in f:
             cpg.append(line)
 
-    fn = 'gene.txt'
+    fn = 'gene' + suffix + '.txt'
     gene = []
     full_path = get_full_path(type, fn)
     with open(full_path) as f:
@@ -31,16 +31,16 @@ def get_dict_cpg_gene(type):
     return dict_cpg_gene
 
 
-def get_dict_gene_cpg(type):
+def get_dict_gene_cpg(type, suffix):
 
-    fn = 'cpg.txt'
+    fn = 'cpg' + suffix + '.txt'
     cpg = []
     full_path = get_full_path(type, fn)
     with open(full_path) as f:
         for line in f:
             cpg.append(line)
 
-    fn = 'gene.txt'
+    fn = 'gene' + suffix + '.txt'
     gene = []
     full_path = get_full_path(type, fn)
     with open(full_path) as f:

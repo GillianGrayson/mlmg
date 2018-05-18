@@ -12,6 +12,8 @@ pval_lim = 1.0e-10
 print_rate = 1000
 num_pval_genes = 1000
 
+suffix = '_ws'
+
 fn = 'ages.txt'
 ages = []
 full_path = get_full_path(type, fn)
@@ -42,7 +44,7 @@ genes_mean_pval = []
 genes_std_pval = []
 genes_mean_std_pval = []
 
-fn = 'gene_mean.txt'
+fn = 'gene_mean' + suffix + '.txt'
 full_path = get_full_path(type, fn)
 f = open(full_path)
 for line in f:
@@ -52,7 +54,7 @@ for line in f:
     genes.append(gene)
     genes_mean.append(vals)
 
-fn = 'gene_std.txt'
+fn = 'gene_std' + suffix + '.txt'
 full_path = get_full_path(type, fn)
 f = open(full_path)
 for line in f:

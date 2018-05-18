@@ -5,12 +5,13 @@ import math
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-from dicts import get_dict_cpg_gene
+from dicts import *
 
 type = FSType.local_big
 print_rate = 1000
+suffix = '_ws'
 
-dict_cpg_gene = get_dict_cpg_gene(type)
+dict_cpg_gene = get_dict_cpg_gene(type, suffix)
 
 fn = 'ages.txt'
 ages = []
@@ -78,7 +79,7 @@ for gene in gene_raw_dict:
     if num_genes % print_rate == 0:
         print('num_genes: ' + str(num_genes))
 
-np.savetxt('gene_mean.txt', gene_mean_str_list, fmt="%s")
-np.savetxt('gene_std.txt', gene_std_str_list, fmt="%s")
+np.savetxt('gene_mean' + suffix + '.txt', gene_mean_str_list, fmt="%s")
+np.savetxt('gene_std' + suffix + '.txt', gene_std_str_list, fmt="%s")
 
 

@@ -7,12 +7,21 @@ import pandas as pd
 import scipy.stats as stats
 from dicts import get_dict_cpg_gene
 
-type = FSType.local_msi
+type = FSType.local_big
 pval_lim = 1.0e-10
-print_rate = 3000
+print_rate = 1000
 num_pval_genes = 1000
 
-dict_cpg_gene = get_dict_cpg_gene(type)
+num_top = 100
+
+suffix = '_ws'
+
+fn = 'table.txt'
+full_path = get_full_path(type, fn)
+file = open(full_path)
+table = file.read().splitlines()
+
+dict_cpg_gene = get_dict_cpg_gene(type, suffix)
 
 fn = 'ages.txt'
 ages = []
@@ -54,6 +63,7 @@ for line in f:
     col_vals = line.split('\t')
     CpG = col_vals[0]
     vals = list(map(float, col_vals[1::]))
+    genes = dict_cpg_gene.get(CpG)
 
     curr_beta_dict = {}
     for key_age in age_dict:
@@ -61,27 +71,17 @@ for line in f:
 
     anova_res = stats.f_oneway(*curr_beta_dict.values())
 
-    if(anova_res.pvalue < pval_lim):
+    if genes is not None:
 
-        approved_CpGs.append(CpG)
-        approved_pvals.append(anova_res.pvalue)
-        genes = dict_cpg_gene.get(CpG)
+        if(anova_res.pvalue < pval_lim):
 
-        if genes is None:
-
-            approved_genes.append('n')
-
-            if 'n' in genes_rate_dict:
-                genes_rate_dict['n'] += 1
-            else:
-                genes_rate_dict['n'] = 1
-
-
-        else:
+            approved_CpGs.append(CpG)
+            approved_pvals.append(anova_res.pvalue)
 
             for gene in genes:
                 if gene in genes_rate_dict:
                     genes_rate_dict[gene] += 1
+
                 else:
                     genes_rate_dict[gene] = 1
 
@@ -92,7 +92,6 @@ for line in f:
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
         print('num_CpGs: ' + str(len(approved_CpGs)))
-        break
 
 info = np.zeros(len(approved_CpGs), dtype=[('var1', 'U50'), ('var2', float), ('var3', 'U50')])
 fmt = "%s %18e %s"
@@ -121,8 +120,19 @@ for i in range(0, len(min_pvals)):
         else:
             min_genes_dict[gene] = 1
 
+
+keys = list(min_genes_dict.keys())
+vals = list(min_genes_dict.values())
+rho_order = np.argsort(vals)[::-1]
+keys_s = list(np.array(keys)[rho_order])
+vals_s = list(np.array(vals)[rho_order])
 info = np.zeros(len(list(min_genes_dict.keys())), dtype=[('var1', 'U50'), ('var2', int)])
 fmt = "%s %d"
-info['var1'] = list(min_genes_dict.keys())
-info['var2'] = list(min_genes_dict.values())
+info['var1'] = keys_s
+info['var2'] = vals_s
 np.savetxt('pvals_genes.txt', info, fmt=fmt)
+top = 0
+for gene in keys_s[0:num_top]:
+    if gene in table:
+        top += 1
+print('top: ' + str(top))
