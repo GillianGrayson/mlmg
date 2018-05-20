@@ -9,10 +9,14 @@ from dicts import get_dict_cpg_gene
 
 type = FSType.local_big
 pval_lim = 1.0e-10
-print_rate = 1000
-num_pval_genes = 1000
+num_top = 100
 
 suffix = ''
+
+fn = 'table.txt'
+full_path = get_full_path(type, fn)
+file = open(full_path)
+table = file.read().splitlines()
 
 fn = 'ages.txt'
 ages = []
@@ -40,8 +44,8 @@ num_genes = 0
 genes = []
 genes_mean = []
 genes_std = []
-genes_mean_pval = []
-genes_std_pval = []
+genes_pval_mean = []
+genes_pval_std = []
 genes_mean_std_pval = []
 
 fn = 'gene_mean' + suffix + '.txt'
@@ -76,27 +80,46 @@ for id in range(0, len(genes)):
         std_dict[key_age] = list(np.asarray(stds)[age_dict[key_age]])
 
     anova_mean = stats.f_oneway(*mean_dict.values())
-    genes_mean_pval.append(anova_mean.pvalue)
+    genes_pval_mean.append(anova_mean.pvalue)
 
     anova_std = stats.f_oneway(*std_dict.values())
-    genes_std_pval.append(anova_std.pvalue)
+    genes_pval_std.append(anova_std.pvalue)
 
-order_mean = np.argsort(genes_mean_pval)
-min_pvals_mean = sorted(genes_mean_pval)[0:len(genes_mean_pval)]
-min_genes_mean = list(np.array(genes)[order_mean[0:len(genes_mean_pval)]])
-
-info = np.zeros(len(list(min_genes_mean)), dtype=[('var1', 'U50'), ('var2', float)])
+order_mean = np.argsort(genes_pval_mean)
+pvals_opt_mean = list(np.array(genes_pval_mean)[order_mean])
+genes_opt_mean = list(np.array(genes)[order_mean])
+info = np.zeros(len(list(genes_opt_mean)), dtype=[('var1', 'U50'), ('var2', float)])
 fmt = "%s %0.18e"
-info['var1'] = min_genes_mean
-info['var2'] = min_pvals_mean
-np.savetxt('pvals_mean_genes.txt', info, fmt=fmt)
+info['var1'] = genes_opt_mean
+info['var2'] = pvals_opt_mean
+np.savetxt('anova_genes_mean.txt', info, fmt=fmt)
 
-order_std = np.argsort(genes_std_pval)
-min_pvals_std = sorted(genes_std_pval)[0:len(genes_std_pval)]
-min_genes_std = list(np.array(genes)[order_mean[0:len(genes_std_pval)]])
-
-info = np.zeros(len(list(min_genes_std)), dtype=[('var1', 'U50'), ('var2', float)])
+order_std = np.argsort(genes_pval_std)
+pvals_opt_std = list(np.array(genes_pval_std)[order_std])
+genes_opt_std = list(np.array(genes)[order_std])
+pvals_opt_std_from = list(np.array(genes_pval_std)[order_mean])
+genes_opt_std_from = list(np.array(genes)[order_mean])
+info = np.zeros(len(list(genes_opt_std)), dtype=[('var1', 'U50'), ('var2', float)])
 fmt = "%s %0.18e"
-info['var1'] = min_genes_std
-info['var2'] = min_pvals_std
-np.savetxt('pvals_std_genes.txt', info, fmt=fmt)
+info['var1'] = genes_opt_std
+info['var2'] = pvals_opt_std
+np.savetxt('anova_genes_std.txt', info, fmt=fmt)
+info = np.zeros(len(list(pvals_opt_std_from)), dtype=[('var1', 'U50'), ('var2', float)])
+fmt = "%s %0.18e"
+info['var1'] = genes_opt_std_from
+info['var2'] = pvals_opt_std_from
+np.savetxt('anova_genes_std_from.txt', info, fmt=fmt)
+
+genes_match = []
+for gene in genes_opt_mean[0:num_top]:
+    if gene in table:
+        genes_match.append(gene)
+np.savetxt('anova_match_mean.txt', genes_match, fmt="%s")
+print('top: ' + str(len(genes_match)))
+
+genes_match = []
+for gene in genes_opt_std[0:num_top]:
+    if gene in table:
+        genes_match.append(gene)
+np.savetxt('anova_match_std.txt', genes_match, fmt="%s")
+print('top: ' + str(len(genes_match)))

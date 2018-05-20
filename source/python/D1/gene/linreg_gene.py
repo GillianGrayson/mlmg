@@ -8,8 +8,7 @@ import scipy.stats as stats
 from dicts import get_dict_cpg_gene
 
 type = FSType.local_big
-pval_lim = 1.0e-10
-print_rate = 1000
+
 num_top = 100
 
 suffix = ''
@@ -81,34 +80,45 @@ for id in range(0, len(mean_names)):
     std_slopes.append(slope)
     std_intercepts.append(intercept)
 
-mean_order = np.argsort(mean_p_values)
-mean_p_values_opt = list(np.array(mean_p_values)[mean_order])
-mean_slopes_opt = list(np.array(mean_slopes)[mean_order])
-mean_intercepts_opt = list(np.array(mean_intercepts)[mean_order])
-mean_genes_opt = list(np.array(mean_names)[mean_order])
+order_mean = np.argsort(mean_p_values)
+p_values_opt_mean = list(np.array(mean_p_values)[order_mean])
+slopes_opt_mean = list(np.array(mean_slopes)[order_mean])
+intercepts_opt_mean = list(np.array(mean_intercepts)[order_mean])
+genes_opt_mean = list(np.array(mean_names)[order_mean])
 info = np.zeros(len(mean_names), dtype=[('var1', 'U50'), ('var2', float), ('var3', float), ('var4', float)])
 fmt = "%s %0.18e %0.18e %0.18e"
-info['var1'] = mean_genes_opt
-info['var2'] = mean_p_values_opt
-info['var3'] = mean_slopes_opt
-info['var4'] = mean_intercepts_opt
+info['var1'] = genes_opt_mean
+info['var2'] = p_values_opt_mean
+info['var3'] = slopes_opt_mean
+info['var4'] = intercepts_opt_mean
 np.savetxt('linreg_genes_mean.txt', info, fmt=fmt)
 
-std_order = np.argsort(std_p_values)
-std_p_values_opt = list(np.array(std_p_values)[std_order])
-std_slopes_opt = list(np.array(std_slopes)[std_order])
-std_intercepts_opt = list(np.array(std_intercepts)[std_order])
-std_genes_opt = list(np.array(std_names)[std_order])
+order_std = np.argsort(std_p_values)
+p_values_opt_std = list(np.array(std_p_values)[order_std])
+slopes_opt_std = list(np.array(std_slopes)[order_std])
+intercepts_opt_std = list(np.array(std_intercepts)[order_std])
+genes_opt_std = list(np.array(std_names)[order_std])
+p_values_opt_std_from = list(np.array(std_p_values)[order_mean])
+slopes_opt_std_from = list(np.array(std_slopes)[order_mean])
+intercepts_opt_std_from = list(np.array(std_intercepts)[order_mean])
+genes_opt_std_from = list(np.array(std_names)[order_mean])
 info = np.zeros(len(std_names), dtype=[('var1', 'U50'), ('var2', float), ('var3', float), ('var4', float)])
 fmt = "%s %0.18e %0.18e %0.18e"
-info['var1'] = std_genes_opt
-info['var2'] = std_p_values_opt
-info['var3'] = std_slopes_opt
-info['var4'] = std_intercepts_opt
+info['var1'] = genes_opt_std
+info['var2'] = p_values_opt_std
+info['var3'] = slopes_opt_std
+info['var4'] = intercepts_opt_std
 np.savetxt('linreg_genes_std.txt', info, fmt=fmt)
+info = np.zeros(len(std_names), dtype=[('var1', 'U50'), ('var2', float), ('var3', float), ('var4', float)])
+fmt = "%s %0.18e %0.18e %0.18e"
+info['var1'] = genes_opt_std_from
+info['var2'] = p_values_opt_std_from
+info['var3'] = slopes_opt_std_from
+info['var4'] = intercepts_opt_std_from
+np.savetxt('linreg_genes_std_from.txt', info, fmt=fmt)
 
 genes_match = []
-for gene in mean_genes_opt[0:num_top]:
+for gene in genes_opt_mean[0:num_top]:
     if gene in table:
         genes_match.append(gene)
 np.savetxt('linreg_match_mean.txt', genes_match, fmt="%s")
@@ -116,7 +126,7 @@ print('top: ' + str(len(genes_match)))
 
 
 genes_match = []
-for gene in std_genes_opt[0:num_top]:
+for gene in genes_opt_std[0:num_top]:
     if gene in table:
         genes_match.append(gene)
 np.savetxt('linreg_match_std.txt', genes_match, fmt="%s")
