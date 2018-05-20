@@ -12,7 +12,7 @@ pval_lim = 1.0e-10
 print_rate = 1000
 num_pval_genes = 1000
 
-suffix = '_ws'
+suffix = ''
 
 fn = 'ages.txt'
 ages = []

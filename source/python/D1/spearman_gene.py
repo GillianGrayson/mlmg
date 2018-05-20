@@ -1,0 +1,107 @@
+import pathlib
+from Infrastructure.file_system import *
+import os.path
+import math
+import numpy as np
+import pandas as pd
+import scipy.stats as stats
+from dicts import get_dict_cpg_gene
+
+type = FSType.local_big
+pval_lim = 1.0e-10
+print_rate = 1000
+num_top = 100
+
+suffix = ''
+
+fn = 'table.txt'
+full_path = get_full_path(type, fn)
+file = open(full_path)
+table = file.read().splitlines()
+
+fn = 'ages.txt'
+ages = []
+full_path = get_full_path(type, fn)
+with open(full_path) as f:
+    for line in f:
+        ages.append(int(line))
+
+num_genes = 0
+genes_names_mean = []
+genes_names_std = []
+genes_mean = []
+genes_std = []
+genes_mean_rho = []
+genes_std_rho = []
+
+fn = 'gene_mean' + suffix + '.txt'
+full_path = get_full_path(type, fn)
+f = open(full_path)
+for line in f:
+    col_vals = line.split(' ')
+    gene = col_vals[0]
+    vals = list(map(float, col_vals[1::]))
+    genes_names_mean.append(gene)
+    genes_mean.append(vals)
+
+fn = 'gene_std' + suffix + '.txt'
+full_path = get_full_path(type, fn)
+f = open(full_path)
+for line in f:
+    col_vals = line.split(' ')
+    gene = col_vals[0]
+    vals = list(map(float, col_vals[1::]))
+    genes_names_std.append(gene)
+    genes_std.append(vals)
+
+for id in range(0, len(genes_names_mean)):
+
+    means = genes_mean[id]
+    stds = genes_std[id]
+
+    gene_name_mean = genes_names_mean[id]
+    gene_name_std = genes_names_std[id]
+
+    if gene_name_mean != gene_name_std:
+        print('error')
+
+    rho_means, pval_means = stats.spearmanr(ages, means)
+    rho_stds, pval_stds = stats.spearmanr(ages, stds)
+    if math.isnan(rho_stds):
+        rho_stds = 0.0
+
+    genes_mean_rho.append(rho_means)
+    genes_std_rho.append(rho_stds)
+
+order_mean = np.argsort(list(map(abs, genes_mean_rho)))[::-1]
+mean_rho_opt = list(np.array(genes_mean_rho)[order_mean])
+mean_genes_opt = list(np.array(genes_names_mean)[order_mean])
+info = np.zeros(len(genes_names_mean), dtype=[('var1', 'U50'), ('var2', float)])
+fmt = "%s %0.18e"
+info['var1'] = mean_genes_opt
+info['var2'] = mean_rho_opt
+np.savetxt('spearman_genes_mean.txt', info, fmt=fmt)
+
+order_std = np.argsort(list(map(abs, genes_std_rho)))[::-1]
+std_rho_opt = list(np.array(genes_std_rho)[order_std])
+std_genes_opt = list(np.array(genes_names_std)[order_std])
+info = np.zeros(len(genes_names_std), dtype=[('var1', 'U50'), ('var2', float)])
+fmt = "%s %0.18e"
+info['var1'] = std_genes_opt
+info['var2'] = std_rho_opt
+np.savetxt('spearman_genes_std.txt', info, fmt=fmt)
+
+genes_match = []
+for gene in mean_genes_opt[0:num_top]:
+    if gene in table:
+        genes_match.append(gene)
+np.savetxt('spearman_match_mean.txt', genes_match, fmt="%s")
+print('top: ' + str(len(genes_match)))
+
+
+genes_match = []
+for gene in std_genes_opt[0:num_top]:
+    if gene in table:
+        genes_match.append(gene)
+np.savetxt('spearman_match_std.txt', genes_match, fmt="%s")
+print('top: ' + str(len(genes_match)))
