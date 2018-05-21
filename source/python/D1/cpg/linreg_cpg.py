@@ -23,7 +23,7 @@ with open(full_path) as f:
 
 suffix = ''
 
-dict_cpg_gene = get_dict_cpg_gene(type, suffix)
+dict_cpg_gene = get_dict_cpg_gene(type)
 
 fn = 'ages.txt'
 ages = []

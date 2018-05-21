@@ -11,7 +11,7 @@ type = FSType.local_big
 
 num_top = 100
 
-suffix = ''
+suffix = '_shores'
 
 fn = 'table.txt'
 full_path = get_full_path(type, fn)

@@ -19,7 +19,7 @@ full_path = get_full_path(type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 
-dict_cpg_gene = get_dict_cpg_gene(type, suffix)
+dict_cpg_gene = get_dict_cpg_gene(type)
 
 fn = 'ages.txt'
 ages = []
