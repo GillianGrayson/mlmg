@@ -2,7 +2,7 @@ clear all;
 
 path = '../../../source/python/D1/cpg_gene';
 
-num_points = 1000;
+num_points = 15000;
 
 fn = sprintf('%s/spearman_spec.txt', path);
 data = importdata(fn);

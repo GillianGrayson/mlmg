@@ -7,11 +7,11 @@ import pandas as pd
 import scipy.stats as stats
 from dicts import get_dict_cpg_gene
 
-type = FSType.local_big
+type = FSType.local_msi
 
 num_top = 100
 
-suffix = '_shores'
+suffix = '_islands_shores'
 
 fn = 'table.txt'
 full_path = get_full_path(type, fn)

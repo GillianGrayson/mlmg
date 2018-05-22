@@ -2,7 +2,7 @@ clear all;
 
 path = '../../../source/python/D1/gene';
 
-num_points = 20270;
+num_points = 1000;
 
 fn = sprintf('%s/spearman_genes_mean.txt', path);
 data = importdata(fn);
@@ -16,7 +16,9 @@ fig = figure;
 hLine = scatter(mean(1:num_points), std(1:num_points), 'filled', 'MarkerEdgeColor', 'r', 'SizeData', 5);
 title(sprintf('Spearman N=%d', num_points))
 xlabel('rho mean', 'Interpreter', 'latex');
+xlim([-1 1])
 set(gca, 'FontSize', 30);
 ylabel('rho std', 'Interpreter', 'latex');
+ylim([-1 1])
 box on
 propertyeditor(fig)

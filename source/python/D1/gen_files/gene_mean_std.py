@@ -7,11 +7,19 @@ import pandas as pd
 import scipy.stats as stats
 from dicts import *
 
-type = FSType.local_big
+type = FSType.local_msi
 print_rate = 1000
-suffix = ''
+suffix = '_islands_shores'
 
-dict_cpg_gene = get_dict_cpg_gene(type)
+dict_cpg_gene = {}
+if suffix == '_shores':
+    dict_cpg_gene = get_dict_cpg_gene_shore(type)
+elif suffix == '_islands':
+    dict_cpg_gene = get_dict_cpg_gene_island(type)
+elif suffix == '_islands_shores':
+    dict_cpg_gene = get_dict_cpg_gene_island_shore(type)
+else:
+    dict_cpg_gene = get_dict_cpg_gene(type)
 
 fn = 'ages.txt'
 ages = []
