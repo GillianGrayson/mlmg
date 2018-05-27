@@ -6,57 +6,23 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 from dicts import *
+from gen_files.geo import *
+from config import *
 
-type = FSType.local_msi
-print_rate = 1000
-suffix = '_islands_shores'
+print_rate = 10000
 
-dict_cpg_gene = {}
-if suffix == '_shores':
-    dict_cpg_gene = get_dict_cpg_gene_shore(type)
-elif suffix == '_islands':
-    dict_cpg_gene = get_dict_cpg_gene_island(type)
-elif suffix == '_islands_shores':
-    dict_cpg_gene = get_dict_cpg_gene_island_shore(type)
-else:
-    dict_cpg_gene = get_dict_cpg_gene(type)
+fs_type = FSType.local_big
+db_type = DataBaseType.GSE52588
+geo_type = GeoType.islands_shores
+config = Config(fs_type, db_type)
+if db_type is DataBaseType.GSE40279:
+    config = ConfigGSE40279(fs_type, db_type)
+elif db_type is DataBaseType.GSE52588:
+    config = ConfigGSE52588(fs_type, db_type)
 
-fn = 'ages.txt'
-ages = []
-full_path = get_full_path(type, fn)
-with open(full_path) as f:
-    for line in f:
-        ages.append(int(line))
+dict_cpg_gene = get_dict_cpg_gene(fs_type, db_type, geo_type)
 
-fn = 'GSE40279_average_beta.txt'
-full_path = get_full_path(type, fn)
-f = open(full_path)
-first_line = f.readline()
-col_names = first_line.split('\t')
-
-num_lines = 0
-gene_raw_dict = {}
-for line in f:
-
-    col_vals = line.split('\t')
-    CpG = col_vals[0]
-    vals = list(map(float, col_vals[1::]))
-
-    genes = dict_cpg_gene.get(CpG)
-
-    if genes is not None:
-        for gene in genes:
-            if gene in gene_raw_dict:
-                for list_id in range(0, len(ages)):
-                    gene_raw_dict[gene][list_id].append(vals[list_id])
-            else:
-                gene_raw_dict[gene] = []
-                for list_id in range(0, len(ages)):
-                    gene_raw_dict[gene].append([vals[list_id]])
-
-    num_lines += 1
-    if num_lines % print_rate == 0:
-        print('num_lines: ' + str(num_lines))
+gene_raw_dict = config.get_raw_dict(dict_cpg_gene)
 
 gene_mean_dict = {}
 gene_std_dict = {}
@@ -87,7 +53,7 @@ for gene in gene_raw_dict:
     if num_genes % print_rate == 0:
         print('num_genes: ' + str(num_genes))
 
-np.savetxt('gene_mean' + suffix + '.txt', gene_mean_str_list, fmt="%s")
-np.savetxt('gene_std' + suffix + '.txt', gene_std_str_list, fmt="%s")
+np.savetxt('gene_mean' + geo_type.value + '.txt', gene_mean_str_list, fmt="%s")
+np.savetxt('gene_std' + geo_type.value + '.txt', gene_std_str_list, fmt="%s")
 
 

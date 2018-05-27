@@ -1,26 +1,21 @@
 from enum import Enum
 
 class FSType(Enum):
-    local_big = 10
-    local_msi = 20
-    unn = 1
-    mpipks = 2
+    local_big = 'E:/Work/mlmg/data'
+    local_msi = 'D:/Work/mlmg/data'
+    unn = '/common/home/yusipov_i/Work/mlmg/data'
+    mpipks = '/data/biophys/yusipov/mlmg/data'
 
-def get_root(type):
+class DataBaseType(Enum):
+    GSE40279 = 'GSE40279'
+    GSE52588 = 'GSE52588'
 
-    root = ''
-    if type is FSType.unn:
-        root = '/common/home/yusipov_i/Work/mlmg/data/D1'
-    elif type is FSType.mpipks:
-        root = '/data/biophys/yusipov/mlmg/data/D1'
-    elif type is FSType.local_big:
-        root = 'E:/Work/mlmg/data/D1'
-    elif type is FSType.local_msi:
-        root = 'D:/Work/mlmg/data/D1'
-
+def get_root(fs_type):
+    root = fs_type.value
     return root
 
-def get_full_path(type, file_name):
-    root = get_root(type)
-    path = root + '/' + file_name
+def get_full_path(fs_type, db_type, file_name):
+    root = fs_type.value
+    db = db_type.value
+    path = root + '/' + db + '/' + file_name
     return path
