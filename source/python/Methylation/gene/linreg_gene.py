@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-from dicts import get_dict_cpg_gene
+from dicts import get_dicts
 
 type = FSType.local_msi
 

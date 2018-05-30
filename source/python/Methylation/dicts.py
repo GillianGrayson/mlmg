@@ -1,7 +1,7 @@
 from Infrastructure.file_system import *
 from gen_files.geo import *
 
-def get_dict_cpg_gene(fs_type, db_type, geo_type):
+def get_dicts(fs_type, db_type, geo_type):
 
     target_geo = []
     if geo_type is GeoType.islands:
@@ -42,14 +42,23 @@ def get_dict_cpg_gene(fs_type, db_type, geo_type):
         for line in f:
             cpg_type.append(line)
 
+    fn = 'map_info.txt'
+    map_info = []
+    full_path = get_full_path(fs_type, db_type, fn)
+    with open(full_path) as f:
+        for line in f:
+            map_info.append(line)
+
     on_sex_chr = 0
     dict_cpg_gene = {}
+    dict_cpg_map = {}
     for i in range(0, len(cpg)):
 
         curr_cpg = cpg[i].rstrip()
         curr_gene = gene[i].rstrip()
         curr_chr = chr[i].rstrip()
         curr_cpg_type = cpg_type[i].rstrip()
+        curr_map_info = map_info[i].rstrip()
 
         is_target_geo = False
         if len(target_geo) == 0:
@@ -65,9 +74,10 @@ def get_dict_cpg_gene(fs_type, db_type, geo_type):
                         if len(curr_gene) > 0:
                             all_genes = list(set(curr_gene.split(';')))
                             dict_cpg_gene[curr_cpg] = all_genes
+                            dict_cpg_map[curr_cpg] = curr_map_info
                 else:
                     on_sex_chr += 1
 
     print('on_sex_chr: ' + str(on_sex_chr))
 
-    return dict_cpg_gene
+    return dict_cpg_gene, dict_cpg_map

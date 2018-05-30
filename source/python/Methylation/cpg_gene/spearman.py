@@ -14,7 +14,7 @@ suffix = '_islands_shores'
 
 dict_cpg_gene = {}
 if suffix == '':
-    dict_cpg_gene = get_dict_cpg_gene(type)
+    dict_cpg_gene = get_dicts(type)
 elif suffix == '_shores':
     dict_cpg_gene = get_dict_cpg_gene_shore(type)
 elif suffix == '_islands':

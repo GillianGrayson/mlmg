@@ -5,7 +5,7 @@ import math
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
-from dicts import get_dict_cpg_gene
+from dicts import get_dicts
 
 type = FSType.local_big
 print_rate = 1000
@@ -23,7 +23,7 @@ with open(full_path) as f:
 
 suffix = '_ws'
 
-dict_cpg_gene = get_dict_cpg_gene(type)
+dict_cpg_gene = get_dicts(type)
 
 fn = 'ages.txt'
 ages = []
