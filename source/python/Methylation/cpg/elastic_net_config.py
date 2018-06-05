@@ -57,7 +57,7 @@ for line in f:
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
 
-regr = ElasticNetCV(cv=num_folds)
+regr = ElasticNetCV(cv=num_folds, normalize=True)
 elastic_net_X = np.array(vals_passed).T.tolist()
 regr.fit(elastic_net_X, ages)
 coef = regr.coef_
@@ -65,7 +65,7 @@ alpha = regr.alpha_
 l1_ratio = regr.l1_ratio_
 param_names = ['alpha',  'l1_ratio']
 param_values = [alpha, l1_ratio]
-info = np.zeros(num_top, dtype=[('var1', 'U50'), ('var2', 'float')])
+info = np.zeros(2, dtype=[('var1', 'U50'), ('var2', 'float')])
 fmt = "%s %0.18e"
 info['var1'] = param_names
 info['var2'] = param_values
@@ -111,7 +111,18 @@ info['var1'] = genes_top[0:num_top]
 info['var2'] = coef_genes_top[0:num_top]
 np.savetxt('gene_top.txt', info, fmt=fmt)
 
-# Run for cpgs not for genes
+# Checking genes with table in article 2015
+fn = 'table.txt'
+full_path = get_full_path(fs_type, db_type, fn)
+file = open(full_path)
+table = file.read().splitlines()
+genes_match = []
+for gene in coef_genes_top[0:num_top]:
+    if gene in table:
+        genes_match.append(gene)
+np.savetxt('match.txt', genes_match, fmt="%s")
+
+print('top: ' + str(len(genes_match)))
 
 
 

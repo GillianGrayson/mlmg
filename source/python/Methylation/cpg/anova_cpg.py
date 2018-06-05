@@ -6,6 +6,11 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 from dicts import get_dicts
+from dicts import *
+import statsmodels.api as sm
+from sklearn.linear_model import ElasticNetCV
+from config import *
+
 
 type = FSType.local_big
 print_rate = 1000
@@ -14,16 +19,25 @@ num_top = 100
 
 suffix = '_ws'
 
+fs_type = FSType.local_msi
+db_type = DataBaseType.GSE40279
+geo_type = GeoType.any
+config = Config(fs_type, db_type)
+if db_type is DataBaseType.GSE40279:
+    config = ConfigGSE40279(fs_type, db_type)
+elif db_type is DataBaseType.GSE52588:
+    config = ConfigGSE52588(fs_type, db_type)
+
 fn = 'table.txt'
-full_path = get_full_path(type, fn)
+full_path = get_full_path(fs_type, db_type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 
-dict_cpg_gene = get_dicts(type)
+dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
 
 fn = 'ages.txt'
 ages = []
-full_path = get_full_path(type, fn)
+full_path = get_full_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
         ages.append(int(line))
@@ -36,7 +50,7 @@ min_age = int(min_age / shift_age) * shift_age
 max_age = (int(max_age / shift_age) + 1) * shift_age
 
 fn = 'GSE40279_average_beta.txt'
-full_path = get_full_path(type, fn)
+full_path = get_full_path(fs_type, db_type, fn)
 
 age_dict = {}
 for age_id in range(0, len(ages)):
