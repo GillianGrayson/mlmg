@@ -9,14 +9,13 @@ from dicts import *
 import statsmodels.api as sm
 from sklearn.linear_model import ElasticNetCV
 from config import *
-from sklearn import cross_validation
 
 print_rate = 10000
 num_top = 100
-num_folds = 10
+num_folds = 3
 num_bootstrap_runs = 500
 
-fs_type = FSType.local_big
+fs_type = FSType.local_msi
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type)
@@ -58,17 +57,24 @@ for line in f:
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
 
-
 regr = ElasticNetCV(cv=num_folds)
 elastic_net_X = np.array(vals_passed).T.tolist()
 regr.fit(elastic_net_X, ages)
 coef = regr.coef_
 alpha = regr.alpha_
 l1_ratio = regr.l1_ratio_
+param_names = ['alpha',  'l1_ratio']
+param_values = [alpha, l1_ratio]
+info = np.zeros(num_top, dtype=[('var1', 'U50'), ('var2', 'float')])
+fmt = "%s %0.18e"
+info['var1'] = param_names
+info['var2'] = param_values
+np.savetxt('elastic_net_params.txt', info, fmt=fmt)
 
 # Local saving: only cpg
 order = np.argsort(list(map(abs, coef)))[::-1]
-cpgs_top = list(np.array(cpgs_passed)[order])[0:num_top]
+cpg_sorted = list(np.array(cpgs_passed)[order])
+cpgs_top = cpg_sorted[0:num_top]
 coef_sorted = list(np.array(coef)[order])
 coef_top = coef_sorted[0:num_top]
 genes_str_top = []
@@ -91,8 +97,8 @@ np.savetxt('cpg_top.txt', info, fmt=fmt)
 # Local saving: only gene
 genes_top = []
 coef_genes_top = []
-for id in range(0, len(cpgs_passed)):
-    cpg = cpgs_passed[id]
+for id in range(0, len(cpg_sorted)):
+    cpg = cpg_sorted[id]
     genes = dict_cpg_gene.get(cpg)
     for gene in genes:
         if gene not in genes_top:
@@ -103,7 +109,7 @@ info = np.zeros(num_top, dtype=[('var1', 'U50'), ('var2', 'float')])
 fmt = "%s %0.18e"
 info['var1'] = genes_top[0:num_top]
 info['var2'] = coef_genes_top[0:num_top]
-np.savetxt('cpg_top.txt', info, fmt=fmt)
+np.savetxt('gene_top.txt', info, fmt=fmt)
 
 # Run for cpgs not for genes
 
