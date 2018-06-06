@@ -12,10 +12,10 @@ from config import *
 
 print_rate = 10000
 num_top = 100
-num_folds = 3
+num_folds = 10
 num_bootstrap_runs = 500
 
-fs_type = FSType.local_msi
+fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type)
@@ -57,7 +57,7 @@ for line in f:
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
 
-regr = ElasticNetCV(cv=num_folds, normalize=True)
+regr = ElasticNetCV(cv=num_folds)
 elastic_net_X = np.array(vals_passed).T.tolist()
 regr.fit(elastic_net_X, ages)
 coef = regr.coef_
@@ -117,7 +117,7 @@ full_path = get_full_path(fs_type, db_type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 genes_match = []
-for gene in coef_genes_top[0:num_top]:
+for gene in genes_top[0:num_top]:
     if gene in table:
         genes_match.append(gene)
 np.savetxt('match.txt', genes_match, fmt="%s")
