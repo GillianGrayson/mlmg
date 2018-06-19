@@ -13,7 +13,6 @@ from config import *
 print_rate = 10000
 num_top = 100
 num_folds = 10
-num_bootstrap_runs = 500
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
@@ -45,7 +44,7 @@ vals_passed = []
 
 for line in f:
 
-    col_vals = line.split('\t')
+    col_vals = config.line_proc(line)
     cpg = col_vals[0]
     vals = list(map(float, col_vals[1::]))
 
@@ -112,17 +111,18 @@ info['var2'] = coef_genes_top[0:num_top]
 np.savetxt('gene_top.txt', info, fmt=fmt)
 
 # Checking genes with table in article 2015
-fn = 'table.txt'
-full_path = get_full_path(fs_type, db_type, fn)
-file = open(full_path)
-table = file.read().splitlines()
-genes_match = []
-for gene in genes_top[0:num_top]:
-    if gene in table:
-        genes_match.append(gene)
-np.savetxt('match.txt', genes_match, fmt="%s")
+if db_type is DataBaseType.GSE40279:
+    fn = 'table.txt'
+    full_path = get_full_path(fs_type, db_type, fn)
+    file = open(full_path)
+    table = file.read().splitlines()
+    genes_match = []
+    for gene in genes_top[0:num_top]:
+        if gene in table:
+            genes_match.append(gene)
+    np.savetxt('match.txt', genes_match, fmt="%s")
 
-print('top: ' + str(len(genes_match)))
+    print('top: ' + str(len(genes_match)))
 
 
 

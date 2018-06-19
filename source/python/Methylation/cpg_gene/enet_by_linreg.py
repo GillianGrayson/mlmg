@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import scipy.stats as stats
 from dicts import *
+from config import *
 import statsmodels.api as sm
 from sklearn.linear_model import ElasticNet
 
@@ -19,20 +20,25 @@ def reg_m(y, x):
 
 print_rate = 10000
 
-num_top_opt = 100
+num_genes_in_mult_reg = 100
 
-fs_type = FSType.local_big
-db_type = DataBaseType.GSE40279
+fs_type = FSType.local_msi
+db_type = DataBaseType.GSE52588
 geo_type = GeoType.islands_shores
+config = Config(fs_type, db_type)
+if db_type is DataBaseType.GSE40279:
+    config = ConfigGSE40279(fs_type, db_type)
+elif db_type is DataBaseType.GSE52588:
+    config = ConfigGSE52588(fs_type, db_type)
 
 dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
 
 fn = 'attribute.txt'
-ages = []
+attributes = []
 full_path = get_full_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
-        ages.append(int(line))
+        attributes.append(int(line))
 
 fn = db_type.value + '_average_beta.txt'
 full_path = get_full_path(fs_type, db_type, fn)
@@ -45,26 +51,29 @@ pvals = []
 vals_passed = []
 
 f = open(full_path)
-first_line = f.readline()
-col_names = first_line.split('\t')
+for skip_id in range(0, config.num_skip_lines):
+    skip_line = f.readline()
 
 for line in f:
 
-    col_vals = line.split('\t')
+    col_vals = config.line_proc(line)
     CpG = col_vals[0]
-    vals = list(map(float, col_vals[1::]))
 
-    if CpG in dict_cpg_gene:
+    if config.miss_tag not in col_vals:
 
-        slope, intercept, r_value, p_value, std_err = stats.linregress(vals, ages)
+        vals = list(map(float, col_vals[1::]))
 
-        genes = dict_cpg_gene.get(CpG)
+        if CpG in dict_cpg_gene:
 
-        if genes is not None:
+            slope, intercept, r_value, p_value, std_err = stats.linregress(vals, attributes)
 
-            cpgs.append(CpG)
-            rhos.append(r_value)
-            vals_passed.append(vals)
+            genes = dict_cpg_gene.get(CpG)
+
+            if genes is not None:
+
+                cpgs.append(CpG)
+                rhos.append(r_value)
+                vals_passed.append(vals)
 
     num_lines += 1
     if num_lines % print_rate == 0:
@@ -94,19 +103,26 @@ for id in range(0, len(cpgs_opt)):
 
 regr = ElasticNet()
 elastic_net_X = list(map(list, zip(*vals_spec)))
-regr.fit(elastic_net_X, ages)
+regr.fit(elastic_net_X, attributes)
 coef = regr.coef_
 
 order = np.argsort(list(map(abs, coef)))[::-1]
+coef_srtd = list(np.array(coef)[order])
 genes = list(np.array(genes_spec)[order])
 vals = list(np.array(vals_spec)[order])
+
+info = np.zeros(len(genes), dtype=[('var1', 'U50'), ('var2', float)])
+fmt = "%s %0.18e"
+info['var1'] = genes
+info['var2'] = coef_srtd
+np.savetxt('enet_by_linreg' + geo_type.value + '.txt', info, fmt=fmt)
 
 top_R = []
 top_coeff = []
 top_num = []
 
-for num_opt in range(0, num_top_opt):
-    reg_res = reg_m(ages, vals[0:num_opt + 1])
+for num_opt in range(0, num_genes_in_mult_reg):
+    reg_res = reg_m(attributes, vals[0:num_opt + 1])
     top_num.append(num_opt + 1)
     top_coeff.append(reg_res.rsquared)
     top_R.append(reg_res.params[0])

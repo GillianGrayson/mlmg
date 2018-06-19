@@ -20,6 +20,7 @@ class ConfigGSE40279(Config):
         super().__init__(fs_type, db_type)
         self.num_skip_lines = 1
         self.attribute_fn = 'attribute.txt'
+        self.miss_tag = 'NULL'
 
     def get_raw_dict(self, fs_type, db_type, geo_type):
 
@@ -76,9 +77,12 @@ class ConfigGSE40279(Config):
                 sorted_record = list(np.array(record)[order])
                 gene_raw_dict[gene].append(sorted_record)
 
-
         return gene_raw_dict
 
+    def line_proc(self, line):
+
+        line_list = line.split('\t')
+        return line_list
 
 
 class ConfigGSE52588(Config):
@@ -86,6 +90,7 @@ class ConfigGSE52588(Config):
         super().__init__(fs_type, db_type)
         self.num_skip_lines = 87
         self.attribute_fn = 'attribute.txt'
+        self.miss_tag = 'NULL'
 
     def get_raw_dict(self, fs_type, db_type, geo_type):
 
@@ -147,7 +152,7 @@ class ConfigGSE52588(Config):
             for val_id in range(0, len(col_vals)):
                 col_vals[val_id] = col_vals[val_id].replace('"', '').rstrip()
 
-            if 'NULL' in col_vals:
+            if self.miss_tag in col_vals:
                 is_none = True
                 num_miss += 1
 
@@ -192,3 +197,12 @@ class ConfigGSE52588(Config):
                 gene_raw_dict[gene].append(sorted_record)
 
         return gene_raw_dict
+
+    def line_proc(self, line):
+
+        line_list = line.split('\t')
+
+        for val_id in range(0, len(line_list)):
+            line_list[val_id] = line_list[val_id].replace('"', '').rstrip()
+
+        return line_list

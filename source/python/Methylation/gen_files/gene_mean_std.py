@@ -11,9 +11,9 @@ from config import *
 
 print_rate = 10000
 
-fs_type = FSType.local_big
+fs_type = FSType.local_msi
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.islands_shores
+geo_type = GeoType.any
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type)

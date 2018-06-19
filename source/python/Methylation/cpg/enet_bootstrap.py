@@ -5,6 +5,7 @@ import math
 import numpy as np
 import pandas as pd
 import scipy.stats as stats
+import operator
 from dicts import *
 import statsmodels.api as sm
 from sklearn.linear_model import ElasticNetCV, ElasticNet
@@ -22,11 +23,14 @@ def reg_m(y, x):
 alpha = 1.564782107693006921e-02
 l1_ratio = 5.000000000000000000e-01
 
+train_size = 482
+test_size = 174
+
 print_rate = 10000
 num_top = 100
-num_bootstrap_runs = 10
+num_bootstrap_runs = 20
 
-fs_type = FSType.local_big
+fs_type = FSType.local_msi
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type)
@@ -56,7 +60,7 @@ vals_passed = []
 
 for line in f:
 
-    col_vals = line.split('\t')
+    col_vals = config.line_proc(line)
     cpg = col_vals[0]
     vals = list(map(float, col_vals[1::]))
 
@@ -68,13 +72,15 @@ for line in f:
     if num_lines % print_rate == 0:
         print('num_lines: ' + str(num_lines))
 
-rs = ShuffleSplit(num_bootstrap_runs, 174, 482)
+rs = ShuffleSplit(num_bootstrap_runs, test_size, train_size)
 indexes = np.linspace(0, len(ages) - 1, len(ages), dtype=int).tolist()
 enet_X = np.array(vals_passed).T.tolist()
 
 bootstrap_id = 0
-r_avg = 0.0
-std_err_avg = 0.0
+r_avg_test = 0.0
+std_err_avg_test = 0.0
+r_avg_train = 0.0
+std_err_avg_train = 0.0
 cpg_top_dict = {}
 for train_index, test_index in rs.split(indexes):
     print('bootstrap_id: ' + str(bootstrap_id))
@@ -90,10 +96,10 @@ for train_index, test_index in rs.split(indexes):
     coef = enet.coef_
 
     order = np.argsort(list(map(abs, coef)))[::-1]
-    cpg_sorted = list(np.array(cpgs_passed)[order])
-    cpg_top = cpg_sorted[0:num_top]
     coef_sorted = list(np.array(coef)[order])
+    cpg_sorted = list(np.array(cpgs_passed)[order])
     coef_top = coef_sorted[0:num_top]
+    cpg_top = cpg_sorted[0:num_top]
     gene_sorted = []
     for id in range(0, len(cpg_sorted)):
         cpg = cpg_sorted[id]
@@ -108,26 +114,48 @@ for train_index, test_index in rs.split(indexes):
         if cpg in cpg_top_dict:
             cpg_top_dict[cpg] += 1
         else:
-            cpg_top_dict[cpg] = 0
+            cpg_top_dict[cpg] = 1
 
-    enet_y_pred = enet.predict(enet_X_test).tolist()
+    enet_y_test_pred = enet.predict(enet_X_test).tolist()
+    slope, intercept, r_value, p_value, std_err = stats.linregress(enet_y_test_pred, enet_y_test)
+    r_avg_test += r_value
+    std_err_avg_test += std_err
 
-    slope, intercept, r_value, p_value, std_err = stats.linregress(enet_y_pred, enet_y_test)
-    r_avg += r_value
-    std_err_avg += std_err
+    enet_y_train_pred = enet.predict(enet_X_train).tolist()
+    slope, intercept, r_value, p_value, std_err = stats.linregress(enet_y_train_pred, enet_y_train)
+    r_avg_train += r_value
+    std_err_avg_train += std_err
 
     bootstrap_id += 1
 
-r_avg /= float(num_bootstrap_runs)
-std_err_avg /= float( num_bootstrap_runs)
-print('r_avg: ', r_avg)
-print('std_err_avg: ', std_err_avg)
+r_avg_test /= float(num_bootstrap_runs)
+std_err_avg_test /= float(num_bootstrap_runs)
+r_avg_train /= float(num_bootstrap_runs)
+std_err_avg_train /= float(num_bootstrap_runs)
+print('r_avg_test: ', r_avg_test)
+print('std_err_avg_test: ', std_err_avg_test)
+print('r_avg_train: ', r_avg_train)
+print('std_err_avg_train: ', std_err_avg_train)
 
-sorted_cpg = sorted(cpg_top_dict, key=cpg_top_dict.get, reverse=True)
+cpgs_sorted = sorted(cpg_top_dict, key=operator.itemgetter(0), reverse=True)
+cpgs_dump = []
+genes_dump = []
+counts_dump = []
+for cpg in cpgs_sorted:
+    cpgs_dump.append(cpg)
 
+    genes = dict_cpg_gene.get(cpg)
+    genes_str = genes[0]
+    for gene in genes[1::]:
+        genes_str += (";" + gene)
+    genes_dump.append(genes_str)
 
+    counts_dump.append(cpg_top_dict.get(cpg))
 
-ololo = 1
-
-
+info = np.zeros(len(cpgs_dump), dtype=[('var1', 'U50'), ('var2', 'U50'), ('var3', float)])
+fmt = "%s %s %0.18e"
+info['var1'] = list(cpgs_dump)
+info['var2'] = list(genes_dump)
+info['var3'] = list(counts_dump)
+np.savetxt('enet_bootstrap_cpgs.txt', info, fmt=fmt)
 
