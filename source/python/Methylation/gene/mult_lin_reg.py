@@ -20,19 +20,13 @@ def reg_m(y, x):
 
 # Config
 fs_type = FSType.local_big
-db_type = DataBaseType.GSE40279
+db_type = DataBaseType.GSE52588
 geo_type = GeoType.islands_shores
 
-num_top = 100 # Number of genes which compares with Claudio table
+num_top = 100 # Number of top genes
 num_top_opt = 5 # Number of genes in multiple regression
 
-# Claudio table
-fn = 'table.txt'
-full_path = get_full_path(fs_type, db_type, fn)
-file = open(full_path)
-table = file.read().splitlines()
-
-# ages
+# attribute
 fn = 'attribute.txt'
 ages = []
 full_path = get_full_path(fs_type, db_type, fn)
@@ -107,17 +101,25 @@ mean_opt_mean = list(np.array(mean)[order_mean])
 print(reg_m(ages, mean_opt_mean[0:num_top_opt]).summary(xname=genes_opt_mean[0:num_top_opt], yname='age'))
 
 # Comparing with Claudio table
-genes_match = []
-mean_match = []
-for gene_id in range(0, num_top):
-    curr_gene = genes_opt_mean[gene_id]
-    curr_mean = mean_opt_mean[gene_id]
-    if curr_gene in table:
-        genes_match.append(curr_gene)
-        mean_match.append(curr_mean)
 
-print('Claudio match')
-print(reg_m(ages, mean_match[0:num_top_opt]).summary(xname=genes_match[0:num_top_opt], yname='age'))
+if db_type is DataBaseType.GSE40279:
+    # Claudio table
+    fn = 'table.txt'
+    full_path = get_full_path(fs_type, db_type, fn)
+    file = open(full_path)
+    table = file.read().splitlines()
+
+    genes_match = []
+    mean_match = []
+    for gene_id in range(0, num_top):
+        curr_gene = genes_opt_mean[gene_id]
+        curr_mean = mean_opt_mean[gene_id]
+        if curr_gene in table:
+            genes_match.append(curr_gene)
+            mean_match.append(curr_mean)
+
+    print('Claudio match')
+    print(reg_m(ages, mean_match[0:num_top_opt]).summary(xname=genes_match[0:num_top_opt], yname='age'))
 
 # Dependence from variable count
 top_R = []

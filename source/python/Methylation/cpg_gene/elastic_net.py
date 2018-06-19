@@ -34,7 +34,7 @@ with open(full_path) as f:
     for line in f:
         ages.append(int(line))
 
-fn = 'GSE40279_average_beta.txt'
+fn = db_type.value + '_average_beta.txt'
 full_path = get_full_path(fs_type, db_type, fn)
 
 num_lines = 0
@@ -65,7 +65,6 @@ for line in f:
             cpgs.append(CpG)
             rhos.append(r_value)
             vals_passed.append(vals)
-            full_path = get_full_path(fs_type, db_type, fn)
 
     num_lines += 1
     if num_lines % print_rate == 0:
