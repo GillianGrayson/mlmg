@@ -28,9 +28,9 @@ test_size = 174
 
 print_rate = 10000
 num_top = 100
-num_bootstrap_runs = 20
+num_bootstrap_runs = 100
 
-fs_type = FSType.local_msi
+fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type)
@@ -137,25 +137,23 @@ print('std_err_avg_test: ', std_err_avg_test)
 print('r_avg_train: ', r_avg_train)
 print('std_err_avg_train: ', std_err_avg_train)
 
-cpgs_sorted = sorted(cpg_top_dict, key=operator.itemgetter(0), reverse=True)
-cpgs_dump = []
-genes_dump = []
-counts_dump = []
+cpgs = list(cpg_top_dict.keys())
+counts = list(cpg_top_dict.values())
+order = np.argsort(list(map(abs, counts)))[::-1]
+cpgs_sorted = list(np.array(cpgs)[order])
+counts_sorted = list(np.array(counts)[order])
+genes_sorted = []
 for cpg in cpgs_sorted:
-    cpgs_dump.append(cpg)
-
     genes = dict_cpg_gene.get(cpg)
     genes_str = genes[0]
     for gene in genes[1::]:
         genes_str += (";" + gene)
-    genes_dump.append(genes_str)
+    genes_sorted.append(genes_str)
 
-    counts_dump.append(cpg_top_dict.get(cpg))
-
-info = np.zeros(len(cpgs_dump), dtype=[('var1', 'U50'), ('var2', 'U50'), ('var3', float)])
+info = np.zeros(len(cpgs_sorted), dtype=[('var1', 'U50'), ('var2', 'U50'), ('var3', float)])
 fmt = "%s %s %0.18e"
-info['var1'] = list(cpgs_dump)
-info['var2'] = list(genes_dump)
-info['var3'] = list(counts_dump)
+info['var1'] = list(cpgs_sorted)
+info['var2'] = list(genes_sorted)
+info['var3'] = list(counts_sorted)
 np.savetxt('enet_bootstrap_cpgs.txt', info, fmt=fmt)
 
