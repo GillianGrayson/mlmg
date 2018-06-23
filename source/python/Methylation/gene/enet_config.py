@@ -24,11 +24,11 @@ elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type)
 
 fn = 'attribute.txt'
-ages = []
+attributes = []
 full_path = get_full_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
-        ages.append(int(line))
+        attributes.append(int(line))
 
 genes_passed = []
 vals_passed = []
@@ -44,7 +44,7 @@ for line in f:
 
 regr = ElasticNetCV(cv=num_folds)
 elastic_net_X = np.array(vals_passed).T.tolist()
-regr.fit(elastic_net_X, ages)
+regr.fit(elastic_net_X, attributes)
 coef = regr.coef_
 alpha = regr.alpha_
 l1_ratio = regr.l1_ratio_
