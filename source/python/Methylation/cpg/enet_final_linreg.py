@@ -32,7 +32,7 @@ num_top_cpgs = 100
 train_size = 482
 test_size = 174
 
-num_bootstrap_runs = 100
+num_bootstrap_runs = 500
 
 print_rate = 10000
 

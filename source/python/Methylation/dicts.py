@@ -9,6 +9,10 @@ def get_dicts(fs_type, db_type, geo_type):
     elif geo_type is GeoType.shores:
         target_geo.append('N_Shore')
         target_geo.append('S_Shore')
+    elif geo_type is GeoType.shores_s:
+        target_geo.append('S_Shore')
+    elif geo_type is GeoType.shores_n:
+        target_geo.append('N_Shore')
     elif geo_type is GeoType.islands_shores:
         target_geo.append('Island')
         target_geo.append('N_Shore')
