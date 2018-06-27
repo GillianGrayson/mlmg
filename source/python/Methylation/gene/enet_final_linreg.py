@@ -40,7 +40,7 @@ print_rate = 10000
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.any
+geo_type = GeoType.shores_n
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type)
@@ -57,7 +57,7 @@ with open(full_path) as f:
         attributes.append(int(line))
 
 genes_top = []
-fn = 'enet_genes_top(' + str(top) + ')_bootstrap(' + str(bootstrap) + ').txt'
+fn = 'enet_bootstrap_genes_' + type + geo_type.value + '.txt'
 full_path = get_full_path(fs_type, db_type, fn)
 f = open(full_path)
 for line in f:
@@ -102,7 +102,7 @@ info = np.zeros(len(nums), dtype=[('var1', int), ('var2', float)])
 fmt = "%d %0.18e"
 info['var1'] = nums
 info['var2'] = R2s
-np.savetxt('R2s.txt', info, fmt=fmt)
+np.savetxt('R2s_' + type + geo_type.value + '.txt', info, fmt=fmt)
 
 rs = ShuffleSplit(num_bootstrap_runs, test_size, train_size)
 indexes = np.linspace(0, len(attributes) - 1, len(attributes), dtype=int).tolist()

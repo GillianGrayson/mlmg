@@ -16,7 +16,7 @@ num_folds = 10
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.any
+geo_type = GeoType.shores_n
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type)
@@ -54,7 +54,7 @@ info = np.zeros(2, dtype=[('var1', 'U50'), ('var2', 'float')])
 fmt = "%s %0.18e"
 info['var1'] = param_names
 info['var2'] = param_values
-np.savetxt('elastic_net_params.txt', info, fmt=fmt)
+np.savetxt('enet_params_' + type + geo_type.value + '.txt', info, fmt=fmt)
 
 
 

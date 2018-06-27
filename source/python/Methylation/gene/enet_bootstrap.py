@@ -22,9 +22,6 @@ def reg_m(y, x):
 
 type = 'mean'
 
-alpha = 8.454092531050155530e-04
-l1_ratio = 5.000000000000000000e-01
-
 train_size = 482
 test_size = 174
 
@@ -34,7 +31,7 @@ num_bootstrap_runs = 100
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.any
+geo_type = GeoType.shores_n
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type)
@@ -42,6 +39,14 @@ elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type)
 
 dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
+
+fn = 'enet_params_' + type + geo_type.value + '.txt'
+attributes = []
+full_path = get_full_path(fs_type, db_type, fn)
+params = np.loadtxt(full_path, dtype='U50')
+alpha = float(params[0][1])
+l1_ratio = float(params[1][1])
+
 
 fn = 'attribute.txt'
 attributes = []
@@ -129,5 +134,5 @@ info = np.zeros(len(genes_sorted), dtype=[('var1', 'U50'),  ('var2', int)])
 fmt = "%s %d"
 info['var1'] = list(genes_sorted)
 info['var2'] = list(counts_sorted)
-np.savetxt('enet_bootstrap_genes.txt', info, fmt=fmt)
+np.savetxt('enet_bootstrap_genes_' + type + geo_type.value + '.txt', info, fmt=fmt)
 

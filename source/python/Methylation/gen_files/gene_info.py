@@ -12,7 +12,7 @@ from config import *
 print_rate = 10000
 
 fs_type = FSType.local_big
-db_type = DataBaseType.GSE52588
+db_type = DataBaseType.GSE40279
 geo_type = GeoType.shores_n
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
@@ -43,7 +43,8 @@ for gene in gene_raw_dict:
                 curr_sum += abs(curr_list[elem_id + 1] - curr_list[elem_id])
             curr_sum /= float(len(curr_list) - 1)
             mean_der_list.append(curr_sum)
-            norm_cpg = np.sum(curr_list) / float(len(curr_list))
+            tmp_sum = np.sum(curr_list)
+            norm_cpg = tmp_sum / float(len(curr_list))
             normed = curr_sum / norm_cpg
             mean_der_normed_list.append(normed)
         else:
