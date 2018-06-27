@@ -40,7 +40,7 @@ print_rate = 10000
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.shores_n
+geo_type = GeoType.any
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type)
@@ -57,11 +57,12 @@ with open(full_path) as f:
         attributes.append(int(line))
 
 genes_top = []
-fn = 'enet_bootstrap_genes_' + type + geo_type.value + '.txt'
+#fn = 'enet_bootstrap_genes_' + type + geo_type.value + '.txt'
+fn = 'enet_bootstrap_genes_olya.txt'
 full_path = get_full_path(fs_type, db_type, fn)
 f = open(full_path)
 for line in f:
-    gene = line.split(' ')[0]
+    gene = line.split(' ')[0].rstrip()
     genes_top.append(gene)
 
 genes_top = genes_top[0:num_top_genes]

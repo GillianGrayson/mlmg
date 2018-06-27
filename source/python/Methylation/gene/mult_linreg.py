@@ -20,7 +20,7 @@ def reg_m(y, x):
 
 # Config
 fs_type = FSType.local_big
-db_type = DataBaseType.GSE52588
+db_type = DataBaseType.GSE40279
 geo_type = GeoType.islands_shores
 
 num_top = 100 # Number of top genes
@@ -98,7 +98,8 @@ genes_opt_mean = list(np.array(mean_names)[order_mean])
 mean_opt_mean = list(np.array(mean)[order_mean])
 
 # Multiple linear regression result
-print(reg_m(ages, mean_opt_mean[0:num_top_opt]).summary(xname=genes_opt_mean[0:num_top_opt], yname='age'))
+print(reg_m(ages, mean_opt_mean[0:num_top_opt]).summary())
+
 
 # Comparing with Claudio table
 
@@ -119,7 +120,7 @@ if db_type is DataBaseType.GSE40279:
             mean_match.append(curr_mean)
 
     print('Claudio match')
-    print(reg_m(ages, mean_match[0:num_top_opt]).summary(xname=genes_match[0:num_top_opt], yname='age'))
+    print(reg_m(ages, mean_match[0:num_top_opt]).summary())
 
 # Dependence from variable count
 top_R = []
