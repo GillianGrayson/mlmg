@@ -1,12 +1,10 @@
-import pathlib
-from Infrastructure.file_system import *
-import os.path
 import math
+
 import numpy as np
-import pandas as pd
 import scipy.stats as stats
-from gen_files.geo import *
-from dicts import get_dicts
+
+from Infrastructure.file_system import *
+from geo import *
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
@@ -14,13 +12,13 @@ geo_type = GeoType.islands_shores
 num_top = 100
 
 fn = 'table.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 
 fn = 'attribute.txt'
 ages = []
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
         ages.append(int(line))
@@ -34,7 +32,7 @@ genes_mean_rho = []
 genes_std_rho = []
 
 fn = 'gene_mean' + geo_type.value + '.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 f = open(full_path)
 for line in f:
     col_vals = line.split(' ')
@@ -44,7 +42,7 @@ for line in f:
     genes_mean.append(vals)
 
 fn = 'gene_std' + geo_type.value + '.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 f = open(full_path)
 for line in f:
     col_vals = line.split(' ')

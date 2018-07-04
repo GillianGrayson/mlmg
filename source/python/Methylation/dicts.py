@@ -1,7 +1,10 @@
 from Infrastructure.file_system import *
-from gen_files.geo import *
+from geo import *
 
-def get_dicts(fs_type, db_type, geo_type):
+def get_dicts(config):
+    fs_type = config.fs_type
+    db_type = config.db_type
+    geo_type = config.geo_type
 
     target_geo = []
     if geo_type is GeoType.islands:
@@ -20,35 +23,35 @@ def get_dicts(fs_type, db_type, geo_type):
 
     fn = 'cpg.txt'
     cpg = []
-    full_path = get_full_path(fs_type, db_type, fn)
+    full_path = get_path(fs_type, db_type, fn)
     with open(full_path) as f:
         for line in f:
             cpg.append(line)
 
     fn = 'gene.txt'
     gene = []
-    full_path = get_full_path(fs_type, db_type, fn)
+    full_path = get_path(fs_type, db_type, fn)
     with open(full_path) as f:
         for line in f:
             gene.append(line)
 
     fn = 'chr.txt'
     chr = []
-    full_path = get_full_path(fs_type, db_type, fn)
+    full_path = get_path(fs_type, db_type, fn)
     with open(full_path) as f:
         for line in f:
             chr.append(line)
 
     fn = 'cpg_type.txt'
     cpg_type = []
-    full_path = get_full_path(fs_type, db_type, fn)
+    full_path = get_path(fs_type, db_type, fn)
     with open(full_path) as f:
         for line in f:
             cpg_type.append(line)
 
     fn = 'map_info.txt'
     map_info = []
-    full_path = get_full_path(fs_type, db_type, fn)
+    full_path = get_path(fs_type, db_type, fn)
     with open(full_path) as f:
         for line in f:
             map_info.append(line)

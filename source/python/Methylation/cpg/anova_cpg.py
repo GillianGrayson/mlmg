@@ -29,7 +29,7 @@ elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type)
 
 fn = 'table.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 
@@ -37,7 +37,7 @@ dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
 
 fn = 'ages.txt'
 ages = []
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
         ages.append(int(line))
@@ -50,7 +50,7 @@ min_age = int(min_age / shift_age) * shift_age
 max_age = (int(max_age / shift_age) + 1) * shift_age
 
 fn = 'GSE40279_average_beta.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 
 age_dict = {}
 for age_id in range(0, len(ages)):

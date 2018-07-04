@@ -13,7 +13,7 @@ num_opt = 1000
 num_top = 100
 
 fn = 'table.txt'
-full_path = get_full_path(type, fn)
+full_path = get_path(type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 
@@ -27,13 +27,13 @@ dict_cpg_gene = get_dicts(type)
 
 fn = 'ages.txt'
 ages = []
-full_path = get_full_path(type, fn)
+full_path = get_path(type, fn)
 with open(full_path) as f:
     for line in f:
         ages.append(int(line))
 
 fn = 'GSE40279_average_beta.txt'
-full_path = get_full_path(type, fn)
+full_path = get_path(type, fn)
 
 num_lines = 0
 

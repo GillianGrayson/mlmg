@@ -1,13 +1,10 @@
-import pathlib
-from Infrastructure.file_system import *
-import os.path
-import math
 import numpy as np
-import pandas as pd
 import scipy.stats as stats
-from dicts import get_dicts
-from gen_files.geo import *
 import statsmodels.api as sm
+
+from Infrastructure.file_system import *
+from geo import *
+
 
 # Aux function for multiple regression
 def reg_m(y, x):
@@ -29,7 +26,7 @@ num_top_opt = 5 # Number of genes in multiple regression
 # attribute
 fn = 'attribute.txt'
 ages = []
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
         ages.append(int(line))
@@ -50,7 +47,7 @@ std_intercepts = []
 
 # Mean table
 fn = 'gene_mean' + geo_type.value + '.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 f = open(full_path)
 for line in f:
     col_vals = line.split(' ')
@@ -61,7 +58,7 @@ for line in f:
 
 # Std table
 fn = 'gene_std' + geo_type.value + '.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 f = open(full_path)
 for line in f:
     col_vals = line.split(' ')
@@ -106,7 +103,7 @@ print(reg_m(ages, mean_opt_mean[0:num_top_opt]).summary())
 if db_type is DataBaseType.GSE40279:
     # Claudio table
     fn = 'table.txt'
-    full_path = get_full_path(fs_type, db_type, fn)
+    full_path = get_path(fs_type, db_type, fn)
     file = open(full_path)
     table = file.read().splitlines()
 

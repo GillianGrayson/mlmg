@@ -28,13 +28,13 @@ dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
 
 fn = 'attribute.txt'
 ages = []
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
         ages.append(int(line))
 
 fn = 'GSE40279_average_beta.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 
 num_lines = 0
 
@@ -64,7 +64,7 @@ for line in f:
             cpgs.append(CpG)
             rhos.append(r_value)
             vals_passed.append(vals)
-            full_path = get_full_path(fs_type, db_type, fn)
+            full_path = get_path(fs_type, db_type, fn)
 
     num_lines += 1
     if num_lines % print_rate == 0:
@@ -103,7 +103,7 @@ print(reg_m(ages, vals_spec[0:num_top_opt]).summary(xname=genes_spec[0:num_top_o
 print(reg_m(ages, vals_spec[0:num_top_opt]).summary())
 
 fn = 'table.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 file = open(full_path)
 table = file.read().splitlines()
 

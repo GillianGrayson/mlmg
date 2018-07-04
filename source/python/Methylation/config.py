@@ -1,40 +1,41 @@
-from Infrastructure.file_system import *
-from gen_files.geo import *
-from dicts import *
 import numpy as np
+
+from dicts import *
+
 
 class Config:
 
-    def __init__(self, fs_type, db_type):
+    def __init__(self, fs_type, db_type, geo_type):
         self.fs_type = fs_type
         self.db_type = db_type
+        self.geo_type = geo_type
         self.print_rate = 10000
 
-    def get_raw_dict(self, fs_type, db_type, geo_type):
+    def get_raw_dict(self):
         raise NotImplementedError("Subclass must implement abstract method")
 
 
 class ConfigGSE40279(Config):
 
-    def __init__(self, fs_type, db_type):
-        super().__init__(fs_type, db_type)
+    def __init__(self, fs_type, db_type, geo_type):
+        super().__init__(fs_type, db_type, geo_type)
         self.num_skip_lines = 1
         self.attribute_fn = 'attribute.txt'
         self.miss_tag = 'NULL'
 
-    def get_raw_dict(self, fs_type, db_type, geo_type):
+    def get_raw_dict(self):
 
-        dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
+        dict_cpg_gene, dict_cpg_map = get_dicts(self)
 
         fn = self.attribute_fn
         attribute = []
-        full_path = get_full_path(self.fs_type, self.db_type, fn)
+        full_path = get_path(self.fs_type, self.db_type, fn)
         with open(full_path) as f:
             for line in f:
                 attribute.append(int(line))
 
         fn = self.db_type.value + '_average_beta.txt'
-        full_path = get_full_path(self.fs_type, self.db_type, fn)
+        full_path = get_path(self.fs_type, self.db_type, fn)
         f = open(full_path)
         for skip_id in range(0, self.num_skip_lines):
             skip_line = f.readline()
@@ -86,15 +87,15 @@ class ConfigGSE40279(Config):
 
 
 class ConfigGSE52588(Config):
-    def __init__(self, fs_type, db_type):
-        super().__init__(fs_type, db_type)
+    def __init__(self, fs_type, db_type, geo_type):
+        super().__init__(fs_type, db_type, geo_type)
         self.num_skip_lines = 87
         self.attribute_fn = 'attribute.txt'
         self.miss_tag = 'NULL'
 
-    def get_raw_dict(self, fs_type, db_type, geo_type):
+    def get_raw_dict(self):
 
-        dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
+        dict_cpg_gene, dict_cpg_map = get_dicts(self)
 
         num_skip_lines_raw = 1
         pval_lim = 0.05
@@ -102,7 +103,7 @@ class ConfigGSE52588(Config):
 
         cpg_non_inc = []
         fn = self.db_type.value + '_raw_data.txt'
-        full_path = get_full_path(self.fs_type, self.db_type, fn)
+        full_path = get_path(self.fs_type, self.db_type, fn)
         f = open(full_path)
         for skip_id in range(0, num_skip_lines_raw):
             skip_line = f.readline()
@@ -129,13 +130,13 @@ class ConfigGSE52588(Config):
 
         fn = self.attribute_fn
         attribute = []
-        full_path = get_full_path(self.fs_type, self.db_type, fn)
+        full_path = get_path(self.fs_type, self.db_type, fn)
         with open(full_path) as f:
             for line in f:
                 attribute.append(int(line))
 
         fn = self.db_type.value + '_average_beta.txt'
-        full_path = get_full_path(self.fs_type, self.db_type, fn)
+        full_path = get_path(self.fs_type, self.db_type, fn)
         f = open(full_path)
         for skip_id in range(0, self.num_skip_lines):
             skip_line = f.readline()

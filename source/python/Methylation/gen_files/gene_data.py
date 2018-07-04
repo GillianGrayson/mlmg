@@ -1,19 +1,14 @@
-import pathlib
-from Infrastructure.file_system import *
-import os.path
-import math
 import numpy as np
-import pandas as pd
-import scipy.stats as stats
+
+from config import Config, ConfigGSE52588, ConfigGSE40279
 from dicts import *
-from gen_files.geo import *
-from config import *
+from geo import *
 
 print_rate = 10000
 
 fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.shores_n
+geo_type = GeoType.any
 config = Config(fs_type, db_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type)

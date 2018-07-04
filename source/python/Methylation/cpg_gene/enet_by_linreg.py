@@ -35,13 +35,13 @@ dict_cpg_gene, dict_cpg_map = get_dicts(fs_type, db_type, geo_type)
 
 fn = 'attribute.txt'
 attributes = []
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 with open(full_path) as f:
     for line in f:
         attributes.append(int(line))
 
 fn = db_type.value + '_average_beta.txt'
-full_path = get_full_path(fs_type, db_type, fn)
+full_path = get_path(fs_type, db_type, fn)
 
 num_lines = 0
 
