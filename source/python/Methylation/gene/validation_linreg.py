@@ -18,7 +18,7 @@ from linreg_mult.routines import *
 from method import *
 
 method = Method.linreg
-gd_type = GeneDataType.mean
+gd_type = GeneDataType.mean_der_normed
 
 train_size = 482
 test_size = 174
