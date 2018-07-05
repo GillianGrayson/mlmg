@@ -24,7 +24,7 @@ if db_type is DataBaseType.GSE40279:
 elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type, geo_type)
 
-attributes = get_attributes(fs_type, db_type)
+attributes = get_attributes(config)
 
 cpgs, vals = get_cpg_data(config)
 

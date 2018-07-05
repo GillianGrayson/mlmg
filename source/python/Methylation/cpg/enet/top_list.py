@@ -37,7 +37,7 @@ params = np.loadtxt(path, dtype='U50')
 alpha = float(params[0][1])
 l1_ratio = float(params[1][1])
 
-attributes = get_attributes(fs_type, db_type)
+attributes = get_attributes(config)
 
 cpgs_passed, vals_passed = get_cpg_data(config)
 

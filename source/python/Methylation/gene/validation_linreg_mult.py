@@ -17,7 +17,7 @@ from Infrastructure.save import *
 from linreg_mult.routines import *
 from method import *
 
-method = Method.linreg
+method = Method.spearman
 gd_type = GeneDataType.mean_der_normed
 
 train_size = 482
@@ -34,13 +34,13 @@ if db_type is DataBaseType.GSE40279:
 elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type, geo_type)
 
-dict_cpg_gene, dict_cpg_map = get_dicts(config)
-
 attributes = get_attributes(config)
 
 genes_top, vals_top = get_top_gene_data(config, gd_type, method, num_top_genes)
 
 counts, R2s = R2_from_count(vals_top, attributes)
+
+print(linreg_mult_with_const(attributes, vals_top).summary())
 
 fn = method.value + '_R2s_' + gd_type.value + geo_type.value + '.txt'
 fn = get_result_path(fs_type, db_type, fn)
@@ -51,4 +51,6 @@ metrics_names, metrics_vals = validation_metrics(vals_top, attributes, test_size
 fn = method.value +'_metrics_' + gd_type.value + geo_type.value + '.txt'
 fn = get_result_path(fs_type, db_type, fn)
 save_params(fn, metrics_names, metrics_vals)
+
+dict_cpg_gene, dict_cpg_map = get_dicts(config)
 

@@ -1,5 +1,7 @@
+import math
 import numpy as np
 import scipy.stats as stats
+from Infrastructure.file_system import *
 from geo import *
 from Infrastructure.load import *
 from Infrastructure.save import *
@@ -8,7 +10,7 @@ from method import *
 from Infrastructure.file_system import *
 from geo import *
 
-method = Method.anova
+method = Method.spearman
 gd_type = GeneDataType.mean_der_normed
 
 fs_type = FSType.local_big
@@ -21,45 +23,28 @@ elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type, geo_type)
 
 num_top = 100
-shift_atr = 5
 
 attributes = get_attributes(config)
 
-min_atr = min(attributes)
-max_atr = max(attributes)
-
-min_atr = int(min_atr / shift_atr) * shift_atr
-max_atr = (int(max_atr / shift_atr) + 1) * shift_atr
-age_dict = {}
-for age_id in range(0, len(attributes)):
-    age = attributes[age_id]
-    key = int((age - min_atr) / shift_atr)
-    if key in age_dict:
-        age_dict[key].append(age_id)
-    else:
-        age_dict[key] = [age_id]
-
 gene_names, gene_vals = get_gene_data(config, gd_type)
 
-pvals = []
+gene_rhos = []
+
 for id in range(0, len(gene_names)):
 
     vals = gene_vals[id]
+    rhos, pvals = stats.spearmanr(attributes, vals)
+    if math.isnan(rhos):
+        rhos = 0.0
+    gene_rhos.append(rhos)
 
-    vals_dict = {}
-    for key_age in age_dict:
-        vals_dict[key_age] = list(np.asarray(vals)[age_dict[key_age]])
-
-    anova_mean = stats.f_oneway(*vals_dict.values())
-    pvals.append(anova_mean.pvalue)
-
-order = np.argsort(pvals)
+order = np.argsort(list(map(abs, gene_rhos)))[::-1]
+rhos_opt = list(np.array(gene_rhos)[order])
 genes_opt = list(np.array(gene_names)[order])
-pvals_opt = list(np.array(pvals)[order])
 
 fn = method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
 fn = get_result_path(fs_type, db_type, fn)
-save_params(fn, genes_opt, pvals_opt)
+save_params(fn, genes_opt, rhos_opt)
 
 if db_type is DataBaseType.GSE40279:
 
