@@ -128,3 +128,46 @@ def get_top_gene_data(config, gd_type, method, num_top):
 
     return genes_top, vals_top
 
+def get_top_cpg_data(config, method, num_top):
+    db_type = config.db_type
+    fs_type = config.fs_type
+    print_rate = config.print_rate
+    cpgs_top = []
+    fn = method.value + '_cpgs.txt'
+    fn = get_result_path(fs_type, db_type, fn)
+    f = open(fn)
+    for line in f:
+        cpg = line.split(' ')[0].rstrip()
+        cpgs_top.append(cpg)
+
+    cpgs_top = cpgs_top[0:num_top]
+
+    fn = db_type.value + '_average_beta.txt'
+    path = get_path(fs_type, db_type, fn)
+    f = open(path)
+    for skip_id in range(0, config.num_skip_lines):
+        skip_line = f.readline()
+
+    num_lines = 0
+    dict_top = {}
+
+    for line in f:
+
+        col_vals = config.line_proc(line)
+        cpg = col_vals[0]
+        vals = list(map(float, col_vals[1::]))
+
+        if cpg in cpgs_top:
+            dict_top[cpg] = vals
+
+        num_lines += 1
+        if num_lines % print_rate == 0:
+            print('num_lines: ' + str(num_lines))
+
+    vals_top = []
+    for cpg in cpgs_top:
+        vals = dict_top.get(cpg)
+        vals_top.append(vals)
+
+    return cpgs_top, vals_top
+
