@@ -6,3 +6,5 @@ class Method(Enum):
     anova = 'anova'
     spearman = 'spearman'
 
+class Validation(Enum):
+    linreg_mult = 'val_linreg_mult'

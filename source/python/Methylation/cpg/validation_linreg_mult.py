@@ -13,10 +13,10 @@ from config import *
 from sklearn.model_selection import ShuffleSplit
 from sklearn import metrics
 from sklearn.model_selection import ShuffleSplit
-from enet.routines import *
 from Infrastructure.load import *
 from Infrastructure.save import *
 from linreg_mult.routines import *
+import socket
 
 num_top_cpgs = 100
 train_size = 482
@@ -24,7 +24,11 @@ test_size = 174
 num_bootstrap_runs = 500
 
 method = Method.enet
+val_method = Validation.linreg_mult
+host_name = socket.gethostname()
 fs_type = FSType.local_big
+if host_name == 'MSI':
+    fs_type = FSType.local_msi
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type, geo_type)
@@ -39,13 +43,13 @@ cpgs_top, vals_top = get_top_cpg_data(config, method, num_top_cpgs)
 
 counts, R2s = R2_from_count(vals_top, attributes)
 
-fn = method.value + '_R2s_cpg.txt'
+fn = val_method.value + '_' + method.value + '_R2s_cpg.txt'
 fn = get_result_path(fs_type, db_type, fn)
 save_R2(fn, counts, R2s)
 
 metrics_names, metrics_vals = validation_metrics(vals_top, attributes, test_size, train_size, num_bootstrap_runs)
 
-fn = method.value +'_metrics_cpg.txt'
+fn = val_method.value + '_' + method.value +'_metrics_cpg.txt'
 fn = get_result_path(fs_type, db_type, fn)
 save_params(fn, metrics_names, metrics_vals)
 
