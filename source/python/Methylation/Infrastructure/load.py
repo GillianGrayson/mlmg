@@ -97,19 +97,47 @@ def get_params_dict(config, gd_type, method):
     return params_dict
 
 def get_top_gene_data(config, gd_type, method, num_top):
+    gene_names = get_top_gene_names(config, gd_type, method, num_top)
+    gene_vals = get_top_gene_vals(config, gd_type, gene_names)
+
+    return gene_names, gene_vals
+
+def get_top_gene_names(config, gd_type, method, num_top):
     db_type = config.db_type
     fs_type = config.fs_type
     geo_type = config.geo_type
-    fn = method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
+    fn = 'gene/' + method.value + '/' + method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
     fn = get_result_path(fs_type, db_type, fn)
     f = open(fn)
-    genes_top = []
+    gene_names = []
     for line in f:
         gene = line.split(' ')[0].rstrip()
-        genes_top.append(gene)
+        gene_names.append(gene)
 
-    genes_top = genes_top[0:num_top]
+        gene_names = gene_names[0:num_top]
 
+    return gene_names
+
+def get_top_cpg_gene_names(config, method, num_top):
+    db_type = config.db_type
+    fs_type = config.fs_type
+    geo_type = config.geo_type
+    fn = 'cpg/' + method.value + '/' + method.value + '_genes_cpgs.txt'
+    fn = get_result_path(fs_type, db_type, fn)
+    f = open(fn)
+    gene_names = []
+    for line in f:
+        gene = line.split(' ')[0].rstrip()
+        gene_names.append(gene)
+
+        gene_names = gene_names[0:num_top]
+
+    return gene_names
+
+def get_top_gene_vals(config, gd_type, genes_top):
+    db_type = config.db_type
+    fs_type = config.fs_type
+    geo_type = config.geo_type
     dict_top = {}
     fn = 'gene_' + gd_type.value + geo_type.value + '.txt'
     fn = get_gene_data_path(fs_type, db_type, gd_type, fn)
@@ -121,12 +149,13 @@ def get_top_gene_data(config, gd_type, method, num_top):
         if gene in genes_top:
             dict_top[gene] = vals
 
-    vals_top = []
+    gene_vals = []
     for gene in genes_top:
         vals = dict_top.get(gene)
-        vals_top.append(vals)
+        gene_vals.append(vals)
 
-    return genes_top, vals_top
+    return gene_vals
+
 
 def get_top_cpg_data(config, method, num_top):
     db_type = config.db_type

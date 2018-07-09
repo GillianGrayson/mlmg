@@ -5,7 +5,7 @@ from dicts import *
 
 class Config:
 
-    def __init__(self, fs_type, db_type, geo_type):
+    def __init__(self, fs_type, db_type, geo_type=GeoType.any):
         self.fs_type = fs_type
         self.db_type = db_type
         self.geo_type = geo_type
@@ -17,7 +17,7 @@ class Config:
 
 class ConfigGSE40279(Config):
 
-    def __init__(self, fs_type, db_type, geo_type):
+    def __init__(self, fs_type, db_type, geo_type=GeoType.any):
         super().__init__(fs_type, db_type, geo_type)
         self.num_skip_lines = 1
         self.attribute_fn = 'attribute.txt'
@@ -87,7 +87,7 @@ class ConfigGSE40279(Config):
 
 
 class ConfigGSE52588(Config):
-    def __init__(self, fs_type, db_type, geo_type):
+    def __init__(self, fs_type, db_type, geo_type=GeoType.any):
         super().__init__(fs_type, db_type, geo_type)
         self.num_skip_lines = 87
         self.attribute_fn = 'attribute.txt'

@@ -15,7 +15,12 @@ from Infrastructure.save import *
 
 num_folds = 10
 
+host_name = socket.gethostname()
 fs_type = FSType.local_big
+if host_name == 'MSI':
+    fs_type = FSType.local_msi
+elif host_name == 'DESKTOP-K9VO2TI':
+    fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type, geo_type)

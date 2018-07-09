@@ -13,7 +13,12 @@ from geo import *
 method = Method.spearman
 gd_type = GeneDataType.mean_der_normed
 
+host_name = socket.gethostname()
 fs_type = FSType.local_big
+if host_name == 'MSI':
+    fs_type = FSType.local_msi
+elif host_name == 'DESKTOP-K9VO2TI':
+    fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.islands_shores
 config = Config(fs_type, db_type, geo_type)
@@ -42,7 +47,7 @@ order = np.argsort(list(map(abs, gene_rhos)))[::-1]
 rhos_opt = list(np.array(gene_rhos)[order])
 genes_opt = list(np.array(gene_names)[order])
 
-fn = method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
+fn = 'gene/' + method.value + '/' +method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
 fn = get_result_path(fs_type, db_type, fn)
 save_params(fn, genes_opt, rhos_opt)
 
@@ -54,7 +59,7 @@ if db_type is DataBaseType.GSE40279:
         if gene in table:
             genes_match.append(gene)
 
-    fn = method.value + '_match_genes_' + gd_type.value + geo_type.value + '.txt'
+    fn = 'gene/' + method.value + '/' + method.value + '_match_genes_' + gd_type.value + geo_type.value + '.txt'
     fn = get_result_path(fs_type, db_type, fn)
     save_names(fn, genes_match)
 

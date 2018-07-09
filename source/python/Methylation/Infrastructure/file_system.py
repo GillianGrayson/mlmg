@@ -1,4 +1,5 @@
 from enum import Enum
+import socket
 
 class FSType(Enum):
     local_big = 'E:/Work/mlmg/data'
@@ -14,6 +15,7 @@ class GeneDataType(Enum):
     mean = 'mean'
     mean_der = 'mean_der'
     mean_der_normed = 'mean_der_normed'
+    from_cpg = 'cpg'
 
 def get_root(fs_type):
     root = fs_type.value

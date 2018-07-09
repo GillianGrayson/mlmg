@@ -20,7 +20,12 @@ test_size = 174
 num_top = 100
 num_bootstrap_runs = 100
 
+host_name = socket.gethostname()
 fs_type = FSType.local_big
+if host_name == 'MSI':
+    fs_type = FSType.local_msi
+elif host_name == 'DESKTOP-K9VO2TI':
+    fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
 geo_type = GeoType.any
 config = Config(fs_type, db_type, geo_type)

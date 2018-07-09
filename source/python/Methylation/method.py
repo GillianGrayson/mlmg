@@ -7,4 +7,5 @@ class Method(Enum):
     spearman = 'spearman'
 
 class Validation(Enum):
-    linreg_mult = 'val_linreg_mult'
+    linreg_mult = 'validation_linreg_mult'
+    linreg = 'validation_linreg'
