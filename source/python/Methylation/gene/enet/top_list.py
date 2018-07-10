@@ -1,20 +1,10 @@
-import pathlib
-from Infrastructure.file_system import *
-import os.path
-import math
-import numpy as np
-import pandas as pd
-import scipy.stats as stats
-import operator
-from dicts import *
-import statsmodels.api as sm
-from sklearn.linear_model import ElasticNetCV, ElasticNet
-from config import *
+from sklearn.linear_model import ElasticNet
 from sklearn.model_selection import ShuffleSplit
-from enet.routines import *
-from Infrastructure.load import *
-from Infrastructure.save import *
-from method import *
+
+from infrastructure.load import *
+from infrastructure.save import *
+from method.enet.routines import *
+from method.method import *
 
 method = Method.enet
 gd_type = GeneDataType.mean_der_normed

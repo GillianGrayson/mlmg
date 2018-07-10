@@ -1,21 +1,7 @@
-import pathlib
-from Infrastructure.file_system import *
-import os.path
-import math
-import numpy as np
-import pandas as pd
-import scipy.stats as stats
-import operator
-from dicts import *
-import statsmodels.api as sm
-from sklearn.linear_model import ElasticNetCV, ElasticNet
 from config import *
-from sklearn.model_selection import ShuffleSplit
-from sklearn import metrics
-from Infrastructure.load import *
-from Infrastructure.save import *
-from linreg_mult.routines import *
-from method import *
+from infrastructure.load import *
+from infrastructure.save import *
+from method.method import *
 
 train_size = 482
 test_size = 174

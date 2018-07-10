@@ -2,7 +2,7 @@ clear all;
 
 path = '../../../../data/GSE40279/result/gene/validation_linreg';
 
-config = 'enet_metrics(mean)_vals(mean)';
+config = 'enet_metrics(mean_der_normed)_vals(mean)';
 
 fn = sprintf('%s/%s.txt', path, config);
 data = importdata(fn);

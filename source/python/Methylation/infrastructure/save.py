@@ -1,4 +1,4 @@
-from Infrastructure.file_system import *
+from infrastructure.file_system import *
 import numpy as np
 
 def save_params(fn, names, vals):

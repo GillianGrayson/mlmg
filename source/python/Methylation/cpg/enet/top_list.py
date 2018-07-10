@@ -1,19 +1,9 @@
-import pathlib
-from Infrastructure.file_system import *
-import os.path
-import math
-import numpy as np
-import pandas as pd
-import scipy.stats as stats
-import operator
-from dicts import *
-import statsmodels.api as sm
-from sklearn.linear_model import ElasticNetCV, ElasticNet
-from config import *
+from sklearn.linear_model import ElasticNet
 from sklearn.model_selection import ShuffleSplit
-from enet.routines import *
-from Infrastructure.load import *
-from Infrastructure.save import *
+
+from infrastructure.load import *
+from infrastructure.save import *
+from method.enet.routines import *
 
 train_size = 482
 test_size = 174
@@ -22,6 +12,7 @@ num_bootstrap_runs = 100
 
 host_name = socket.gethostname()
 fs_type = FSType.local_big
+method = Method.enet
 if host_name == 'MSI':
     fs_type = FSType.local_msi
 elif host_name == 'DESKTOP-K9VO2TI':
@@ -36,7 +27,7 @@ elif db_type is DataBaseType.GSE52588:
 
 dict_cpg_gene, dict_cpg_map = get_dicts(config)
 
-fn = 'enet_params_cpg.txt'
+fn = method.value + '_params_cpg.txt'
 path = get_param_path(fs_type, db_type, fn)
 params = np.loadtxt(path, dtype='U50')
 alpha = float(params[0][1])
@@ -103,11 +94,11 @@ for id in range(0, len(cpgs_sorted)):
         genes_sorted.append(gene)
         counts_genes.append(count)
 
-fn = 'enet_cpgs.txt'
+fn = 'cpg/' + method.value + '/' + method.value + '_cpgs.txt'
 fn = get_result_path(fs_type, db_type, fn)
 save_enet_top(fn, cpgs_sorted, counts_sorted)
 
-fn = 'enet_genes_cpg.txt'
+fn = 'cpg/' + method.value + '/' + method.value + '_genes_cpg.txt'
 fn = get_result_path(fs_type, db_type, fn)
 save_enet_top(fn, genes_sorted, counts_genes)
 
@@ -117,7 +108,7 @@ if db_type is DataBaseType.GSE40279:
     for gene in list(set(genes_sorted))[0:num_top]:
         if gene in table:
             genes_match.append(gene)
-    fn = 'enet_match_genes_cpg.txt'
+    fn = 'cpg/' + method.value + '/' + method.value + '_match_genes_cpg.txt'
     fn = get_result_path(fs_type, db_type, fn)
     save_names(fn, genes_match)
     print('top: ' + str(len(genes_match)))

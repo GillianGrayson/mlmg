@@ -1,4 +1,4 @@
-from Infrastructure.file_system import *
+from infrastructure.file_system import *
 from geo import *
 
 def get_dicts(config):

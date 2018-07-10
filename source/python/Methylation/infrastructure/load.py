@@ -1,7 +1,7 @@
-from Infrastructure.file_system import *
 from dicts import *
 import numpy as np
-from method import *
+from method.method import *
+
 
 def get_attributes(config):
     db_type = config.db_type

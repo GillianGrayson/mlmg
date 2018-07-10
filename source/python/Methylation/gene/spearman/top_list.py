@@ -1,14 +1,10 @@
 import math
-import numpy as np
+
 import scipy.stats as stats
-from Infrastructure.file_system import *
-from geo import *
-from Infrastructure.load import *
-from Infrastructure.save import *
-from linreg_mult.routines import *
-from method import *
-from Infrastructure.file_system import *
-from geo import *
+
+from infrastructure.load import *
+from infrastructure.save import *
+from method.method import *
 
 method = Method.spearman
 gd_type = GeneDataType.mean_der_normed
@@ -44,18 +40,18 @@ for id in range(0, len(gene_names)):
     gene_rhos.append(rhos)
 
 order = np.argsort(list(map(abs, gene_rhos)))[::-1]
-rhos_opt = list(np.array(gene_rhos)[order])
-genes_opt = list(np.array(gene_names)[order])
+rhos_sorted = list(np.array(gene_rhos)[order])
+genes_sorted = list(np.array(gene_names)[order])
 
 fn = 'gene/' + method.value + '/' +method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
 fn = get_result_path(fs_type, db_type, fn)
-save_params(fn, genes_opt, rhos_opt)
+save_params(fn, genes_sorted, rhos_sorted)
 
 if db_type is DataBaseType.GSE40279:
 
     table = get_table(config)
     genes_match = []
-    for gene in genes_opt[0:num_top]:
+    for gene in genes_sorted[0:num_top]:
         if gene in table:
             genes_match.append(gene)
 

@@ -1,11 +1,8 @@
-import numpy as np
 import scipy.stats as stats
-from Infrastructure.file_system import *
-from geo import *
-from Infrastructure.load import *
-from Infrastructure.save import *
-from linreg_mult.routines import *
-from method import *
+
+from infrastructure.load import *
+from infrastructure.save import *
+from method.method import *
 
 method = Method.linreg
 gd_type = GeneDataType.mean_der_normed
