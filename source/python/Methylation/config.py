@@ -30,6 +30,7 @@ class Config:
         self.db_type = db_type
         self.geo_type = geo_type
         self.class_type = class_type
+        self.dna_region = dna_region
         self.print_rate = 10000
 
     def get_raw_dict(self):
@@ -38,8 +39,8 @@ class Config:
 
 class ConfigGSE40279(Config):
 
-    def __init__(self, fs_type, db_type, geo_type=GeoType.any):
-        super().__init__(fs_type, db_type, geo_type)
+    def __init__(self, fs_type, db_type, geo_type=GeoType.any, dna_region = DNARegion.genic, class_type=ClassType.any):
+        super().__init__(fs_type, db_type, geo_type=geo_type, dna_region=dna_region, class_type=class_type)
         self.num_skip_lines = 1
         self.attribute_fn = 'attribute.txt'
         self.miss_tag = 'NULL'
@@ -91,8 +92,8 @@ class ConfigGSE40279(Config):
 
 
 class ConfigGSE52588(Config):
-    def __init__(self, fs_type, db_type, geo_type=GeoType.any):
-        super().__init__(fs_type, db_type, geo_type)
+    def __init__(self, fs_type, db_type, geo_type=GeoType.any, dna_region = DNARegion.genic, class_type=ClassType.any):
+        super().__init__(fs_type, db_type, geo_type=geo_type, dna_region=dna_region, class_type=class_type)
         self.num_skip_lines = 87
         self.attribute_fn = 'attribute.txt'
         self.miss_tag = 'NULL'

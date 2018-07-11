@@ -10,7 +10,7 @@ def bop_condition(config, annotation):
     ct = annotation['Class']
 
     is_class_match = False
-    if ct is ClassType.any or ct is target_ct:
+    if ct is ClassType.any or ct == target_ct.value:
         is_class_match = True
 
     is_dna_region_match = False
@@ -67,11 +67,11 @@ def get_dict_bop_cpgs(config):
 
         is_passed = bop_condition(config, annotation)
 
-        if len(curr_bop) > 0:
-            if curr_bop in dict_bop_cpgs:
-                if is_passed:
+        if is_passed:
+            if len(curr_bop) > 0:
+                if curr_bop in dict_bop_cpgs:
                     dict_bop_cpgs[curr_bop].append(curr_cpg)
-            else:
-                dict_bop_cpgs[curr_bop] = [curr_cpg]
+                else:
+                    dict_bop_cpgs[curr_bop] = [curr_cpg]
 
     return dict_bop_cpgs
