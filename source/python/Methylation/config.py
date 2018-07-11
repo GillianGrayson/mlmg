@@ -1,14 +1,35 @@
 import numpy as np
+from annotation.regular import *
+from infrastructure.load import *
+from infrastructure.file_system import *
 
-from dicts import *
+def get_annotations(config):
 
+    fn = 'annotations.txt'
+    fn = get_path(config.fs_type, config.db_type, fn)
+    f = open(fn)
+
+    key_line = f.readline()
+    keys = key_line.split('\t')
+    annotations = {}
+    for key_id in range(0, len(keys)):
+        keys[key_id] = keys[key_id].rstrip()
+        annotations[keys[key_id]] = []
+
+    for line in f:
+        vals = line.split('\t')
+        for key_id in range(0, len(keys)):
+            annotations[keys[key_id]].append(vals[key_id].rstrip())
+
+    return annotations
 
 class Config:
 
-    def __init__(self, fs_type, db_type, geo_type=GeoType.any):
+    def __init__(self, fs_type, db_type, geo_type=GeoType.any, dna_region = DNARegion.genic, class_type=ClassType.any):
         self.fs_type = fs_type
         self.db_type = db_type
         self.geo_type = geo_type
+        self.class_type = class_type
         self.print_rate = 10000
 
     def get_raw_dict(self):
@@ -22,52 +43,36 @@ class ConfigGSE40279(Config):
         self.num_skip_lines = 1
         self.attribute_fn = 'attribute.txt'
         self.miss_tag = 'NULL'
+        self.annotations = get_annotations(self)
 
     def get_raw_dict(self):
+        dict_cpg_gene = get_dict_cpg_gene(self)
+        dict_cpg_map = get_dict_cpg_map_info(self)
+        attributes = get_attributes(self)
+        cpgs, vals = get_cpg_data(self)
 
-        dict_cpg_gene, dict_cpg_map = get_dicts(self)
-
-        fn = self.attribute_fn
-        attribute = []
-        full_path = get_path(self.fs_type, self.db_type, fn)
-        with open(full_path) as f:
-            for line in f:
-                attribute.append(int(line))
-
-        fn = self.db_type.value + '_average_beta.txt'
-        full_path = get_path(self.fs_type, self.db_type, fn)
-        f = open(full_path)
-        for skip_id in range(0, self.num_skip_lines):
-            skip_line = f.readline()
-
-        num_lines = 0
         gene_raw_dict = {}
         map_dict = {}
-        for line in f:
+        for id in range(0, len(cpgs)):
 
-            col_vals = line.split('\t')
-            CpG = col_vals[0]
-            vals = list(map(float, col_vals[1::]))
+            curr_cpg = cpgs[id]
+            curr_vals = vals[id]
 
-            genes = dict_cpg_gene.get(CpG)
-            map_info = dict_cpg_map.get(CpG)
+            genes = dict_cpg_gene.get(curr_cpg)
+            map_info = dict_cpg_map.get(curr_cpg)
 
             if genes is not None:
                 for gene in genes:
                     if gene in gene_raw_dict:
-                        for list_id in range(0, len(attribute)):
-                            gene_raw_dict[gene][list_id].append(vals[list_id])
+                        for list_id in range(0, len(attributes)):
+                            gene_raw_dict[gene][list_id].append(curr_vals[list_id])
                         map_dict[gene].append(int(map_info))
                     else:
                         gene_raw_dict[gene] = []
-                        for list_id in range(0, len(attribute)):
-                            gene_raw_dict[gene].append([vals[list_id]])
+                        for list_id in range(0, len(attributes)):
+                            gene_raw_dict[gene].append([curr_vals[list_id]])
                         map_dict[gene] = []
                         map_dict[gene].append(int(map_info))
-
-            num_lines += 1
-            if num_lines % self.print_rate == 0:
-                print('num_lines: ' + str(num_lines))
 
         for gene in gene_raw_dict:
             raw = gene_raw_dict[gene]
@@ -81,7 +86,6 @@ class ConfigGSE40279(Config):
         return gene_raw_dict
 
     def line_proc(self, line):
-
         line_list = line.split('\t')
         return line_list
 
@@ -92,101 +96,56 @@ class ConfigGSE52588(Config):
         self.num_skip_lines = 87
         self.attribute_fn = 'attribute.txt'
         self.miss_tag = 'NULL'
+        self.annotations = get_annotations(self)
 
     def get_raw_dict(self):
+        dict_cpg_gene = get_dict_cpg_gene(self)
+        dict_cpg_map = get_dict_cpg_map_info(self)
 
-        dict_cpg_gene, dict_cpg_map = get_dicts(self)
-
-        num_skip_lines_raw = 1
         pval_lim = 0.05
         pval_part = 0.75
 
+        cpgs, pvals = get_cpg_pval_data(self)
         cpg_non_inc = []
-        fn = self.db_type.value + '_raw_data.txt'
-        full_path = get_path(self.fs_type, self.db_type, fn)
-        f = open(full_path)
-        for skip_id in range(0, num_skip_lines_raw):
-            skip_line = f.readline()
+        for id in range(0, len(cpgs)):
+            curr_cpg = cpgs[id]
+            curr_pvals = pvals[2::3]
 
-        num_lines = 0
-        for line in f:
-            col_vals = line.split('\t')
-            CpG = col_vals[0].replace('"', '')
-            vals = list(map(float, col_vals[1::]))
-            pvals = vals[2::3]
             num_big_pvals = 0
-
             for pval in pvals:
                 if pval > pval_lim:
                     num_big_pvals += 1
 
             if float(num_big_pvals) / float(len(pvals)) > pval_part:
-                cpg_non_inc.append(CpG)
+                cpg_non_inc.append(curr_cpg)
 
-            num_lines += 1
-            if num_lines % self.print_rate == 0:
-                print('num_lines: ' + str(num_lines))
-                print('num_cpg_non_inc: ' + str(len(cpg_non_inc)))
+        attributes = get_attributes(self)
+        cpgs, vals = get_cpg_data(self)
 
-        fn = self.attribute_fn
-        attribute = []
-        full_path = get_path(self.fs_type, self.db_type, fn)
-        with open(full_path) as f:
-            for line in f:
-                attribute.append(int(line))
-
-        fn = self.db_type.value + '_average_beta.txt'
-        full_path = get_path(self.fs_type, self.db_type, fn)
-        f = open(full_path)
-        for skip_id in range(0, self.num_skip_lines):
-            skip_line = f.readline()
-
-        num_miss = 0
-        num_lines = 0
         gene_raw_dict = {}
         map_dict = {}
-        for line in f:
+        for id in range(0, len(cpgs)):
 
-            col_vals = line.split('\t')
+            curr_cpg = cpgs[id]
+            curr_vals = vals[id]
 
-            is_none = False
-            for val_id in range(0, len(col_vals)):
-                col_vals[val_id] = col_vals[val_id].replace('"', '').rstrip()
+            if curr_cpg not in cpg_non_inc:
 
-            if self.miss_tag in col_vals:
-                is_none = True
-                num_miss += 1
+                genes = dict_cpg_gene.get(curr_cpg)
+                map_info = dict_cpg_map.get(curr_cpg)
 
-            if not is_none:
-
-                CpG = col_vals[0].replace('"', '')
-
-                if CpG not in cpg_non_inc:
-
-                    vals = list(map(float, col_vals[1::]))
-
-                    genes = dict_cpg_gene.get(CpG)
-                    map_info = dict_cpg_map.get(CpG)
-
-                    if genes is not None:
-                        for gene in genes:
-                            if gene in gene_raw_dict:
-                                for list_id in range(0, len(attribute)):
-                                    gene_raw_dict[gene][list_id].append(vals[list_id])
-                                map_dict[gene].append(int(map_info))
-                            else:
-                                gene_raw_dict[gene] = []
-                                for list_id in range(0, len(attribute)):
-                                    gene_raw_dict[gene].append([vals[list_id]])
-                                map_dict[gene] = []
-                                map_dict[gene].append(int(map_info))
-
-                    num_lines += 1
-                    if num_lines % self.print_rate == 0:
-                        print('num_lines: ' + str(num_lines))
-
-        print('num_miss: ' + str(num_miss))
-        print('num_final: ' + str(num_lines))
+                if genes is not None:
+                    for gene in genes:
+                        if gene in gene_raw_dict:
+                            for list_id in range(0, len(attributes)):
+                                gene_raw_dict[gene][list_id].append(vals[list_id])
+                            map_dict[gene].append(int(map_info))
+                        else:
+                            gene_raw_dict[gene] = []
+                            for list_id in range(0, len(attributes)):
+                                gene_raw_dict[gene].append([vals[list_id]])
+                            map_dict[gene] = []
+                            map_dict[gene].append(int(map_info))
 
         for gene in gene_raw_dict:
             raw = gene_raw_dict[gene]
@@ -200,9 +159,7 @@ class ConfigGSE52588(Config):
         return gene_raw_dict
 
     def line_proc(self, line):
-
         line_list = line.split('\t')
-
         for val_id in range(0, len(line_list)):
             line_list[val_id] = line_list[val_id].replace('"', '').rstrip()
 

@@ -5,6 +5,7 @@ class Method(Enum):
     linreg = 'linreg'
     anova = 'anova'
     spearman = 'spearman'
+    manova = 'manova'
 
 class Validation(Enum):
     linreg_mult = 'validation_linreg_mult'

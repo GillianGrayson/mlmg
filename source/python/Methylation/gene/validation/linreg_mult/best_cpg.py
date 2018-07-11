@@ -2,6 +2,7 @@ from config import *
 from infrastructure.load import *
 from infrastructure.save import *
 from method.method import *
+from method.linreg_mult.routines import *
 
 train_size = 482
 test_size = 174

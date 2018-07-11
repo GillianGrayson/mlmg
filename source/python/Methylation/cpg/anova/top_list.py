@@ -1,6 +1,7 @@
 from infrastructure.load import *
 from infrastructure.save import *
 from method.enet.routines import *
+from scipy import stats
 
 num_top = 100
 shift_atr = 5
@@ -20,7 +21,7 @@ if db_type is DataBaseType.GSE40279:
 elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type, geo_type)
 
-dict_cpg_gene, dict_cpg_map = get_dicts(config)
+dict_cpg_gene = get_dict_cpg_gene(config)
 
 attributes = get_attributes(config)
 

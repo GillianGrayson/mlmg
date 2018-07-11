@@ -25,7 +25,7 @@ if db_type is DataBaseType.GSE40279:
 elif db_type is DataBaseType.GSE52588:
     config = ConfigGSE52588(fs_type, db_type, geo_type)
 
-dict_cpg_gene, dict_cpg_map = get_dicts(config)
+dict_cpg_gene = get_dict_cpg_gene(config)
 
 fn = method.value + '_params_cpg.txt'
 path = get_param_path(fs_type, db_type, fn)

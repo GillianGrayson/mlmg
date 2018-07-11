@@ -1,7 +1,7 @@
-from dicts import *
 import numpy as np
+from annotation.regular import *
 from method.method import *
-
+from infrastructure.file_system import *
 
 def get_attributes(config):
     db_type = config.db_type
@@ -11,7 +11,10 @@ def get_attributes(config):
     full_path = get_path(fs_type, db_type, fn)
     with open(full_path) as f:
         for line in f:
-            attributes.append(int(line))
+            if db_type is DataBaseType.GSE40279:
+                attributes.append(int(line))
+            elif db_type is DataBaseType.GSE52588:
+                attributes.append(int(line))
     return attributes
 
 def get_cpg_data(config):
@@ -19,7 +22,7 @@ def get_cpg_data(config):
     fs_type = config.fs_type
     print_rate = config.print_rate
 
-    dict_cpg_gene, dict_cpg_map = get_dicts(config)
+    dict_cpg_gene = get_dict_cpg_gene(config)
 
     fn = db_type.value + '_average_beta.txt'
     full_path = get_path(fs_type, db_type, fn)
@@ -34,15 +37,52 @@ def get_cpg_data(config):
     for line in f:
 
         col_vals = config.line_proc(line)
-        cpg = col_vals[0]
-        vals = list(map(float, col_vals[1::]))
 
-        if cpg in dict_cpg_gene:
-            vals_passed.append(vals)
-            cpgs_passed.append(cpg)
+        is_none = False
+        if config.miss_tag in col_vals:
+            is_none = True
+
+        if not is_none:
+            cpg = col_vals[0]
+            vals = list(map(float, col_vals[1::]))
+
+            if cpg in dict_cpg_gene:
+                vals_passed.append(vals)
+                cpgs_passed.append(cpg)
+
+            num_lines += 1
+            if num_lines % print_rate == 0:
+                print('num_lines: ' + str(num_lines))
+
+    return cpgs_passed, vals_passed
+
+def get_cpg_pval_data(config):
+    db_type = config.db_type
+    fs_type = config.fs_type
+    print_rate = config.print_rate
+
+    num_skip_lines_raw = 1
+
+    fn = db_type.value + '_raw_data.txt'
+    fn = get_path(fs_type, db_type, fn)
+    f = open(fn)
+    for skip_id in range(0, num_skip_lines_raw):
+        skip_line = f.readline()
+
+    num_lines = 0
+    cpgs_passed = []
+    vals_passed = []
+    for line in f:
+        col_vals = line.split('\t')
+        cpg = col_vals[0].replace('"', '')
+        vals = list(map(float, col_vals[1::]))
+        pvals = vals[2::3]
+
+        cpgs_passed.append(cpg)
+        vals_passed.append(pvals)
 
         num_lines += 1
-        if num_lines % print_rate == 0:
+        if num_lines % config.print_rate == 0:
             print('num_lines: ' + str(num_lines))
 
     return cpgs_passed, vals_passed

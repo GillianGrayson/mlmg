@@ -1,11 +1,11 @@
 import scipy.stats as stats
-
 from infrastructure.load import *
 from infrastructure.save import *
 from method.method import *
+from config import *
 
 method = Method.linreg
-gd_type = GeneDataType.mean_der_normed
+gd_type = GeneDataType.mean
 
 host_name = socket.gethostname()
 fs_type = FSType.local_big
@@ -14,7 +14,7 @@ if host_name == 'MSI':
 elif host_name == 'DESKTOP-K9VO2TI':
     fs_type = FSType.local_big
 db_type = DataBaseType.GSE40279
-geo_type = GeoType.islands_shores
+geo_type = GeoType.any
 config = Config(fs_type, db_type, geo_type)
 if db_type is DataBaseType.GSE40279:
     config = ConfigGSE40279(fs_type, db_type, geo_type)

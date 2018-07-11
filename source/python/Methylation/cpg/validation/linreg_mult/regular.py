@@ -1,8 +1,8 @@
 import socket
-
 from config import *
 from infrastructure.load import *
 from infrastructure.save import *
+from method.linreg_mult.routines import *
 
 num_top_cpgs = 100
 train_size = 482
