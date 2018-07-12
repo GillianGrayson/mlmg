@@ -59,7 +59,6 @@ def get_cpg_data(config):
 def get_cpg_pval_data(config):
     db_type = config.db_type
     fs_type = config.fs_type
-    print_rate = config.print_rate
 
     num_skip_lines_raw = 1
 

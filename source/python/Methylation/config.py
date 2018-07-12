@@ -4,7 +4,6 @@ from infrastructure.load import *
 from infrastructure.file_system import *
 
 def get_annotations(config):
-
     fn = 'annotations.txt'
     fn = get_path(config.fs_type, config.db_type, fn)
     f = open(fn)
@@ -110,14 +109,14 @@ class ConfigGSE52588(Config):
         cpg_non_inc = []
         for id in range(0, len(cpgs)):
             curr_cpg = cpgs[id]
-            curr_pvals = pvals[2::3]
+            curr_pvals = pvals[id]
 
             num_big_pvals = 0
-            for pval in pvals:
+            for pval in curr_pvals:
                 if pval > pval_lim:
                     num_big_pvals += 1
 
-            if float(num_big_pvals) / float(len(pvals)) > pval_part:
+            if float(num_big_pvals) / float(len(curr_pvals)) > pval_part:
                 cpg_non_inc.append(curr_cpg)
 
         attributes = get_attributes(self)
@@ -139,12 +138,12 @@ class ConfigGSE52588(Config):
                     for gene in genes:
                         if gene in gene_raw_dict:
                             for list_id in range(0, len(attributes)):
-                                gene_raw_dict[gene][list_id].append(vals[list_id])
+                                gene_raw_dict[gene][list_id].append(curr_vals[list_id])
                             map_dict[gene].append(int(map_info))
                         else:
                             gene_raw_dict[gene] = []
                             for list_id in range(0, len(attributes)):
-                                gene_raw_dict[gene].append([vals[list_id]])
+                                gene_raw_dict[gene].append([curr_vals[list_id]])
                             map_dict[gene] = []
                             map_dict[gene].append(int(map_info))
 
