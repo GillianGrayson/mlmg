@@ -201,7 +201,7 @@ def get_top_cpg_data(config, method, num_top):
     fs_type = config.fs_type
     print_rate = config.print_rate
     cpgs_top = []
-    fn = method.value + '_cpgs.txt'
+    fn = 'cpg/' + method.value + '/' + method.value + '_cpgs.txt'
     fn = get_result_path(fs_type, db_type, fn)
     f = open(fn)
     for line in f:

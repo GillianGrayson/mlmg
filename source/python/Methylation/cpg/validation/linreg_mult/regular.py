@@ -9,7 +9,7 @@ train_size = 482
 test_size = 174
 num_bootstrap_runs = 500
 
-method = Method.enet
+method = Method.linreg
 val_method = Validation.linreg_mult
 host_name = socket.gethostname()
 fs_type = FSType.local_big
