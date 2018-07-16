@@ -14,3 +14,5 @@ class Validation(Enum):
 
 class ClusteringType(Enum):
     k_means = 'k_means'
+    mean_shift = 'mean_shift'
+

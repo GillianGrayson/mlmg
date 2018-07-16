@@ -9,8 +9,8 @@ num_top_genes = 100
 
 method = Method.enet
 val_method = Validation.linreg
-gd_type_order = GeneDataType.mean
-gd_type_vals = GeneDataType.mean_der_normed
+gd_type_order = GeneDataType.mean_der_normed
+gd_type_vals = GeneDataType.mean
 host_name = socket.gethostname()
 geo_type = GeoType.islands_shores
 fs_type = FSType.local_big

@@ -2,7 +2,7 @@ clear all;
 
 path = '../../../../data/GSE40279/result/gene/validation_linreg';
 
-config = 'enet_plane(mean)_islands_shores';
+config = 'enet_plane(mean_der_normed)_islands_shores';
 
 fn = sprintf('%s/%s.txt', path, config);
 data = importdata(fn);

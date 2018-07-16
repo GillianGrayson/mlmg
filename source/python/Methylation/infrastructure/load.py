@@ -147,7 +147,7 @@ def get_top_gene_names(config, gd_type, method, num_top):
     geo_type = config.geo_type
     fn = ''
     if method is Method.clustering:
-        fn = 'gene/' + method.value + '/' + config.clustering_type.value + '_1D_' + gd_type.value + '_' + geo_type.value + '.txt'
+        fn = 'gene/' + method.value + '/' + config.clustering_type.value + '_1D_' + gd_type.value + geo_type.value + '.txt'
     else:
         fn = 'gene/' + method.value + '/' + method.value + '_genes_' + gd_type.value + geo_type.value + '.txt'
     fn = get_result_path(fs_type, db_type, fn)
