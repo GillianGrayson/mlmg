@@ -37,3 +37,16 @@ def save_linreg_top(fn, genes, p_vals, r_vals, slopes, intercepts):
     info['var4'] = slopes
     info['var5'] = intercepts
     np.savetxt(fn, info, fmt=fmt)
+
+def save_features(fn, names, features):
+    num_features = len(features)
+    dtype = [('var1', 'U50')]
+    fmt = '%s'
+    for f_id in range(0, num_features):
+        dtype.append(('var' + str(f_id + 2), float))
+        fmt +=  ' %0.18e'
+    info = np.zeros(len(names), dtype=dtype)
+    info['var1'] = names
+    for f_id in range(0, num_features):
+        info['var' + str(f_id + 2)] = features[f_id]
+    np.savetxt(fn, info, fmt=fmt)

@@ -1,5 +1,5 @@
 import scipy.stats as stats
-
+from config import *
 from infrastructure.load import *
 from infrastructure.save import *
 from method.method import *
