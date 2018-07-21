@@ -1,47 +1,95 @@
-from enum import Enum
-import socket
+from config.types import DataType, Scenario, Validation, Approach
 
-class FSType(Enum):
-    local_big = 'E:/Work/mlmg/data'
-    local_msi = 'D:/Work/mlmg/data'
-    unn = '/common/home/yusipov_i/Work/mlmg/data'
-    mpipks = '/data/biophys/yusipov/mlmg/data'
-
-class DataBaseType(Enum):
-    GSE40279 = 'GSE40279'
-    GSE52588 = 'GSE52588'
-
-class GeneDataType(Enum):
-    mean = 'mean'
-    mean_der = 'mean_der'
-    mean_der_normed = 'mean_der_normed'
-    from_cpg = 'cpg'
-
-def get_root(fs_type):
-    root = fs_type.value
+def get_root(config):
+    root = config.fs.value
     return root
 
-def get_path(fs_type, db_type, file_name):
-    root = fs_type.value
-    db = db_type.value
+def get_path(config, file_name):
+    root = config.fs.value
+    db = config.db.value
     path = root + '/' + db + '/' + file_name
     return path
 
-def get_gene_data_path(fs_type, db_type, gd_type, file_name):
-    root = fs_type.value
-    db = db_type.value
-    gd = gd_type.value
-    path = root + '/' + db + '/' + 'gene_data' + '/' + gd + '/' + file_name
+def get_aux_path(config, file_name):
+    root = config.fs.value
+    db = config.db.value
+    path = root + '/' + db + '/aux_data/' + config.geo_type.value +  '/' + file_name
     return path
 
-def get_param_path(fs_type, db_type, file_name):
-    root = fs_type.value
-    db = db_type.value
-    path = root + '/' + db + '/' + 'param' + '/' + file_name
+def get_result_path(config, file_name):
+    root = config.fs.value
+
+    path = root + '/' + config.db.value + '/' + 'result' + '/' + config.dt.value
+
+    if config.dt is DataType.gene:
+        if config.scenario is Scenario.validation:
+            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
+            if config.validation is Validation.simple:
+                path += '/' + config.geo_type.value + '/' + \
+                        'approach(' + config.approach.value + ')_' + \
+                        'method(' + config.approach_method.value + ')_' + \
+                        'order(' + config.approach_gd.value + ')_' + \
+                        'vals(' + config.validation_gd.value + ')'
+        elif config.scenario is Scenario.approach:
+            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            if config.approach is Approach.top:
+                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+            elif config.approach is Approach.clustering:
+                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+    elif config.dt is DataType.cpg:
+        if config.scenario is Scenario.validation:
+            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
+            if config.validation is Validation.simple:
+                path += ''
+        elif config.scenario is Scenario.approach:
+            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            if config.approach_method is Approach.top:
+                path += ''
+            elif config.approach_method is Approach.clustering:
+                path += ''
+
+    path += '/' + file_name
     return path
 
-def get_result_path(fs_type, db_type, file_name):
-    root = fs_type.value
-    db = db_type.value
-    path = root + '/' + db + '/' + 'result' + '/' + file_name
+def get_gene_data_path(config, file_name):
+    root = config.fs.value
+    path = root + '/' + config.db.value + '/' + 'gene_data'
+
+    if config.scenario is Scenario.validation:
+        path += '/' + config.validation_gd.value
+    elif config.scenario is Scenario.approach:
+        path += '/' + config.approach_gd.value
+
+    path += '/' + config.geo_type.value
+    path += '/' + file_name
+    return path
+
+def get_param_path(config, file_name):
+    root = config.fs.value
+    path = root + '/' + config.db.value + '/' + 'param' + '/' + config.dt.value
+
+    if config.dt is DataType.gene:
+        if config.scenario is Scenario.validation:
+            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
+            if config.validation is Validation.simple:
+                path += ''
+        elif config.scenario is Scenario.approach:
+            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            if config.approach is Approach.top:
+                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+            elif config.approach is Approach.clustering:
+                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+    elif config.dt is DataType.cpg:
+        if config.scenario is Scenario.validation:
+            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
+            if config.validation is Validation.simple:
+                path += ''
+        elif config.scenario is Scenario.approach:
+            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            if config.approach is Approach.top:
+                path += ''
+            elif config.approach is Approach.clustering:
+                path += ''
+
+    path += '/' + file_name
     return path

@@ -1,4 +1,4 @@
-from annotation.types import *
+from config.types import *
 
 def bop_condition(config, annotation):
     target_ct = config.class_type
@@ -32,7 +32,6 @@ def bop_condition(config, annotation):
                         result = True
 
     return result
-
 
 def get_dict_bop_cpgs(config):
     annotations = config.annotations

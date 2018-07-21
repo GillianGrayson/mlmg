@@ -1,4 +1,4 @@
-from annotation.types import *
+from config.types import *
 
 def regular_condition(config, annotation):
     geo_type = config.geo_type
@@ -50,7 +50,6 @@ def regular_condition(config, annotation):
                         result = True
 
     return result
-
 
 def get_dict_cpg_gene(config):
     annotations = config.annotations

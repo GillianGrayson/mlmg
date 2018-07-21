@@ -1,8 +1,5 @@
 from sklearn.linear_model import ElasticNetCV
-from config import *
-from sklearn.linear_model import ElasticNetCV
-
-from config import *
+import numpy as np
 
 
 def get_enet_params(x, y, num_folds):

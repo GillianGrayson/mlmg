@@ -25,7 +25,6 @@ def R2_from_count(vals, attributes):
         reg_res = linreg_mult(attributes, vals[0:num_opt + 1])
         counts.append(num_opt + 1)
         R2s.append(reg_res.rsquared)
-
     return counts, R2s
 
 def validation_metrics(vals, attributes, test_size, train_size, num_bootstrap_runs):
