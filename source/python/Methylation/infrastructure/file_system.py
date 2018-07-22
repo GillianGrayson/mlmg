@@ -1,4 +1,4 @@
-from config.types import DataType, Scenario, Validation, Approach
+from config.types import *
 
 def get_root(config):
     root = config.fs.value
@@ -33,9 +33,17 @@ def get_result_path(config, file_name):
         elif config.scenario is Scenario.approach:
             path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
             if config.approach is Approach.top:
-                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+                path += '/' + config.approach_gd.value
+                if config.approach_gd is GeneDataType.from_cpg:
+                    path += ''
+                else:
+                    path += '/' + config.geo_type.value
             elif config.approach is Approach.clustering:
-                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+                path += '/' + config.approach_gd.value
+                if config.approach_gd is GeneDataType.from_cpg:
+                    path += ''
+                else:
+                    path += '/' + config.geo_type.value
     elif config.dt is DataType.cpg:
         if config.scenario is Scenario.validation:
             path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
@@ -76,9 +84,17 @@ def get_param_path(config, file_name):
         elif config.scenario is Scenario.approach:
             path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
             if config.approach is Approach.top:
-                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+                path += '/' + config.approach_gd.value
+                if config.approach_gd is GeneDataType.from_cpg:
+                    path += ''
+                else:
+                    path += '/' + config.geo_type.value
             elif config.approach is Approach.clustering:
-                path += '/' + config.approach_gd.value + '/' + config.geo_type.value
+                path += '/' + config.approach_gd.value
+                if config.approach_gd is GeneDataType.from_cpg:
+                    path += ''
+                else:
+                    path += '/' + config.geo_type.value
     elif config.dt is DataType.cpg:
         if config.scenario is Scenario.validation:
             path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value

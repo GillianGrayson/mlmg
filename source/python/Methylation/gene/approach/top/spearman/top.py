@@ -7,7 +7,7 @@ from scipy import stats
 import math
 
 
-def save_top_spearman(config, shift=5):
+def save_top_spearman(config):
     attributes = get_main_attributes(config)
     gene_names, gene_vals = load_gene_data(config)
 

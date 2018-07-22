@@ -34,7 +34,7 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=100):
         enet_y_train = list(np.array(attributes)[train_index])
         enet_y_test = list(np.array(attributes)[test_index])
 
-        enet = enet.fit(enet_X_test, enet_y_test)
+        enet = enet.fit(enet_X_train, enet_y_train)
         coef = enet.coef_
 
         order = np.argsort(list(map(abs, coef)))[::-1]

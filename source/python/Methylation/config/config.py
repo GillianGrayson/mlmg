@@ -53,15 +53,18 @@ class Config:
         self.miss_tag = ''
         self.train_size = 0
         self.test_size = 0
+        self.shift = 0
         if self.db is DataBaseType.GSE40279:
             self.num_skip_lines = 1
             self.attribute_fn = 'attributes.txt'
             self.miss_tag = 'NULL'
             self.train_size = 482
             self.test_size = 174
+            self.shift = 5
         elif self.db is DataBaseType.GSE52588:
             self.num_skip_lines = 87
             self.attribute_fn = 'attribute.txt'
             self.miss_tag = 'NULL'
             self.train_size = 0
             self.test_size = 0
+            self.shift = 0
