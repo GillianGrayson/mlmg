@@ -10,10 +10,10 @@ def get_path(config, file_name):
     path = root + '/' + db + '/' + file_name
     return path
 
-def get_aux_path(config, file_name):
+def get_suppl_path(config, file_name):
     root = config.fs.value
     db = config.db.value
-    path = root + '/' + db + '/aux_data/' + config.geo_type.value +  '/' + file_name
+    path = root + '/' + db + '/suppl_data/' + config.geo_type.value +  '/' + file_name
     return path
 
 def get_result_path(config, file_name):
@@ -61,7 +61,7 @@ def get_result_path(config, file_name):
 
 def get_gene_data_path(config, file_name):
     root = config.fs.value
-    path = root + '/' + config.db.value + '/' + 'gene_data'
+    path = root + '/' + config.db.value + '/' + 'gene'
 
     if config.scenario is Scenario.validation:
         path += '/' + config.validation_gd.value

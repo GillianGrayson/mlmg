@@ -7,7 +7,7 @@ from infrastructure.load.attributes import get_main_attributes
 def load_gene_data(config):
     genes_passed = []
     vals_passed = []
-    fn = 'gene_data.txt'
+    fn = 'gene.txt'
     path = get_gene_data_path(config, fn)
     f = open(path)
     for line in f:

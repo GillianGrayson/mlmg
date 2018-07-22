@@ -1,4 +1,5 @@
 import numpy as np
+from config.config import *
 from annotation.regular import *
 from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.file_system import *
@@ -8,7 +9,7 @@ def save_cpg_by_gene_list(config, fn):
     gene_cpg_dict = get_dict_gene_cpg(config)
     cpgs, vals = load_cpg_data(config)
 
-    fn = get_aux_path(config, fn)
+    fn = get_suppl_path(config, fn)
     f = open(fn + '.txt')
     target_genes = f.read().splitlines()
 
@@ -25,3 +26,13 @@ def save_cpg_by_gene_list(config, fn):
                 str_list.append(curr_str)
 
     np.savetxt(fn + '_cpgs.txt', str_list, fmt="%s")
+
+
+
+config = Config(
+    db=DataBaseType.GSE40279,
+    geo=GeoType.any
+)
+
+fn = 'graph_genes_1'
+save_cpg_by_gene_list(config, fn)

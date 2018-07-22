@@ -27,7 +27,7 @@ def load_top_gene_names(config, num_top):
 
 def load_top_gene_vals(config, genes_top):
     dict_top = {}
-    fn = 'gene_data.txt'
+    fn = 'gene.txt'
     fn = get_gene_data_path(config, fn)
     f = open(fn)
     for line in f:

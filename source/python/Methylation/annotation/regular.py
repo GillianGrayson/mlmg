@@ -84,6 +84,45 @@ def get_dict_cpg_gene(config):
 
     return dict_cpg_gene
 
+def get_dict_gene_chr(config):
+    annotations = config.annotations
+
+    cpg = annotations['ID_REF']
+    gene = annotations['UCSC_REFGENE_NAME']
+    chr = annotations['CHR']
+    geo = annotations['RELATION_TO_UCSC_CPG_ISLAND']
+    map_info = annotations['MAPINFO']
+
+    dict_gene_chr = {}
+    for i in range(0, len(cpg)):
+
+        curr_cpg = cpg[i].rstrip()
+        curr_gene = gene[i].rstrip()
+        curr_chr = chr[i].rstrip()
+        curr_geo = geo[i].rstrip()
+        curr_map_info = map_info[i].rstrip()
+
+        annotation = {}
+        annotation['ID_REF'] = curr_cpg
+        annotation['UCSC_REFGENE_NAME'] = curr_gene
+        annotation['CHR'] = curr_chr
+        annotation['RELATION_TO_UCSC_CPG_ISLAND'] = curr_geo
+        annotation['MAPINFO'] = curr_map_info
+
+        is_passed = regular_condition(config, annotation)
+
+        if is_passed:
+            all_genes = list(set(curr_gene.split(';')))
+            for g in all_genes:
+                if g in dict_gene_chr:
+                    if curr_chr not in dict_gene_chr[g]:
+                        dict_gene_chr[g].append(curr_chr)
+                else:
+                    dict_gene_chr[g] = [curr_chr]
+
+    return dict_gene_chr
+
+
 def get_dict_gene_cpg(config):
     annotations = config.annotations
 
