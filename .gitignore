@@ -111,3 +111,5 @@ data/D1/
 *.asv
 
 data/
+
+*.pyc
