@@ -72,3 +72,4 @@ class Method(Enum):
     k_means = 'k_means'
     mean_shift = 'mean_shift'
     linreg_mult = 'linreg_mult'
+    match = 'match'

@@ -25,11 +25,14 @@ def get_result_path(config, file_name):
         if config.scenario is Scenario.validation:
             path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
             if config.validation is Validation.simple:
-                path += '/' + config.geo_type.value + '/' + \
-                        'approach(' + config.approach.value + ')_' + \
-                        'method(' + config.approach_method.value + ')_' + \
-                        'order(' + config.approach_gd.value + ')_' + \
-                        'vals(' + config.validation_gd.value + ')'
+                if config.validation_method is Method.linreg_mult:
+                    path += '/' + config.geo_type.value + '/' + \
+                            'approach(' + config.approach.value + ')_' + \
+                            'method(' + config.approach_method.value + ')_' + \
+                            'order(' + config.approach_gd.value + ')_' + \
+                            'vals(' + config.validation_gd.value + ')'
+                elif config.validation_method is Method.match:
+                    path += '/' + config.validation_gd.value + '/' + config.geo_type.value
         elif config.scenario is Scenario.approach:
             path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
             if config.approach is Approach.top:
