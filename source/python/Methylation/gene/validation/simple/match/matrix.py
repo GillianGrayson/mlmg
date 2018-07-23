@@ -1,6 +1,8 @@
 from config.config import *
 from infrastructure.load.top import *
 from infrastructure.save.features import save_features
+import xlsxwriter
+
 
 db = DataBaseType.GSE40279
 dt = DataType.gene
@@ -8,7 +10,7 @@ approach = Approach.top
 scenario = Scenario.approach
 approach_methods = [Method.anova, Method.enet, Method.linreg, Method.spearman]
 approach_gd = GeneDataType.mean
-geo = GeoType.islands
+geo = GeoType.islands_shores
 
 config = Config(
     db=db,
@@ -43,7 +45,11 @@ firsts = []
 seconds = []
 match_count = []
 match_genes = []
+first_row = list(gene_top_dict.keys())
+first_row.insert(0, 'source')
+table = [first_row]
 for first in gene_top_dict:
+    row = [first]
     for second in gene_top_dict:
         firsts.append(first)
         seconds.append(second)
@@ -55,7 +61,9 @@ for first in gene_top_dict:
                 genes_common.append(gene)
         match_count.append(len(genes_common))
         match_genes.append(';'.join(genes_common))
+        row.append(str(len(genes_common)))
 
+    table.append(row)
 
 config.scenario = Scenario.validation
 config.validation = Validation.simple
@@ -64,3 +72,12 @@ config.validation_gd = config.approach_gd
 fn = 'match_matrix.txt'
 fn = get_result_path(config, fn)
 save_features(fn, [firsts, seconds, match_count, match_genes])
+
+fn = 'match_matrix.xlsx'
+fn = get_result_path(config, fn)
+workbook = xlsxwriter.Workbook(fn)
+worksheet = workbook.add_worksheet()
+row = 0
+for col, data in enumerate(table):
+    worksheet.write_column(row, col, data)
+workbook.close()
