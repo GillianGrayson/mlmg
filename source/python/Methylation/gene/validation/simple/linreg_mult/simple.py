@@ -15,7 +15,9 @@ def save_simple_linreg_mult(config, num_bootstrap_runs=500, num_top=100):
     fn = get_result_path(config, fn)
     save_features(fn, [counts, R2s])
 
-    metrics_names, metrics_vals = validation_metrics(gene_vals, attributes, config.test_size, config.train_size, num_bootstrap_runs)
+    test_size = int(len(attributes) * config.test_part)
+    train_size = len(attributes) - test_size
+    metrics_names, metrics_vals = validation_metrics(gene_vals, attributes, test_size, train_size, num_bootstrap_runs)
     fn = 'metrics.txt'
     fn = get_result_path(config, fn)
     save_features(fn, [metrics_names, metrics_vals])

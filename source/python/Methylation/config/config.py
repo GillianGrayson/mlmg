@@ -1,6 +1,7 @@
 from config.types import *
 from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
+from infrastructure.load.indexes import get_indexes
 import socket
 
 
@@ -14,6 +15,7 @@ class Config:
                  scenario=Scenario.approach,
                  approach_method=Method.linreg,
                  validation_method=Method.linreg_mult,
+                 gt=Gender.any,
                  approach_gd=GeneDataType.mean,
                  validation_gd=GeneDataType.mean,
                  geo=GeoType.any,
@@ -28,6 +30,7 @@ class Config:
         self.scenario=scenario
         self.approach_method = approach_method
         self.validation_method = validation_method
+        self.gt=gt
         self.approach_gd = approach_gd
         self.validation_gd = validation_gd
         self.geo_type = geo
@@ -44,6 +47,7 @@ class Config:
 
         # Core data
         self.annotations = load_annotations(self)
+        self.indexes = get_indexes(self)
         self.attributes = load_attributes(self)
 
         # Aux data
@@ -51,20 +55,17 @@ class Config:
         self.num_skip_lines = 0
         self.attribute_fn = ''
         self.miss_tag = ''
-        self.train_size = 0
-        self.test_size = 0
+        self.test_part = 0
         self.shift = 0
         if self.db is DataBaseType.GSE40279:
             self.num_skip_lines = 1
             self.attribute_fn = 'attributes.txt'
             self.miss_tag = 'NULL'
-            self.train_size = 482
-            self.test_size = 174
+            self.test_part = 0.25
             self.shift = 5
         elif self.db is DataBaseType.GSE52588:
             self.num_skip_lines = 87
             self.attribute_fn = 'attribute.txt'
             self.miss_tag = 'NULL'
-            self.train_size = 0
-            self.test_size = 0
+            self.test_part = 0
             self.shift = 0

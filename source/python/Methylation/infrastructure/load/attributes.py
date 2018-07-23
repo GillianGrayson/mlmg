@@ -1,5 +1,6 @@
 from config.types import DataBaseType
 from infrastructure.file_system import get_path
+import numpy as np
 
 
 def load_attributes(config):
@@ -22,9 +23,10 @@ def load_attributes(config):
     return attributes
 
 def get_main_attributes(config):
+    indexes = config.indexes
     ma = []
     if config.db is DataBaseType.GSE40279:
-        ma = list(map(int, config.attributes['age']))
+        ma = list(map(int, list(np.array(config.attributes['age'])[indexes])))
     elif config.db is DataBaseType.GSE52588:
         ma = config.attributes['type']
     return ma

@@ -32,6 +32,12 @@ class Scenario(Enum):
     validation = 'validation'
 
 
+class Gender(Enum):
+    male = 'M'
+    female = 'F'
+    any = 'any'
+
+
 class GeneDataType(Enum):
     mean = 'mean'
     std = 'std'

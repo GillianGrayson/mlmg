@@ -18,7 +18,9 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=100):
 
     genes_passed, vals_passed = load_gene_data(config)
 
-    rs = ShuffleSplit(num_bootstrap_runs, config.test_size, config.train_size)
+    test_size = int(len(attributes) * config.test_part)
+    train_size = len(attributes) - test_size
+    rs = ShuffleSplit(num_bootstrap_runs, test_size, train_size)
     indexes = np.linspace(0, len(attributes) - 1, len(attributes), dtype=int).tolist()
     enet_X = np.array(vals_passed).T.tolist()
 
