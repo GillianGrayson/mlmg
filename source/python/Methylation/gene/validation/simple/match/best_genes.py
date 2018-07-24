@@ -31,10 +31,15 @@ for gt in genders:
             geo=geo
         )
 
+        gene_top_dict = {}
+
         fn = 'claudio2015.txt'
         gene_top = load_top_gene_names_by_article(config, fn)
-        gene_top_dict = {}
         gene_top_dict['claudio2015'] = gene_top
+
+        fn = 'hannum2013.txt'
+        gene_top = load_top_gene_names_by_article(config, fn)
+        gene_top_dict['hannum2103'] = gene_top
 
         for method in approach_methods:
             config.approach_method = method

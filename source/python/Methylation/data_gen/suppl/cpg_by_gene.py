@@ -5,11 +5,10 @@ from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.file_system import *
 
 
-def save_cpg_by_gene_list(config, fn):
+def save_cpg_by_gene(config, fn):
     gene_cpg_dict = get_dict_gene_cpg(config)
     cpgs, vals = load_cpg_data(config)
 
-    fn = get_suppl_path(config, fn)
     f = open(fn + '.txt')
     target_genes = f.read().splitlines()
 
@@ -35,4 +34,5 @@ config = Config(
 )
 
 fn = 'graph_genes_1'
-save_cpg_by_gene_list(config, fn)
+fn = get_suppl_path(config, fn)
+save_cpg_by_gene(config, fn)
