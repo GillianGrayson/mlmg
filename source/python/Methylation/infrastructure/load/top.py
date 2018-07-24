@@ -1,6 +1,7 @@
 from infrastructure.file_system import *
 from infrastructure.load.routines import line_proc
 from infrastructure.file_system import get_result_path
+import numpy as np
 
 
 def load_top_gene_names_by_article(config, fn):
@@ -26,6 +27,7 @@ def load_top_gene_names(config, num_top):
     return gene_names
 
 def load_top_gene_vals(config, genes_top):
+    indexes = config.indexes
     dict_top = {}
     fn = 'gene.txt'
     fn = get_gene_data_path(config, fn)
@@ -34,6 +36,7 @@ def load_top_gene_vals(config, genes_top):
         col_vals = line.split(' ')
         gene = col_vals[0]
         vals = list(map(float, col_vals[1::]))
+        vals = list(np.array(vals)[indexes])
         if gene in genes_top:
             dict_top[gene] = vals
     gene_vals = []
@@ -54,6 +57,7 @@ def load_top_gene_names_by_cpg(config, method, num_top):
     return gene_names
 
 def load_top_cpg_data(config, method, num_top):
+    indexes = config.indexes
     db_type = config.db_type
     print_rate = config.print_rate
     cpgs_top = []
@@ -80,6 +84,7 @@ def load_top_cpg_data(config, method, num_top):
         col_vals = line_proc(config, line)
         cpg = col_vals[0]
         vals = list(map(float, col_vals[1::]))
+        vals = list(np.array(vals)[indexes])
 
         if cpg in cpgs_top:
             dict_top[cpg] = vals

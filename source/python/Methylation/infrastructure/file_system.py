@@ -29,31 +29,31 @@ def get_result_path(config, file_name):
                     path += '/' + config.geo_type.value + '/' + \
                             'approach(' + config.approach.value + ')_' + \
                             'method(' + config.approach_method.value + ')_' + \
+                            'gender(' + config.gt.value + ')_' + \
                             'order(' + config.approach_gd.value + ')_' + \
                             'vals(' + config.validation_gd.value + ')'
                 elif config.validation_method is Method.match:
-                    path += '/' + config.validation_gd.value + '/' + config.geo_type.value
+                    path += '/' + config.gt.value + '/' + config.validation_gd.value + '/' + config.geo_type.value
         elif config.scenario is Scenario.approach:
             path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            path += '/' + config.gt.value + '/' + config.approach_gd.value
             if config.approach is Approach.top:
-                path += '/' + config.approach_gd.value
                 if config.approach_gd is GeneDataType.from_cpg:
                     path += ''
                 else:
                     path += '/' + config.geo_type.value
             elif config.approach is Approach.clustering:
-                path += '/' + config.approach_gd.value
                 if config.approach_gd is GeneDataType.from_cpg:
-                    path += ''
+                    print('TODO')
                 else:
-                    path += '/' + config.geo_type.value
+                    print('TODO')
     elif config.dt is DataType.cpg:
         if config.scenario is Scenario.validation:
-            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
+            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value + '/' + config.gt.value
             if config.validation is Validation.simple:
                 path += ''
         elif config.scenario is Scenario.approach:
-            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value + '/' + config.gt.value
             if config.approach_method is Approach.top:
                 path += ''
             elif config.approach_method is Approach.clustering:
@@ -64,7 +64,7 @@ def get_result_path(config, file_name):
 
 def get_gene_data_path(config, file_name):
     root = config.fs.value
-    path = root + '/' + config.db.value + '/' + 'gene'
+    path = root + '/' + config.db.value + '/' + 'gene_data'
 
     if config.scenario is Scenario.validation:
         path += '/' + config.validation_gd.value

@@ -2,6 +2,7 @@ from annotation.regular import get_dict_cpg_gene
 from infrastructure.file_system import get_path
 from config.types import *
 from infrastructure.load.routines import line_proc
+import numpy as np
 
 
 def get_non_inc_cpgs(config):
@@ -28,6 +29,7 @@ def get_non_inc_cpgs(config):
     return cpg_non_inc
 
 def load_cpg_data(config):
+    indexes = config.indexes
     dict_cpg_gene = get_dict_cpg_gene(config)
 
     fn = config.db.value + '_average_beta.txt'
@@ -53,6 +55,7 @@ def load_cpg_data(config):
         if not is_none:
             cpg = col_vals[0]
             vals = list(map(float, col_vals[1::]))
+            vals = list(np.array(vals)[indexes])
 
             if cpg not in cpg_non_inc:
                 if cpg in dict_cpg_gene:
@@ -66,6 +69,8 @@ def load_cpg_data(config):
     return cpgs_passed, vals_passed
 
 def load_cpg_pval_data(config):
+    indexes = config.indexes
+
     num_skip_lines_raw = 1
 
     fn = config.db.value + '_raw_data.txt'
@@ -82,6 +87,7 @@ def load_cpg_pval_data(config):
         cpg = col_vals[0].replace('"', '')
         vals = list(map(float, col_vals[1::]))
         pvals = vals[2::3]
+        pvals = list(np.array(pvals)[indexes])
 
         cpgs_passed.append(cpg)
         vals_passed.append(pvals)

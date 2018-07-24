@@ -5,15 +5,17 @@ from infrastructure.load.cpg_data import load_cpg_data, get_non_inc_cpgs
 from infrastructure.load.attributes import get_main_attributes
 
 def load_gene_data(config):
+    indexes = config.indexes
     genes_passed = []
     vals_passed = []
-    fn = 'gene.txt'
+    fn = 'gene_data.txt'
     path = get_gene_data_path(config, fn)
     f = open(path)
     for line in f:
         col_vals = line.split(' ')
         gene = col_vals[0]
         vals = list(map(float, col_vals[1::]))
+        vals = list(np.array(vals)[indexes])
         nans = np.isnan(vals)
         if True not in nans:
             genes_passed.append(gene)

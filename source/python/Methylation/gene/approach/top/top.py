@@ -17,15 +17,33 @@ def top_proc(config):
     elif config.approach_method is Method.spearman:
         save_top_spearman(config)
 
-config = Config(
-    db=DataBaseType.GSE40279,
-    dt=DataType.gene,
-    approach=Approach.top,
-    scenario=Scenario.approach,
-    approach_method=Method.enet,
-    approach_gd=GeneDataType.mean,
-    geo=GeoType.islands,
-)
+db = DataBaseType.GSE40279
+dt = DataType.gene
+approach = Approach.top
+scenario = Scenario.approach
+approach_methods = [Method.anova, Method.enet, Method.linreg, Method.spearman]
+approach_gd = GeneDataType.mean
+gts = [Gender.any, Gender.M, Gender.F]
+geos = [GeoType.islands, GeoType.islands_shores, GeoType.any]
 
-top_proc(config)
+
+for method in approach_methods:
+    print(method.value)
+    for gt in gts:
+        print(gt.value)
+        for geo in geos:
+            print(geo.value)
+
+            config = Config(
+                db=db,
+                dt=dt,
+                approach=approach,
+                scenario=scenario,
+                approach_method=method,
+                approach_gd=approach_gd,
+                geo=geo,
+                gt=gt
+            )
+
+            top_proc(config)
 

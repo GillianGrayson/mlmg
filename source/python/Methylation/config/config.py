@@ -47,8 +47,8 @@ class Config:
 
         # Core data
         self.annotations = load_annotations(self)
-        self.indexes = get_indexes(self)
         self.attributes = load_attributes(self)
+        self.indexes = get_indexes(self)
 
         # Aux data
         self.print_rate = 10000

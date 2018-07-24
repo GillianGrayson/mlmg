@@ -33,8 +33,8 @@ class Scenario(Enum):
 
 
 class Gender(Enum):
-    male = 'M'
-    female = 'F'
+    M = 'M'
+    F = 'F'
     any = 'any'
 
 

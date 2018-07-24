@@ -59,28 +59,33 @@ def save_gene_data(config):
     # mean
     config.approach_gd = GeneDataType.mean
     config.validation_gd = GeneDataType.mean
-    fn = get_gene_data_path(config, 'gene.txt')
+    fn = get_gene_data_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_mean_str_list, fmt="%s")
     # std
     config.approach_gd = GeneDataType.std
     config.validation_gd = GeneDataType.std
-    fn = get_gene_data_path(config, 'gene.txt')
+    fn = get_gene_data_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_std_str_list, fmt="%s")
     # mean_der
     config.approach_gd = GeneDataType.mean_der
     config.validation_gd = GeneDataType.mean_der
-    fn = get_gene_data_path(config, 'gene.txt')
+    fn = get_gene_data_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_mean_der_str_list, fmt="%s")
     # mean_der_normed
     config.approach_gd = GeneDataType.mean_der_normed
     config.validation_gd = GeneDataType.mean_der_normed
-    fn = get_gene_data_path(config, 'gene.txt')
+    fn = get_gene_data_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_mean_der_normed_str_list, fmt="%s")
 
 
-config = Config(
-    db=DataBaseType.GSE40279,
-    geo=GeoType.islands
-)
+db = DataBaseType.GSE40279
+geos = [GeoType.any, GeoType.islands, GeoType.islands_shores]
 
-save_gene_data(config)
+for geo in geos:
+
+    config = Config(
+        db=db,
+        geo=geo
+    )
+
+    save_gene_data(config)
