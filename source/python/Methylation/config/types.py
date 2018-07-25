@@ -79,3 +79,4 @@ class Method(Enum):
     mean_shift = 'mean_shift'
     linreg_mult = 'linreg_mult'
     match = 'match'
+    gender_vs = 'gender_vs'

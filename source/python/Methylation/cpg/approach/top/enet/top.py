@@ -10,7 +10,7 @@ from annotation.regular import get_dict_cpg_gene
 from config.types import *
 
 
-def save_top_enet(config, num_bootstrap_runs=100, num_top=100):
+def save_top_enet(config, num_bootstrap_runs=10, num_top=100):
 
     dict_cpg_gene = get_dict_cpg_gene(config)
     params_dict = load_params_dict(config)

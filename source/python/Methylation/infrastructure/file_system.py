@@ -34,6 +34,12 @@ def get_result_path(config, file_name):
                             'vals(' + config.validation_gd.value + ')'
                 elif config.validation_method is Method.match:
                     path += '/' + config.gt.value + '/' + config.validation_gd.value + '/' + config.geo_type.value
+                elif config.validation_method is Method.gender_vs:
+                    path += '/' + config.approach_method.value + '/' + config.approach_gd.value
+                    if config.approach_gd is GeneDataType.from_cpg:
+                        path += ''
+                    else:
+                        path += '/' + config.geo_type.value
         elif config.scenario is Scenario.approach:
             path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
             path += '/' + config.gt.value + '/' + config.approach_gd.value
@@ -86,6 +92,7 @@ def get_param_path(config, file_name):
                 path += ''
         elif config.scenario is Scenario.approach:
             path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            path += '/' + config.gt.value
             if config.approach is Approach.top:
                 path += '/' + config.approach_gd.value
                 if config.approach_gd is GeneDataType.from_cpg:
@@ -100,11 +107,11 @@ def get_param_path(config, file_name):
                     path += '/' + config.geo_type.value
     elif config.dt is DataType.cpg:
         if config.scenario is Scenario.validation:
-            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value
+            path += '/' + config.scenario.value + '/' + config.validation.value + '/' + config.validation_method.value + '/' + config.gt.value
             if config.validation is Validation.simple:
                 path += ''
         elif config.scenario is Scenario.approach:
-            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value
+            path += '/' + config.scenario.value + '/' + config.approach.value + '/' + config.approach_method.value + '/' + config.gt.value
             if config.approach is Approach.top:
                 path += ''
             elif config.approach is Approach.clustering:

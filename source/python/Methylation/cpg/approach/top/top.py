@@ -17,12 +17,26 @@ def top_proc(config):
     elif config.approach_method is Method.spearman:
         save_top_spearman(config)
 
-config = Config(
-    db=DataBaseType.GSE40279,
-    dt=DataType.cpg,
-    approach=Approach.top,
-    scenario=Scenario.approach,
-    approach_method=Method.linreg
-)
 
-top_proc(config)
+db = DataBaseType.GSE40279,
+dt = DataType.cpg,
+approach = Approach.top,
+scenario = Scenario.approach,
+approach_methods = [Method.anova, Method.linreg, Method.spearman, Method.enet]
+gts = [Gender.any, Gender.M, Gender.F]
+
+
+for method in approach_methods:
+    print('method: ' + method.value)
+    for gender in gts:
+        print('\t' + 'gender: ' + gender.value)
+        config = Config(
+            db=DataBaseType.GSE40279,
+            dt=DataType.cpg,
+            approach=Approach.top,
+            scenario=Scenario.approach,
+            approach_method=method,
+            gt=gender
+        )
+
+        top_proc(config)
