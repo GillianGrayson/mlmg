@@ -16,6 +16,7 @@ class DataBaseType(Enum):
 class DataType(Enum):
     cpg = 'cpg'
     gene = 'gene'
+    bop = 'bop'
 
 
 class Approach(Enum):
@@ -56,10 +57,10 @@ class GeoType(Enum):
 
 
 class ClassType(Enum):
-    class_a = 'class_a'
-    class_b = 'class_b'
-    class_c = 'class_c'
-    class_d = 'class_d'
+    class_a = 'ClassA'
+    class_b = 'ClassB'
+    class_c = 'ClassC'
+    class_d = 'ClassD'
     any = 'any'
 
 
