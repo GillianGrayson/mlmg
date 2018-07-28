@@ -81,3 +81,17 @@ class Method(Enum):
     linreg_mult = 'linreg_mult'
     match = 'match'
     gender_vs = 'gender_vs'
+
+
+class MANOVATest(Enum):
+    wilks = 'wilks'
+    pillai_bartlett = 'pillai_bartlett'
+    lawley_hotelling = 'lawley_hotelling'
+    roy = 'roy'
+
+
+class Attribute(Enum):
+    geo_accession = 'geo_accession'
+    age = 'age'
+    gender = 'gender'
+    disease = 'disease'

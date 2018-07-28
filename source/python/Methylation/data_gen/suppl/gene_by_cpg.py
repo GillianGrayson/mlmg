@@ -1,5 +1,5 @@
 from config.config import *
-from annotation.regular import *
+from annotations.regular import *
 from infrastructure.file_system import *
 from infrastructure.save.features import save_features
 

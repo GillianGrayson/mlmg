@@ -1,12 +1,12 @@
 import numpy as np
 from sklearn.linear_model import ElasticNet
 from sklearn.model_selection import ShuffleSplit
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.load.params import load_params_dict
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
-from annotation.regular import get_dict_cpg_gene
+from annotations.regular import get_dict_cpg_gene
 from config.types import *
 
 
@@ -17,7 +17,7 @@ def save_top_enet(config, num_bootstrap_runs=10, num_top=100):
     alpha = params_dict.get('alpha')
     l1_ratio = params_dict.get('l1_ratio')
 
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
     cpgs_passed, vals_passed = load_cpg_data(config)
 
     test_size = int(len(attributes) * config.test_part)

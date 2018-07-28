@@ -1,11 +1,11 @@
 from method.linreg_mult.routines import *
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 from infrastructure.load.top import load_top_gene_data
 from infrastructure.file_system import *
 from infrastructure.save.features import save_features
 
 def save_simple_linreg(config, num_top=100):
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
     config.scenario = Scenario.approach
     gene_names, gene_vals = load_top_gene_data(config, num_top)
     config.scenario = Scenario.validation

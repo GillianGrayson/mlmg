@@ -1,4 +1,4 @@
-from annotation.regular import get_dict_cpg_gene
+from annotations.regular import get_dict_cpg_gene
 from infrastructure.file_system import get_path
 from config.types import *
 from infrastructure.load.routines import line_proc
@@ -32,7 +32,7 @@ def load_cpg_data(config):
     indexes = config.indexes
     dict_cpg_gene = get_dict_cpg_gene(config)
 
-    fn = config.db.value + '_average_beta.txt'
+    fn = 'average_beta.txt'
     full_path = get_path(config, fn)
     f = open(full_path)
     for skip_id in range(0, config.num_skip_lines):

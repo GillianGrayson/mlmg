@@ -1,8 +1,8 @@
 import numpy as np
 from infrastructure.file_system import get_gene_data_path
-from annotation.regular import get_dict_cpg_gene, get_dict_cpg_map_info
+from annotations.regular import get_dict_cpg_gene, get_dict_cpg_map_info
 from infrastructure.load.cpg_data import load_cpg_data, get_non_inc_cpgs
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 
 def load_gene_data(config):
     indexes = config.indexes
@@ -26,7 +26,7 @@ def load_gene_data(config):
 def get_raw_dict(config):
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_map = get_dict_cpg_map_info(config)
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
     cpgs, vals = load_cpg_data(config)
 
     cpg_non_inc = get_non_inc_cpgs(config)

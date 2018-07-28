@@ -1,5 +1,5 @@
 from method.enet.routines import *
-from method.anova.routines import get_attributes_dict
+from attributes.categorical import get_attributes_dict
 from infrastructure.load.gene_data import load_gene_data
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features

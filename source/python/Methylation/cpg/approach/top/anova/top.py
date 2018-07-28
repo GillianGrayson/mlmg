@@ -1,9 +1,9 @@
 import numpy as np
-from method.anova.routines import get_attributes_dict
+from attributes.categorical import get_attributes_dict
 from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
-from annotation.regular import get_dict_cpg_gene
+from annotations.regular import get_dict_cpg_gene
 from config.types import *
 from scipy import stats
 

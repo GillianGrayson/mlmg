@@ -1,15 +1,15 @@
 import numpy as np
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
-from annotation.regular import get_dict_cpg_gene
+from annotations.regular import get_dict_cpg_gene
 from config.types import *
 from scipy import stats
 
 
 def save_top_linreg(config, num_top=100):
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     cpgs, vals = load_cpg_data(config)
 

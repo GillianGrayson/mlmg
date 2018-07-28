@@ -4,6 +4,11 @@ def get_root(config):
     root = config.fs.value
     return root
 
+def get_origin_path(config, file_name):
+    root = config.fs.value
+    path = root + '/'  + file_name
+    return path
+
 def get_path(config, file_name):
     root = config.fs.value
     db = config.db.value

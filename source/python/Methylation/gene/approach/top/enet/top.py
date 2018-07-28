@@ -2,7 +2,7 @@ from sklearn.linear_model import ElasticNet
 from sklearn.model_selection import ShuffleSplit
 from method.enet.routines import *
 from infrastructure.load.params import load_params_dict
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 from infrastructure.load.gene_data import load_gene_data
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
@@ -14,7 +14,7 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=100):
     alpha = params_dict.get('alpha')
     l1_ratio = params_dict.get('l1_ratio')
 
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
 
     genes_passed, vals_passed = load_gene_data(config)
 

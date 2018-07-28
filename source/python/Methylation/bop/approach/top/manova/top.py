@@ -1,61 +1,69 @@
 from config.config import *
-from annotation.bop import *
+from annotations.bop import *
 from infrastructure.load.cpg_data import load_cpg_data
 from statsmodels.multivariate.manova import MANOVA
-
-window = 3
-
-db = DataBaseType.GSE40279
-dt = DataType.gene
-approach = Approach.top
-validation = Validation.simple
-scenario = Scenario.approach
-approach_method = Method.manova
-validation_method = Method.linreg_mult
-gt = Gender.any
-approach_gd = GeneDataType.mean
-validation_gd = GeneDataType.mean
-geo = GeoType.any
-dna_region = DNARegion.any
-cpg_class = ClassType.class_a
-
-config = Config(
-    db=db,
-    dt=dt,
-    approach=approach,
-    validation=validation,
-    scenario=scenario,
-    approach_method=approach_method,
-    validation_method=validation_method,
-    gt=gt,
-    approach_gd=approach_gd,
-    validation_gd=validation_gd,
-    geo=geo,
-    dna_region=dna_region,
-    cpg_class=cpg_class,
-)
-
-dict_bop_cpgs = get_dict_bop_cpgs(config)
-cpgs, betas = load_cpg_data(config)
-exog = np.array(get_main_attributes(config))
-
-bops_passed = []
-bops_pvals = []
-for bop in dict_bop_cpgs:
-    curr_cpgs = dict_bop_cpgs.get(bop)
-    if len(curr_cpgs) > 2:
-        for win_id in range(0, len(curr_cpgs) - 2):
-            endog = []
-            for cpg_id in range(0, window):
-                cpg = curr_cpgs[win_id + cpg_id]
-                beta = betas[cpgs.index(cpg)]
-                endog.append(beta)
-            endog = np.array(endog).T
-
-            manova = MANOVA(endog, exog)
-            mv_test_res =manova.mv_test()
-            pfff = mv_test_res.results['x0']['stat'].values[0, 4]
-            ololo = 1
+from attributes.categorical import get_attributes_group
+import pandas as pd
 
 
-a = 0
+def save_top_manova(config, attributes_types, attribute_target, num_top=100, window=3, test=MANOVATest.pillai_bartlett):
+    dict_bop_cpgs = get_dict_bop_cpgs(config)
+    cpgs, betas = load_cpg_data(config)
+
+    atr_table = []
+    atr_cols = []
+    for atr_type in attributes_types:
+        atr_table.append(get_attributes(config, atr_type))
+        atr_cols.append(atr_type.value)
+
+    #exog = np.array([get_attributes_group(config), get_attributes(config, Attribute.gender)]).T
+
+    bops_passed = []
+    bops_pvals = []
+    for bop in dict_bop_cpgs:
+        curr_cpgs = dict_bop_cpgs.get(bop)
+        cpgd_passed = []
+        for cpg in curr_cpgs:
+            if cpg in cpgs:
+                cpgd_passed.append(cpg)
+        if len(cpgd_passed) > 2:
+            pvals_on_bop = []
+            for win_id in range(0, len(cpgd_passed) - 2):
+                val_table = []
+                val_cols  = []
+                for cpg_id in range(0, window):
+                    cpg = cpgd_passed[win_id + cpg_id]
+                    beta = betas[cpgs.index(cpg)]
+                    val_table.append(beta)
+                    val_cols.append(cpg)
+                table = atr_table + val_table
+                cols = atr_cols + val_cols
+
+                formula = val_cols[0]
+                for val_col_id in range(1, len(val_cols)):
+                    val_col = val_cols[val_col_id]
+                    formula += ' + ' + val_col
+                formula += ' ~ ' + atr_cols[0]
+                for atr_col_id in range(1, len(atr_cols)):
+                    atr_col = atr_cols[atr_col_id]
+                    formula += ' + ' + atr_col
+
+                table = list(map(list, zip(*table)))
+                x = pd.DataFrame(table, columns=cols)
+                manova = MANOVA.from_formula(formula, x)
+                mv_test_res = manova.mv_test()
+                pvals = mv_test_res.results[attribute_target.value]['stat'].values[0:4, 4]
+                target_pval = pvals[0]
+                if test is MANOVATest.wilks:
+                    target_pval = pvals[0]
+                elif test is MANOVATest.pillai_bartlett:
+                    target_pval = pvals[1]
+                elif test is MANOVATest.lawley_hotelling:
+                    target_pval = pvals[2]
+                elif test is MANOVATest.roy:
+                    target_pval = pvals[3]
+                pvals_on_bop.append(target_pval)
+            min_pval = np.min(pvals_on_bop)
+            bops_passed.append(bop)
+            bops_pvals.append(min_pval)
+    a = 0

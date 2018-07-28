@@ -1,5 +1,5 @@
 from method.enet.routines import *
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 from infrastructure.load.gene_data import load_gene_data
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
@@ -7,7 +7,7 @@ from scipy import stats
 
 
 def save_top_linreg(config):
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
     genes, vals = load_gene_data(config)
 
     p_values = []

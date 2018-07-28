@@ -1,5 +1,5 @@
 from method.enet.routines import *
-from infrastructure.load.attributes import get_main_attributes
+from infrastructure.load.attributes import get_attributes
 from infrastructure.load.gene_data import load_gene_data
 from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
@@ -8,7 +8,7 @@ import math
 
 
 def save_top_spearman(config):
-    attributes = get_main_attributes(config)
+    attributes = get_attributes(config)
     gene_names, gene_vals = load_gene_data(config)
 
     gene_rhos = []
