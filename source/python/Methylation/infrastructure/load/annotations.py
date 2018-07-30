@@ -1,4 +1,5 @@
 from infrastructure.file_system import *
+from config.types import *
 
 
 def load_annotations(config):
@@ -16,6 +17,23 @@ def load_annotations(config):
     for line in f:
         vals = line.split('\t')
         for key_id in range(0, len(keys)):
-            annotations[keys[key_id]].append(vals[key_id].rstrip())
+            key = keys[key_id]
+            if key == Annotation.cpg.value:
+                annotations[key].append(vals[key_id].rstrip())
+            elif key == Annotation.chr.value:
+                annotations[key].append(vals[key_id].rstrip())
+            elif key == Annotation.map_info.value:
+                if vals[key_id].rstrip().isdigit():
+                    annotations[key].append(int(vals[key_id].rstrip()))
+                else:
+                    annotations[key].append(0)
+            elif key == Annotation.gene.value:
+                annotations[key].append(vals[key_id].rstrip())
+            elif key == Annotation.class_type.value:
+                annotations[key].append(vals[key_id].rstrip())
+            elif key == Annotation.geo.value:
+                annotations[key].append(vals[key_id].rstrip())
+            elif key == Annotation.bop.value:
+                annotations[key].append(vals[key_id].rstrip())
 
     return annotations

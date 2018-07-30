@@ -25,15 +25,15 @@ for method in approach_methods:
                 approach=approach,
                 scenario=scenario,
                 approach_method=Method.linreg,
-                gt=Gender.any,
+                gender=Gender.any,
                 approach_gd=gd,
                 geo=geo
             )
 
-            config.gt = Gender.M
+            config.gender = Gender.M
             genes_m = load_top_gene_names(config, num_top)[0:num_top]
 
-            config.gt = Gender.F
+            config.gender = Gender.F
             genes_f = load_top_gene_names(config, num_top)[0:num_top]
 
             intersection_genes = list(set(genes_m).intersection(genes_f))

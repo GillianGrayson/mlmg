@@ -38,6 +38,11 @@ class Gender(Enum):
     F = 'F'
     any = 'any'
 
+class Disease(Enum):
+    any = 'any'
+    healthy = 'healthy'
+    down_syndrome = 'down_syndrome'
+
 
 class GeneDataType(Enum):
     mean = 'mean'
@@ -45,6 +50,7 @@ class GeneDataType(Enum):
     mean_der = 'mean_der'
     mean_der_normed = 'mean_der_normed'
     from_cpg = 'from_cpg'
+    from_bop = 'from_bop'
 
 
 class GeoType(Enum):
@@ -95,3 +101,13 @@ class Attribute(Enum):
     age = 'age'
     gender = 'gender'
     disease = 'disease'
+
+
+class Annotation(Enum):
+    cpg = 'ID_REF'
+    chr = 'CHR'
+    map_info = 'MAPINFO'
+    gene = 'UCSC_REFGENE_NAME'
+    class_type = 'Class'
+    geo = 'RELATION_TO_UCSC_CPG_ISLAND'
+    bop = 'BOP'

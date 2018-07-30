@@ -1,13 +1,16 @@
 from config.types import *
+import numpy as np
+from annotations.regular import get_dict_cpg_gene
+
 
 def bop_condition(config, annotation):
     target_ct = config.class_type
     dna_region = config.dna_region
 
-    cpg = annotation['ID_REF']
-    chr = annotation['CHR']
-    gene = annotation['UCSC_REFGENE_NAME']
-    ct = annotation['Class']
+    cpg = annotation[Annotation.cpg.value]
+    chr = annotation[Annotation.chr.value]
+    gene = annotation[Annotation.gene.value]
+    ct = annotation[Annotation.class_type.value]
 
     is_class_match = False
     if ct is ClassType.any or ct == target_ct.value:
@@ -36,33 +39,33 @@ def bop_condition(config, annotation):
 def get_dict_bop_cpgs(config):
     annotations = config.annotations
 
-    cpg = annotations['ID_REF']
-    gene = annotations['UCSC_REFGENE_NAME']
-    chr = annotations['CHR']
-    geo = annotations['RELATION_TO_UCSC_CPG_ISLAND']
-    map_info = annotations['MAPINFO']
-    bop = annotations['BOP']
-    class_type = annotations['Class']
+    cpg = annotations[Annotation.cpg.value]
+    gene = annotations[Annotation.gene.value]
+    chr = annotations[Annotation.chr.value]
+    geo = annotations[Annotation.geo.value]
+    map_info = annotations[Annotation.map_info.value]
+    bop = annotations[Annotation.bop.value]
+    class_type = annotations[Annotation.class_type.value]
 
     dict_bop_cpgs = {}
     for i in range(0, len(cpg)):
 
-        curr_cpg = cpg[i].rstrip()
-        curr_gene = gene[i].rstrip()
-        curr_chr = chr[i].rstrip()
-        curr_geo = geo[i].rstrip()
-        curr_map_info = map_info[i].rstrip()
-        curr_bop = bop[i].rstrip()
-        curr_class_type = class_type[i].rstrip()
+        curr_cpg = cpg[i]
+        curr_gene = gene[i]
+        curr_chr = chr[i]
+        curr_geo = geo[i]
+        curr_map_info = map_info[i]
+        curr_bop = bop[i]
+        curr_class_type = class_type[i]
 
         annotation = {}
-        annotation['ID_REF'] = curr_cpg
-        annotation['UCSC_REFGENE_NAME'] = curr_gene
-        annotation['CHR'] = curr_chr
-        annotation['RELATION_TO_UCSC_CPG_ISLAND'] = curr_geo
-        annotation['MAPINFO'] = curr_map_info
-        annotation['BOP'] = curr_bop
-        annotation['Class'] = curr_class_type
+        annotation[Annotation.cpg.value] = curr_cpg
+        annotation[Annotation.gene.value] = curr_gene
+        annotation[Annotation.chr.value] = curr_chr
+        annotation[Annotation.geo.value] = curr_geo
+        annotation[Annotation.map_info.value] = curr_map_info
+        annotation[Annotation.bop.value] = curr_bop
+        annotation[Annotation.class_type.value] = curr_class_type
 
         is_passed = bop_condition(config, annotation)
 
@@ -73,4 +76,32 @@ def get_dict_bop_cpgs(config):
                 else:
                     dict_bop_cpgs[curr_bop] = [curr_cpg]
 
+    # Sorting cpgs in bops by map_info
+    num_bops = 0
+    for bop in dict_bop_cpgs:
+        cpgs = dict_bop_cpgs.get(bop)
+        map_infos = []
+        for curr_cpg in cpgs:
+            cpg_index = cpg.index(curr_cpg)
+            curr_map_info = map_info[cpg_index]
+            map_infos.append(curr_map_info)
+        order = np.argsort(map_infos)
+        cpgs_sorted = list(np.array(cpgs)[order])
+        dict_bop_cpgs[bop] = cpgs_sorted
+        num_bops += 1
+        if num_bops % config.print_rate == 0:
+            print('num_bops: ' + str(num_bops))
+
     return dict_bop_cpgs
+
+def get_dict_bop_genes(config, dict_bop_cpgs):
+    dict_cpg_gene = get_dict_cpg_gene(config)
+    dict_bop_genes = {}
+    for bop in dict_bop_cpgs:
+        cpgs = dict_bop_cpgs.get(bop)
+        genes = []
+        for curr_cpg in cpgs:
+            curr_genes = dict_cpg_gene.get(curr_cpg)
+            genes += curr_genes
+        dict_bop_genes[bop] = list(set(genes))
+    return dict_bop_genes

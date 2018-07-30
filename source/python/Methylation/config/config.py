@@ -15,7 +15,8 @@ class Config:
                  scenario=Scenario.approach,
                  approach_method=Method.linreg,
                  validation_method=Method.linreg_mult,
-                 gt=Gender.any,
+                 gender=Gender.any,
+                 disease=Disease.any,
                  approach_gd=GeneDataType.mean,
                  validation_gd=GeneDataType.mean,
                  geo=GeoType.any,
@@ -27,10 +28,11 @@ class Config:
         self.dt = dt
         self.approach = approach
         self.validation = validation
-        self.scenario=scenario
+        self.scenario = scenario
         self.approach_method = approach_method
         self.validation_method = validation_method
-        self.gt=gt
+        self.gender = gender
+        self.disease = disease
         self.approach_gd = approach_gd
         self.validation_gd = validation_gd
         self.geo_type = geo
@@ -64,8 +66,8 @@ class Config:
             self.test_part = 0.25
             self.shift = 5
         elif self.db is DataBaseType.GSE52588:
-            self.num_skip_lines = 87
-            self.attribute_fn = 'attribute.txt'
+            self.num_skip_lines = 1
+            self.attribute_fn = 'attributes.txt'
             self.miss_tag = 'NULL'
-            self.test_part = 0
-            self.shift = 0
+            self.test_part = 0.25
+            self.shift = 5

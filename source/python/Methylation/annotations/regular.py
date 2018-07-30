@@ -4,10 +4,10 @@ def regular_condition(config, annotation):
     geo_type = config.geo_type
     dna_region = config.dna_region
 
-    cpg = annotation['ID_REF']
-    gene = annotation['UCSC_REFGENE_NAME']
-    chr = annotation['CHR']
-    geo = annotation['RELATION_TO_UCSC_CPG_ISLAND']
+    cpg = annotation[Annotation.cpg.value]
+    gene = annotation[Annotation.gene.value]
+    chr = annotation[Annotation.chr.value]
+    geo = annotation[Annotation.geo.value]
 
     target_geo = []
     if geo_type is GeoType.islands:
@@ -54,27 +54,27 @@ def regular_condition(config, annotation):
 def get_dict_cpg_gene(config):
     annotations = config.annotations
 
-    cpg = annotations['ID_REF']
-    gene = annotations['UCSC_REFGENE_NAME']
-    chr = annotations['CHR']
-    geo = annotations['RELATION_TO_UCSC_CPG_ISLAND']
-    map_info = annotations['MAPINFO']
+    cpg = annotations[Annotation.cpg.value]
+    gene = annotations[Annotation.gene.value]
+    chr = annotations[Annotation.chr.value]
+    geo = annotations[Annotation.geo.value]
+    map_info = annotations[Annotation.map_info.value]
 
     dict_cpg_gene = {}
     for i in range(0, len(cpg)):
 
-        curr_cpg = cpg[i].rstrip()
-        curr_gene = gene[i].rstrip()
-        curr_chr = chr[i].rstrip()
-        curr_geo = geo[i].rstrip()
-        curr_map_info = map_info[i].rstrip()
+        curr_cpg = cpg[i]
+        curr_gene = gene[i]
+        curr_chr = chr[i]
+        curr_geo = geo[i]
+        curr_map_info = map_info[i]
 
         annotation = {}
-        annotation['ID_REF'] = curr_cpg
-        annotation['UCSC_REFGENE_NAME'] = curr_gene
-        annotation['CHR'] = curr_chr
-        annotation['RELATION_TO_UCSC_CPG_ISLAND'] = curr_geo
-        annotation['MAPINFO'] = curr_map_info
+        annotation[Annotation.cpg.value] = curr_cpg
+        annotation[Annotation.gene.value] = curr_gene
+        annotation[Annotation.chr.value] = curr_chr
+        annotation[Annotation.geo.value] = curr_geo
+        annotation[Annotation.map_info.value] = curr_map_info
 
         is_passed = regular_condition(config, annotation)
 
@@ -87,27 +87,27 @@ def get_dict_cpg_gene(config):
 def get_dict_gene_chr(config):
     annotations = config.annotations
 
-    cpg = annotations['ID_REF']
-    gene = annotations['UCSC_REFGENE_NAME']
-    chr = annotations['CHR']
-    geo = annotations['RELATION_TO_UCSC_CPG_ISLAND']
-    map_info = annotations['MAPINFO']
+    cpg = annotations[Annotation.cpg.value]
+    gene = annotations[Annotation.gene.value]
+    chr = annotations[Annotation.chr.value]
+    geo = annotations[Annotation.geo.value]
+    map_info = annotations[Annotation.map_info.value]
 
     dict_gene_chr = {}
     for i in range(0, len(cpg)):
 
-        curr_cpg = cpg[i].rstrip()
-        curr_gene = gene[i].rstrip()
-        curr_chr = chr[i].rstrip()
-        curr_geo = geo[i].rstrip()
-        curr_map_info = map_info[i].rstrip()
+        curr_cpg = cpg[i]
+        curr_gene = gene[i]
+        curr_chr = chr[i]
+        curr_geo = geo[i]
+        curr_map_info = map_info[i]
 
         annotation = {}
-        annotation['ID_REF'] = curr_cpg
-        annotation['UCSC_REFGENE_NAME'] = curr_gene
-        annotation['CHR'] = curr_chr
-        annotation['RELATION_TO_UCSC_CPG_ISLAND'] = curr_geo
-        annotation['MAPINFO'] = curr_map_info
+        annotation[Annotation.cpg.value] = curr_cpg
+        annotation[Annotation.gene.value] = curr_gene
+        annotation[Annotation.chr.value] = curr_chr
+        annotation[Annotation.geo.value] = curr_geo
+        annotation[Annotation.map_info.value] = curr_map_info
 
         is_passed = regular_condition(config, annotation)
 
@@ -126,27 +126,27 @@ def get_dict_gene_chr(config):
 def get_dict_gene_cpg(config):
     annotations = config.annotations
 
-    cpg = annotations['ID_REF']
-    gene = annotations['UCSC_REFGENE_NAME']
-    chr = annotations['CHR']
-    geo = annotations['RELATION_TO_UCSC_CPG_ISLAND']
-    map_info = annotations['MAPINFO']
+    cpg = annotations[Annotation.cpg.value]
+    gene = annotations[Annotation.gene.value]
+    chr = annotations[Annotation.chr.value]
+    geo = annotations[Annotation.geo.value]
+    map_info = annotations[Annotation.map_info.value]
 
     dict_gene_cpg = {}
     for i in range(0, len(cpg)):
 
-        curr_cpg = cpg[i].rstrip()
-        curr_gene = gene[i].rstrip()
-        curr_chr = chr[i].rstrip()
-        curr_geo = geo[i].rstrip()
-        curr_map_info = map_info[i].rstrip()
+        curr_cpg = cpg[i]
+        curr_gene = gene[i]
+        curr_chr = chr[i]
+        curr_geo = geo[i]
+        curr_map_info = map_info[i]
 
         annotation = {}
-        annotation['ID_REF'] = curr_cpg
-        annotation['UCSC_REFGENE_NAME'] = curr_gene
-        annotation['CHR'] = curr_chr
-        annotation['RELATION_TO_UCSC_CPG_ISLAND'] = curr_geo
-        annotation['MAPINFO'] = curr_map_info
+        annotation[Annotation.cpg.value] = curr_cpg
+        annotation[Annotation.gene.value] = curr_gene
+        annotation[Annotation.chr.value] = curr_chr
+        annotation[Annotation.geo.value] = curr_geo
+        annotation[Annotation.map_info.value] = curr_map_info
 
         is_passed = regular_condition(config, annotation)
 
@@ -163,11 +163,11 @@ def get_dict_gene_cpg(config):
 def get_dict_cpg_map_info(config):
     annotations = config.annotations
 
-    cpg = annotations['ID_REF']
-    gene = annotations['UCSC_REFGENE_NAME']
-    chr = annotations['CHR']
-    geo = annotations['RELATION_TO_UCSC_CPG_ISLAND']
-    map_info = annotations['MAPINFO']
+    cpg = annotations[Annotation.cpg.value]
+    gene = annotations[Annotation.gene.value]
+    chr = annotations[Annotation.chr.value]
+    geo = annotations[Annotation.geo.value]
+    map_info = annotations[Annotation.map_info.value]
 
     dict_cpg_map = {}
     for i in range(0, len(cpg)):
@@ -179,11 +179,11 @@ def get_dict_cpg_map_info(config):
         curr_map_info = map_info[i].rstrip()
 
         annotation = {}
-        annotation['ID_REF'] = curr_cpg
-        annotation['UCSC_REFGENE_NAME'] = curr_gene
-        annotation['CHR'] = curr_chr
-        annotation['RELATION_TO_UCSC_CPG_ISLAND'] = curr_geo
-        annotation['MAPINFO'] = curr_map_info
+        annotation[Annotation.cpg.value] = curr_cpg
+        annotation[Annotation.gene.value] = curr_gene
+        annotation[Annotation.chr.value] = curr_chr
+        annotation[Annotation.geo.value] = curr_geo
+        annotation[Annotation.map_info.value] = curr_map_info
 
         is_passed = regular_condition(config, annotation)
 

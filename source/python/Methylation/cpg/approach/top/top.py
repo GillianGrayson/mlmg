@@ -36,7 +36,7 @@ for method in approach_methods:
             approach=Approach.top,
             scenario=Scenario.approach,
             approach_method=method,
-            gt=gender
+            gender=gender
         )
 
         top_proc(config)

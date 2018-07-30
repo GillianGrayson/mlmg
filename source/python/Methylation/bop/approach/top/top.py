@@ -8,13 +8,14 @@ def top_proc(config, attributes_types, attribute_target):
 
 
 db = DataBaseType.GSE40279
-dt = DataType.gene
+dt = DataType.bop
 approach = Approach.top
 validation = Validation.simple
 scenario = Scenario.approach
 approach_method = Method.manova
 validation_method = Method.linreg_mult
-gt = Gender.any
+gender = Gender.any
+disease = Disease.any
 approach_gd = GeneDataType.mean
 validation_gd = GeneDataType.mean
 geo = GeoType.any
@@ -31,7 +32,8 @@ config = Config(
     scenario=scenario,
     approach_method=approach_method,
     validation_method=validation_method,
-    gt=gt,
+    gender=gender,
+    disease=disease,
     approach_gd=approach_gd,
     validation_gd=validation_gd,
     geo=geo,

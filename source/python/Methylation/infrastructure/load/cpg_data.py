@@ -71,12 +71,10 @@ def load_cpg_data(config):
 def load_cpg_pval_data(config):
     indexes = config.indexes
 
-    num_skip_lines_raw = 1
-
-    fn = config.db.value + '_raw_data.txt'
+    fn = 'raw_data.txt'
     fn = get_path(config, fn)
     f = open(fn)
-    for skip_id in range(0, num_skip_lines_raw):
+    for skip_id in range(0, config.num_skip_lines):
         skip_line = f.readline()
 
     num_lines = 0

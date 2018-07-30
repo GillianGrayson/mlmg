@@ -2,12 +2,14 @@ from config.config import *
 from annotations.bop import *
 from infrastructure.load.cpg_data import load_cpg_data
 from statsmodels.multivariate.manova import MANOVA
-from attributes.categorical import get_attributes_group
+from statsmodels.stats.multitest import multipletests
+from infrastructure.save.features import save_features
 import pandas as pd
 
 
-def save_top_manova(config, attributes_types, attribute_target, num_top=100, window=3, test=MANOVATest.pillai_bartlett):
+def save_top_manova(config, attributes_types, attribute_target, num_top=500, window=3, test=MANOVATest.pillai_bartlett):
     dict_bop_cpgs = get_dict_bop_cpgs(config)
+    dict_bop_genes = get_dict_bop_genes(config, dict_bop_cpgs)
     cpgs, betas = load_cpg_data(config)
 
     atr_table = []
@@ -15,8 +17,6 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=100, win
     for atr_type in attributes_types:
         atr_table.append(get_attributes(config, atr_type))
         atr_cols.append(atr_type.value)
-
-    #exog = np.array([get_attributes_group(config), get_attributes(config, Attribute.gender)]).T
 
     bops_passed = []
     bops_pvals = []
@@ -35,7 +35,7 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=100, win
                     cpg = cpgd_passed[win_id + cpg_id]
                     beta = betas[cpgs.index(cpg)]
                     val_table.append(beta)
-                    val_cols.append(cpg)
+                    val_cols.append('cpg_'+str(cpg_id))
                 table = atr_table + val_table
                 cols = atr_cols + val_cols
 
@@ -66,4 +66,30 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=100, win
             min_pval = np.min(pvals_on_bop)
             bops_passed.append(bop)
             bops_pvals.append(min_pval)
-    a = 0
+
+    reject, pvals_corrected, alphacSidak, alphacBonf = multipletests(bops_pvals, 0.05, method='fdr_bh')
+    order = np.argsort(pvals_corrected)
+    bops_opt = list(np.array(bops_passed)[order])[0:num_top]
+    pvals_opt = list(np.array(pvals_corrected)[order])[0:num_top]
+    genes_opt = []
+    genes_from_bop = []
+    for bop in bops_opt:
+        curr_genes = dict_bop_genes.get(bop)
+        genes_str = curr_genes[0]
+        for gene_id in range(1, len(curr_genes)):
+            genes_str += ';' + curr_genes[gene_id]
+        genes_opt.append(genes_str)
+        for gene in curr_genes:
+            if gene not in genes_from_bop:
+                genes_from_bop.append(gene)
+
+    fn = 'top.txt'
+    fn = get_result_path(config, fn)
+    save_features(fn, [bops_opt, genes_opt, pvals_opt])
+
+    config.approach_gd = GeneDataType.from_bop
+    config.dt = DataType.gene
+    fn = 'top.txt'
+    fn = get_result_path(config, fn)
+    save_features(fn, [genes_from_bop])
+    config.dt = DataType.cpg

@@ -42,7 +42,7 @@ for method in approach_methods:
                 approach_method=method,
                 approach_gd=approach_gd,
                 geo=geo,
-                gt=gt
+                gender=gt
             )
 
             top_proc(config)

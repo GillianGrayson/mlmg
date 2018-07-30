@@ -26,7 +26,7 @@ for gt in genders:
             approach=approach,
             scenario=scenario,
             approach_method=Method.linreg,
-            gt=gt,
+            gender=gt,
             approach_gd=approach_gd,
             geo=geo
         )
