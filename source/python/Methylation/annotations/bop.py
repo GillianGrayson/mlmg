@@ -13,7 +13,7 @@ def bop_condition(config, annotation):
     ct = annotation[Annotation.class_type.value]
 
     is_class_match = False
-    if ct is ClassType.any or ct == target_ct.value:
+    if target_ct is ClassType.any or ct == target_ct.value:
         is_class_match = True
 
     is_dna_region_match = False

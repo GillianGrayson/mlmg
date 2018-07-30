@@ -78,7 +78,7 @@ def save_gene_data(config):
     np.savetxt(fn, gene_mean_der_normed_str_list, fmt="%s")
 
 
-db = DataBaseType.GSE40279
+db = DataBaseType.GSE52588
 geos = [GeoType.any, GeoType.islands, GeoType.islands_shores]
 
 for geo in geos:

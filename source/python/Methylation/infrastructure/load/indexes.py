@@ -15,7 +15,7 @@ def get_indexes(config):
                     gender_indexes.append(p_id)
         indexes = list(set(indexes).intersection(gender_indexes))
 
-    if Attribute.disease in config.attributes:
+    if Attribute.disease.value in config.attributes:
         disease_indexes = []
         diseases = config.attributes[Attribute.disease.value]
         if config.disease is Disease.any:

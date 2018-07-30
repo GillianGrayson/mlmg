@@ -140,6 +140,13 @@ def get_gene_data_path(config, file_name):
     path += '/' + file_name
     return path
 
+def get_bop_data_path(config, file_name):
+    path = config.fs.value + '/' + config.db.value + '/' + 'bop_data'
+    path += '/' + config.class_type.value
+    path += '/' + file_name
+    return path
+
+
 def get_param_path(config, file_name):
     path = config.fs.value + '/' + config.db.value + '/' + 'param'
 

@@ -172,11 +172,11 @@ def get_dict_cpg_map_info(config):
     dict_cpg_map = {}
     for i in range(0, len(cpg)):
 
-        curr_cpg = cpg[i].rstrip()
-        curr_gene = gene[i].rstrip()
-        curr_chr = chr[i].rstrip()
-        curr_geo = geo[i].rstrip()
-        curr_map_info = map_info[i].rstrip()
+        curr_cpg = cpg[i]
+        curr_gene = gene[i]
+        curr_chr = chr[i]
+        curr_geo = geo[i]
+        curr_map_info = map_info[i]
 
         annotation = {}
         annotation[Annotation.cpg.value] = curr_cpg

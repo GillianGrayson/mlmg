@@ -20,7 +20,7 @@ class Config:
                  approach_gd=GeneDataType.mean,
                  validation_gd=GeneDataType.mean,
                  geo=GeoType.any,
-                 dna_region=DNARegion.genic,
+                 dna_region=DNARegion.any,
                  cpg_class=ClassType.any,
                  ):
         # Config data
