@@ -7,8 +7,8 @@ num_top = 100
 
 db = DataBaseType.GSE40279
 dt = DataType.gene
-approach = Approach.top
 scenario = Scenario.approach
+approach = Approach.top
 approach_methods = [Method.anova, Method.enet, Method.linreg, Method.spearman]
 approach_gds = [GeneDataType.mean, GeneDataType.from_cpg]
 geos = [GeoType.islands, GeoType.islands_shores, GeoType.any]
@@ -24,7 +24,7 @@ for method in approach_methods:
                 dt=dt,
                 approach=approach,
                 scenario=scenario,
-                approach_method=Method.linreg,
+                approach_method=method,
                 gender=Gender.any,
                 approach_gd=gd,
                 geo=geo

@@ -9,4 +9,9 @@ def line_proc(config, line):
         line_list = line.split('\t')
         for val_id in range(0, len(line_list)):
             line_list[val_id] = line_list[val_id].replace('"', '').rstrip()
+    elif config.db is DataBaseType.GSE30870:
+        line_list = line.split('\t')
+        for val_id in range(0, len(line_list)):
+            if(line_list[val_id].rstrip() == ''):
+                line_list[val_id] = config.miss_tag
     return line_list

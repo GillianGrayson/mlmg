@@ -54,20 +54,7 @@ class Config:
 
         # Aux data
         self.print_rate = 10000
-        self.num_skip_lines = 0
-        self.attribute_fn = ''
-        self.miss_tag = ''
-        self.test_part = 0
-        self.shift = 0
-        if self.db is DataBaseType.GSE40279:
-            self.num_skip_lines = 1
-            self.attribute_fn = 'attributes.txt'
-            self.miss_tag = 'NULL'
-            self.test_part = 0.25
-            self.shift = 5
-        elif self.db is DataBaseType.GSE52588:
-            self.num_skip_lines = 1
-            self.attribute_fn = 'attributes.txt'
-            self.miss_tag = 'NULL'
-            self.test_part = 0.25
-            self.shift = 5
+        self.num_skip_lines = 1
+        self.miss_tag = 'NULL'
+        self.test_part = 0.25
+        self.shift = 5

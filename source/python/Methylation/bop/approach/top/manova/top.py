@@ -4,11 +4,12 @@ from infrastructure.load.cpg_data import load_cpg_data
 from statsmodels.multivariate.manova import MANOVA
 from statsmodels.stats.multitest import multipletests
 from infrastructure.save.features import save_features
+from infrastructure.load.bop_data import load_bop_cpg_dict
 import pandas as pd
 
 
 def save_top_manova(config, attributes_types, attribute_target, num_top=500, window=3, test=MANOVATest.pillai_bartlett):
-    dict_bop_cpgs = get_dict_bop_cpgs(config)
+    dict_bop_cpgs = load_bop_cpg_dict(config)
     dict_bop_genes = get_dict_bop_genes(config, dict_bop_cpgs)
     cpgs, betas = load_cpg_data(config)
 
@@ -18,6 +19,7 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=500, win
         atr_table.append(get_attributes(config, atr_type))
         atr_cols.append(atr_type.value)
 
+    num_bops = 0
     bops_passed = []
     bops_pvals = []
     for bop in dict_bop_cpgs:
@@ -66,6 +68,9 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=500, win
             min_pval = np.min(pvals_on_bop)
             bops_passed.append(bop)
             bops_pvals.append(min_pval)
+        num_bops += 1
+        if num_bops % config.print_rate == 0:
+            print('num_bops: ' + str(num_bops))
 
     reject, pvals_corrected, alphacSidak, alphacBonf = multipletests(bops_pvals, 0.05, method='fdr_bh')
     order = np.argsort(pvals_corrected)

@@ -11,6 +11,7 @@ class FSType(Enum):
 class DataBaseType(Enum):
     GSE40279 = 'GSE40279'
     GSE52588 = 'GSE52588'
+    GSE30870 = 'GSE30870'
 
 
 class DataType(Enum):
