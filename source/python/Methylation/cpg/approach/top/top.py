@@ -22,7 +22,7 @@ db = DataBaseType.GSE40279,
 dt = DataType.cpg,
 approach = Approach.top,
 scenario = Scenario.approach,
-approach_methods = [Method.anova, Method.linreg, Method.spearman, Method.enet]
+approach_methods = [Method.anova, Method.linreg, Method.spearman]
 gts = [Gender.any, Gender.M, Gender.F]
 
 

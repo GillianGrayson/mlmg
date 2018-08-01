@@ -8,7 +8,7 @@ from config.types import *
 from scipy import stats
 
 
-def save_top_anova(config, num_top=100):
+def save_top_anova(config, num_top=500):
     attributes_dict = get_attributes_dict(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     cpgs, vals = load_cpg_data(config)

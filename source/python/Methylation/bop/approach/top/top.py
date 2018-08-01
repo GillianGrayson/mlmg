@@ -7,12 +7,12 @@ def top_proc(config, attributes_types, attribute_target):
         save_top_manova(config, attributes_types, attribute_target)
 
 
-db = DataBaseType.GSE30870
+db = DataBaseType.GSE40279
 dt = DataType.bop
 scenario = Scenario.approach
 approach = Approach.top
 approach_method = Method.manova
-gender = Gender.any
+gender = Gender.M
 disease = Disease.any
 cpg_class = ClassType.class_a
 attributes_types = [Attribute.age]
