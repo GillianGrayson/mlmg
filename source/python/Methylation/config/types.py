@@ -4,6 +4,7 @@ from enum import Enum
 class FSType(Enum):
     local_big = 'E:/Work/mlmg/data'
     local_msi = 'D:/Work/mlmg/data'
+    local_ab = 'D:/Aaron/Bio/mlmg/data'
     unn = '/common/home/yusipov_i/Work/mlmg/data'
     mpipks = '/data/biophys/yusipov/mlmg/data'
 

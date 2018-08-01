@@ -46,6 +46,8 @@ class Config:
             self.fs = FSType.local_msi
         elif host_name == 'DESKTOP-K9VO2TI':
             self.fs = FSType.local_big
+        elif host_name == 'DESKTOP-4BEQ7MS':
+            self.fs = FSType.local_ab
 
         # Core data
         self.annotations = load_annotations(self)
