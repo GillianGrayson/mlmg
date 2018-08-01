@@ -10,7 +10,7 @@ from annotations.regular import get_dict_cpg_gene
 from config.types import *
 
 
-def save_top_enet(config, num_bootstrap_runs=10, num_top=100):
+def save_top_enet(config, num_bootstrap_runs=10, num_top=500):
 
     dict_cpg_gene = get_dict_cpg_gene(config)
     params_dict = load_params_dict(config)
@@ -46,14 +46,6 @@ def save_top_enet(config, num_bootstrap_runs=10, num_top=100):
         cpg_sorted = list(np.array(cpgs_passed)[order])
         coef_top = coef_sorted[0:num_top]
         cpg_top = cpg_sorted[0:num_top]
-        gene_sorted = []
-        for id in range(0, len(cpg_sorted)):
-            cpg = cpg_sorted[id]
-            genes = dict_cpg_gene.get(cpg)
-            for gene in genes:
-                if gene not in gene_sorted:
-                    gene_sorted.append(gene)
-        gene_top = gene_sorted[0:num_top]
 
         for top_id in range(0, num_top):
             cpg = cpg_top[top_id]

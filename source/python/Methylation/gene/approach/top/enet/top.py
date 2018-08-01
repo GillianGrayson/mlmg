@@ -8,7 +8,7 @@ from infrastructure.file_system import get_result_path
 from infrastructure.save.features import save_features
 
 
-def save_top_enet(config, num_bootstrap_runs=100, num_top=100):
+def save_top_enet(config, num_bootstrap_runs=100, num_top=500):
 
     params_dict = load_params_dict(config)
     alpha = params_dict.get('alpha')
