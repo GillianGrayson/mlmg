@@ -84,6 +84,7 @@ class Method(Enum):
     anova = 'anova'
     spearman = 'spearman'
     manova = 'manova'
+    random_forest = 'random_forest'
     k_means = 'k_means'
     mean_shift = 'mean_shift'
     linreg_mult = 'linreg_mult'
