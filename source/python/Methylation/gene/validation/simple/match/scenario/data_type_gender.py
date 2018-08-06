@@ -1,6 +1,5 @@
 from config.config import *
 from infrastructure.load.top import *
-import numpy as np
 
 
 def vs_article(article_name, intersection, only_f, only_m):
@@ -80,7 +79,7 @@ D_F = Config(
     geo=GeoType.islands_shores
 )
 
-configs_F = [A_F]
+configs_F = [D_F, B_F]
 
 I_F = load_top_gene_names(configs_F[0], num_top)[0:num_top]
 for config in configs_F[1:]:
@@ -138,7 +137,7 @@ D_M = Config(
     geo=GeoType.islands_shores
 )
 
-configs_M = [A_M]
+configs_M = [D_M, B_M]
 
 I_M = load_top_gene_names(configs_M[0], num_top)[0:num_top]
 for config in configs_M[1:]:

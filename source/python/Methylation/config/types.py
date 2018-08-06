@@ -13,6 +13,7 @@ class DataBaseType(Enum):
     GSE40279 = 'GSE40279'
     GSE52588 = 'GSE52588'
     GSE30870 = 'GSE30870'
+    GSE61256 = 'GSE61256'
 
 
 class DataType(Enum):
@@ -89,7 +90,6 @@ class Method(Enum):
     mean_shift = 'mean_shift'
     linreg_mult = 'linreg_mult'
     match = 'match'
-    gender_vs = 'gender_vs'
 
 
 class MANOVATest(Enum):

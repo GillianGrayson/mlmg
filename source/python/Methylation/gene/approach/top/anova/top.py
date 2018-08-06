@@ -1,7 +1,7 @@
 from method.enet.routines import *
 from attributes.categorical import get_attributes_dict
 from infrastructure.load.gene_data import load_gene_data
-from infrastructure.file_system import get_result_path
+from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
 from scipy import stats
 

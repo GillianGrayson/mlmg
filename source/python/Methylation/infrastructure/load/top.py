@@ -1,6 +1,6 @@
-from infrastructure.file_system import *
+from infrastructure.path import *
 from infrastructure.load.routines import line_proc
-from infrastructure.file_system import get_result_path
+from infrastructure.path import get_result_path
 import numpy as np
 
 

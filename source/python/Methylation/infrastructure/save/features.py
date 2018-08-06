@@ -1,5 +1,5 @@
 import numpy as np
-from infrastructure.file_system import *
+from infrastructure.path import *
 
 def save_features(fn, features):
     features = np.array(features)

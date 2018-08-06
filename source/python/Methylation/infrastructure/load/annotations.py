@@ -1,4 +1,4 @@
-from infrastructure.file_system import *
+from infrastructure.path import *
 from config.types import *
 
 

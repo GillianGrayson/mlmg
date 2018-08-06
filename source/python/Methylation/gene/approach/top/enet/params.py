@@ -1,7 +1,7 @@
 from method.enet.routines import *
 from infrastructure.load.attributes import get_attributes
 from infrastructure.load.gene_data import load_gene_data
-from infrastructure.file_system import *
+from infrastructure.path import *
 from infrastructure.save.features import save_features
 
 

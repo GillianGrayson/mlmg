@@ -2,7 +2,7 @@ import numpy as np
 from config.config import *
 from annotations.regular import *
 from infrastructure.load.cpg_data import load_cpg_data
-from infrastructure.file_system import *
+from infrastructure.path import *
 
 
 def save_cpg_by_gene(config, fn):

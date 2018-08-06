@@ -2,7 +2,7 @@ from method.linreg_mult.routines import *
 from config.types import *
 from infrastructure.load.attributes import get_attributes
 from infrastructure.load.top import load_top_gene_data, load_top_gene_names, load_top_gene_vals
-from infrastructure.file_system import *
+from infrastructure.path import *
 from infrastructure.save.features import save_features
 
 def save_plane_linreg(config, num_top=100, gd_type_x=GeneDataType.mean, gd_type_y=GeneDataType.mean):
