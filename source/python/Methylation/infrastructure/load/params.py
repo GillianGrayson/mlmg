@@ -1,6 +1,6 @@
 import numpy as np
 from config.types import Method
-from infrastructure.file_system import get_param_path
+from infrastructure.path import get_param_path
 
 
 def load_params_dict(config):

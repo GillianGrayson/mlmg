@@ -1,4 +1,4 @@
-from infrastructure.file_system import *
+from infrastructure.path import *
 
 
 def load_bop_cpg_dict(config):

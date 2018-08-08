@@ -1,5 +1,5 @@
 import numpy as np
-from infrastructure.file_system import get_gene_data_path
+from infrastructure.path import get_gene_data_path
 from annotations.regular import get_dict_cpg_gene, get_dict_cpg_map_info
 from infrastructure.load.cpg_data import load_cpg_data, get_non_inc_cpgs
 from infrastructure.load.attributes import get_attributes

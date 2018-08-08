@@ -4,7 +4,7 @@ from method.enet.routines import *
 from infrastructure.load.params import load_params_dict
 from infrastructure.load.attributes import get_attributes
 from infrastructure.load.gene_data import load_gene_data
-from infrastructure.file_system import get_result_path
+from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
 
 

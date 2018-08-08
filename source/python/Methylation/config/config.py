@@ -8,6 +8,7 @@ import socket
 class Config:
 
     def __init__(self,
+                 read_only=False,
                  db=DataBaseType.GSE40279,
                  dt=DataType.gene,
                  approach=Approach.top,
@@ -24,6 +25,7 @@ class Config:
                  cpg_class=ClassType.any,
                  ):
         # Config data
+        self.read_only = read_only
         self.db = db
         self.dt = dt
         self.approach = approach
@@ -50,9 +52,10 @@ class Config:
             self.fs = FSType.local_ab
 
         # Core data
-        self.annotations = load_annotations(self)
-        self.attributes = load_attributes(self)
-        self.indexes = get_indexes(self)
+        if not read_only:
+            self.annotations = load_annotations(self)
+            self.attributes = load_attributes(self)
+            self.indexes = get_indexes(self)
 
         # Aux data
         self.print_rate = 10000

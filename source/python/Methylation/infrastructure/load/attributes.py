@@ -1,5 +1,5 @@
 from config.types import *
-from infrastructure.file_system import get_path
+from infrastructure.path import get_path
 import numpy as np
 
 

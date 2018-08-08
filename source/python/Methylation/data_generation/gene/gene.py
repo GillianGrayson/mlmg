@@ -1,7 +1,7 @@
 import numpy as np
 from config.config import *
 from infrastructure.load.gene_data import get_raw_dict
-from infrastructure.file_system import get_gene_data_path
+from infrastructure.path import get_gene_data_path
 from config.types import *
 
 def save_gene_data(config):

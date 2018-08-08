@@ -4,7 +4,7 @@ from sklearn.model_selection import ShuffleSplit
 from infrastructure.load.attributes import get_attributes
 from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.load.params import load_params_dict
-from infrastructure.file_system import get_result_path
+from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.regular import get_dict_cpg_gene
 from config.types import *
