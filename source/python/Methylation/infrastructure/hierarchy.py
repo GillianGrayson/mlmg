@@ -163,9 +163,64 @@ def create_hierarchy(config):
 
                         elif method == Method.linreg_mult.value:
 
-                            pass
+                            for approach in approaches:
 
-config = Config(db=DataBaseType.GSE61256,
+                                approach_path = method_path + '/' + approach
+                                if not os.path.exists(approach_path):
+                                    os.makedirs(approach_path)
+
+                                if approach == Approach.top.value:
+
+                                    for method in apr_top_methods:
+
+                                        method_apr_path = approach_path + '/' + method
+                                        if not os.path.exists(method_apr_path):
+                                            os.makedirs(method_apr_path)
+
+                                        for gender in genders:
+
+                                            gender_path = method_apr_path + '/' + gender
+                                            if not os.path.exists(gender_path):
+                                                os.makedirs(gender_path)
+
+                                            for disease in diseases:
+
+                                                disease_path = gender_path + '/' + disease
+                                                if not os.path.exists(disease_path):
+                                                    os.makedirs(disease_path)
+
+                                                if data_type == DataType.bop.value:
+
+                                                    pass
+
+                                                elif data_type == DataType.cpg.value:
+
+                                                    pass
+
+                                                elif data_type == DataType.gene.value:
+
+                                                    for geo in geos:
+
+                                                        geo_path = disease_path + '/' + geo
+                                                        if not os.path.exists(geo_path):
+                                                            os.makedirs(geo_path)
+
+                                                        for gd_o in gds:
+
+                                                            gd_path_order = geo_path + '/' + gd_o
+                                                            if not os.path.exists(gd_path_order):
+                                                                os.makedirs(gd_path_order)
+
+                                                            for gd_v in gds:
+
+                                                                gd_path_vals = gd_path_order + '/' + gd_v
+                                                                if not os.path.exists(gd_path_vals):
+                                                                    os.makedirs(gd_path_vals)
+
+
+
+
+config = Config(db=DataBaseType.GSE40279,
                 read_only=True)
 
 create_hierarchy(config)

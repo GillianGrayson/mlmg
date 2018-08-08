@@ -22,15 +22,15 @@ db = DataBaseType.GSE40279
 dt = DataType.gene
 approach = Approach.top
 scenario = Scenario.approach
-approach_methods = [Method.anova, Method.enet, Method.linreg, Method.spearman]
+approach_methods = [Method.enet, Method.anova, Method.linreg, Method.spearman]
 approach_gd = GeneDataType.mean
-gts = [Gender.any, Gender.M, Gender.F]
+genders = [Gender.F, Gender.M, Gender.any]
 geos = [GeoType.islands_shores]
 
 for method in approach_methods:
     print(method.value)
-    for gt in gts:
-        print('\t' + gt.value)
+    for gender in genders:
+        print('\t' + gender.value)
         for geo in geos:
             print('\t\t' + geo.value)
 
@@ -42,7 +42,7 @@ for method in approach_methods:
                 approach_method=method,
                 approach_gd=approach_gd,
                 geo=geo,
-                gender=gt
+                gender=gender
             )
 
             top_proc(config)

@@ -47,7 +47,7 @@ B_F = Config(
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
-    approach_method=Method.linreg,
+    approach_method=Method.enet,
     gender=Gender.F,
     disease=Disease.any,
     approach_gd=GeneDataType.mean,
@@ -79,7 +79,7 @@ D_F = Config(
     geo=GeoType.islands_shores
 )
 
-configs_F = [D_F, B_F]
+configs_F = [B_F]
 
 I_F = load_top_gene_names(configs_F[0], num_top)[0:num_top]
 for config in configs_F[1:]:
@@ -105,7 +105,7 @@ B_M = Config(
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
-    approach_method=Method.linreg,
+    approach_method=Method.enet,
     gender=Gender.M,
     disease=Disease.any,
     approach_gd=GeneDataType.mean,
@@ -137,7 +137,7 @@ D_M = Config(
     geo=GeoType.islands_shores
 )
 
-configs_M = [D_M, B_M]
+configs_M = [B_M]
 
 I_M = load_top_gene_names(configs_M[0], num_top)[0:num_top]
 for config in configs_M[1:]:

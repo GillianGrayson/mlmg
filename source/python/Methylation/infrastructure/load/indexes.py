@@ -26,4 +26,6 @@ def get_indexes(config):
                     disease_indexes.append(p_id)
         indexes = list(set(indexes).intersection(disease_indexes))
 
+    indexes.sort()
+
     return indexes
