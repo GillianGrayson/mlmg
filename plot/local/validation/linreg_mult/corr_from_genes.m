@@ -2,12 +2,12 @@ clear all;
 
 base = 'GSE40279';
 method = 'enet';
-gender_type = 'F';
+gender_type = 'any';
 disease_type = 'any';
 gd_approach = 'mean';
 gd_validation = 'mean';
 
-tops = 5:5:350;
+tops = 5:5:1000;
 tops = tops';
 
 corrs = zeros(size(tops, 1), 1);
