@@ -24,17 +24,17 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=500, win
     bops_pvals = []
     for bop in dict_bop_cpgs:
         curr_cpgs = dict_bop_cpgs.get(bop)
-        cpgd_passed = []
+        cpgs_passed = []
         for cpg in curr_cpgs:
             if cpg in cpgs:
-                cpgd_passed.append(cpg)
-        if len(cpgd_passed) > 2:
+                cpgs_passed.append(cpg)
+        if len(cpgs_passed) > 2:
             pvals_on_bop = []
-            for win_id in range(0, len(cpgd_passed) - 2):
+            for win_id in range(0, len(cpgs_passed) - 2):
                 val_table = []
                 val_cols  = []
                 for cpg_id in range(0, window):
-                    cpg = cpgd_passed[win_id + cpg_id]
+                    cpg = cpgs_passed[win_id + cpg_id]
                     beta = betas[cpgs.index(cpg)]
                     val_table.append(beta)
                     val_cols.append('cpg_'+str(cpg_id))

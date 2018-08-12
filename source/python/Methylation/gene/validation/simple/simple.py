@@ -12,7 +12,6 @@ def simple_proc(config, num_top=100, num_bootstraps=100):
 
 num_bootstraps = 100
 genders = [Gender.F, Gender.any, Gender.M]
-tops = range(5, 1001, 5)
 
 for gender in genders:
 
@@ -29,6 +28,8 @@ for gender in genders:
         geo=GeoType.islands_shores,
         gender=gender
     )
+
+    tops = range(5, int(len(config.indexes) * config.test_part), 5)
 
     for num_top in tops:
 
