@@ -4,15 +4,17 @@ base = 'GSE40279';
 data_type = 'mean';
 geo = 'islands_shores';
 age_ann = 'age';
-genes = {'ELOVL2', ...
-    'FHL2', ...
-    'TRIM59', ...
-    'OTUD7A', ...
-    'SOD2', ...
-    'TRAPPC3', ...
-    'PEX5L', ...
-    'USP21'};
+genes = {'KLHDC7A', ...
+    'LRRC24', ...
+    'ELL2', ...
+    'VWA5B1', ...
+    'ZIC1', ...
+    'MIR1247', ...
+    'MTMR7', ...
+    'MIR193A'};
 genes = genes';
+XI = 20:10:100;
+XI = XI';
 
 fn = sprintf('../../data/%s/attributes.txt', base);
 ann = importdata(fn);
@@ -41,13 +43,46 @@ all_genes = data.textdata;
 all_data = data.data;
 
 figure;
+colors = {};
 for gene_id = 1:size(genes, 1)
     gene = string(genes(gene_id));
     idx = find(all_genes==gene);
-    gene_data = all_data(idx, :);
+    gene_data = all_data(idx, :)';
     
-    h = scatter(ages, gene_data);
-    legend(h, gene)
+    YI = lsq_lut_piecewise(ages, gene_data, XI);
+    
+    h = plot(ages, gene_data, '.');
+    color = get(h, 'Color');
+    colors = vertcat(colors, color);
+    set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+    hold all;
+    l = plot(XI, YI, '+-', 'Color', color);
+    legend(l, gene)
+    set(gca, 'FontSize', 30);
+    xlabel('age', 'Interpreter', 'latex');
+    set(gca, 'FontSize', 30);
+    ylabel('$\beta$', 'Interpreter', 'latex');
+    hold all;
+end
+
+figure;
+for gene_id = 1:size(genes, 1)
+    gene = string(genes(gene_id));
+    idx = find(all_genes==gene);
+    gene_data = all_data(idx, :)';
+    
+    YI = lsq_lut_piecewise(ages, gene_data, XI);
+    
+    max_beta = max(max(gene_data), max(YI));
+    min_beta = min(min(gene_data), min(YI));
+    
+    for p_id = 1:size(YI, 1)
+        coeff = (YI(p_id) - min_beta) / (max_beta - min_beta);
+        YI(p_id) = coeff;
+    end
+    
+    l = plot(XI, YI, '+-', 'Color', colors{gene_id});
+    legend(l, gene)
     set(gca, 'FontSize', 30);
     xlabel('age', 'Interpreter', 'latex');
     set(gca, 'FontSize', 30);
