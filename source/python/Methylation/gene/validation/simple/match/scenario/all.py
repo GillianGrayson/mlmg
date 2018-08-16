@@ -22,10 +22,10 @@ configs = {}
 
 approach_gd = GeneDataType.mean
 approach_methods = [Method.anova, Method.enet, Method.linreg, Method.spearman]
-for method in approach_methods:
-    print('method: ' + method.value)
-    for gender in genders:
-        print('\t' + 'gender: ' + gender.value)
+for gender in genders:
+    print('gender: ' + gender.value)
+    for method in approach_methods:
+        print('\t' + 'method: ' + method.value)
 
         config = Config(
             read_only=True,
@@ -59,10 +59,10 @@ for method in approach_methods:
 
 approach_gd = GeneDataType.from_cpg
 approach_methods = [Method.anova, Method.enet, Method.linreg, Method.spearman]
-for method in approach_methods:
-    print('method: ' + method.value)
-    for gender in genders:
-        print('\t' + 'gender: ' + gender.value)
+for gender in genders:
+    print('gender: ' + gender.value)
+    for method in approach_methods:
+        print('\t' + 'method: ' + method.value)
 
         config = Config(
             read_only=True,
@@ -96,10 +96,10 @@ for method in approach_methods:
 
 approach_gd = GeneDataType.from_bop
 approach_methods = [Method.manova]
-for method in approach_methods:
-    print('method: ' + method.value)
-    for gender in genders:
-        print('\t' + 'gender: ' + gender.value)
+for gender in genders:
+    print('gender: ' + gender.value)
+    for method in approach_methods:
+        print('\t' + 'method: ' + method.value)
 
         config = Config(
             read_only=True,
