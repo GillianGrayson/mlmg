@@ -13,7 +13,7 @@ scenario = Scenario.approach
 geo = GeoType.islands_shores
 genders = [Gender.any, Gender.M, Gender.F]
 
-fn = 'krivonosov_genes.txt'
+fn = 'krivonosov_1_genes.txt'
 gene_top_origin = load_top_gene_names_by_article(Config(read_only=True), fn)
 
 column = 0
