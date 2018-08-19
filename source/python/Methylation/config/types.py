@@ -25,6 +25,7 @@ class DataType(Enum):
 class Approach(Enum):
     top = 'top'
     clustering = 'clustering'
+    bend = 'bend'
 
 
 class Validation(Enum):

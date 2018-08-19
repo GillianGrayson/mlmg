@@ -72,6 +72,13 @@ def get_result_path(config, file_name):
                     path += ''
                 else:
                     path += '/' + config.geo_type.value
+            if config.approach is Approach.bend:
+                if config.approach_gd is GeneDataType.from_cpg:
+                    path += ''
+                elif config.approach_gd is GeneDataType.from_bop:
+                    path += ''
+                else:
+                    path += '/' + config.geo_type.value
             elif config.approach is Approach.clustering:
                 path += ''
 
