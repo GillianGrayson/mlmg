@@ -104,7 +104,7 @@ approach_gd = GeneDataType.mean
 gender = Gender.F
 geo = GeoType.islands_shores
 
-limit = 55
+limit = 65
 pval = 0.001
 
 config = Config(

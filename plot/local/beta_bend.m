@@ -10,7 +10,7 @@ geo = 'islands_shores';
 gender = 'F';
 disease_type = 'healthy';
 
-age_lim = 55;
+age_lim = 65;
 
 num_genes = 5;
 
@@ -167,11 +167,11 @@ for gene_id = 1:size(genes, 1)
     set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
     
     hold all;
-    h = plot(x_lin_less, y_lin_less, 'LineWidth', 3, 'Color', color);
+    h = plot(x_lin_less, y_lin_less, '-', 'LineWidth', 3, 'Color', color);
     legend(h, gene_name);
     
     hold all;
-    h = plot(x_lin_more, y_lin_more, 'LineWidth', 3, 'Color', color);
+    h = plot(x_lin_more, y_lin_more, '-', 'LineWidth', 3, 'Color', color);
      set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
     
     set(gca, 'FontSize', 30);
@@ -181,6 +181,7 @@ for gene_id = 1:size(genes, 1)
 
 end
 
+box on;
 
 
 
