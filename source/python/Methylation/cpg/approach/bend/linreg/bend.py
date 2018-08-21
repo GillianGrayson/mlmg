@@ -1,25 +1,29 @@
 from method.enet.routines import *
 from infrastructure.load.attributes import get_attributes
-from infrastructure.load.gene_data import load_gene_data
+from infrastructure.load.cpg_data import load_cpg_data
 from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
+from annotations.regular import get_dict_cpg_gene
 from scipy import stats
 from attributes.conditions import *
 from config.config import *
 from copy import deepcopy
 
 
-def save_bend_linreg(config, limit, pval):
+def save_bend_linreg(config, limit, pval, num_opt=1000):
     config_less = deepcopy(config)
     age_less(config_less, limit)
     atr_l = get_attributes(config_less)
-    g_names_l, g_vals_l = load_gene_data(config_less)
+    cpg_names_l, cpg_vals_l = load_cpg_data(config_less)
 
     config_more = deepcopy(config)
     age_more(config_more, limit)
     atr_m = get_attributes(config_more)
-    g_names_m, g_vals_m = load_gene_data(config_more)
+    cpg_names_m, cpg_vals_m = load_cpg_data(config_more)
 
+    cpg_gene_dict = get_dict_cpg_gene(config)
+
+    cpgs_passed = []
     genes_passed = []
 
     angles = []
@@ -36,17 +40,22 @@ def save_bend_linreg(config, limit, pval):
     p_value_ms = []
     std_err_ms = []
 
-    for g_id_l in range(0, len(g_names_l)):
-        g_id_m = g_names_m.index(g_names_l[g_id_l])
-        vals_l = g_vals_l[g_id_l]
-        vals_m = g_vals_m[g_id_m]
+    num_cpgs = 0
+
+    for cpg_id_l in range(0, len(cpg_names_l)):
+        cpg_id_m = cpg_names_m.index(cpg_names_l[cpg_id_l])
+        vals_l = cpg_vals_l[cpg_id_l]
+        vals_m = cpg_vals_m[cpg_id_m]
 
         slope_l, intercept_l, r_value_l, p_value_l, std_err_l = stats.linregress(atr_l, vals_l)
         slope_m, intercept_m, r_value_m, p_value_m, std_err_m = stats.linregress(atr_m, vals_m)
         angle = abs(slope_l - slope_m)
 
         if (max(p_value_l, p_value_m) < pval):
-            genes_passed.append(g_names_l[g_id_l])
+            cpgs_passed.append(cpg_names_l[cpg_id_l])
+
+            genes_passed.append(cpg_gene_dict.get(cpg_names_l[cpg_id_l]))
+
             angles.append(angle)
 
             slope_ls.append(slope_l)
@@ -61,8 +70,16 @@ def save_bend_linreg(config, limit, pval):
             p_value_ms.append(p_value_m)
             std_err_ms.append(std_err_m)
 
-    order = np.argsort(angles)[::-1]
+        num_cpgs += 1
+        if num_cpgs % config.print_rate == 0:
+            print('num_cpgs: ' + str(num_cpgs))
+
+    order = np.argsort(angles)[::-1][0:num_opt]
+
+    cpgs_opt = list(np.array(cpgs_passed)[order])
+
     genes_opt = list(np.array(genes_passed)[order])
+
     angles_opt = list(np.array(angles)[order])
 
     slope_ls_opt = list(np.array(slope_ls)[order])
@@ -78,7 +95,9 @@ def save_bend_linreg(config, limit, pval):
     std_err_ms_opt = list(np.array(std_err_ms)[order])
 
     fn = get_result_path(config, 'bend_' + str(limit) + '.txt')
-    save_features(fn, [genes_opt,
+    save_features(fn, [cpgs_opt,
+
+                       genes_opt,
 
                        angles_opt,
 
@@ -96,13 +115,12 @@ def save_bend_linreg(config, limit, pval):
 
 
 db = DataBaseType.GSE40279
-dt = DataType.gene
+dt = DataType.cpg
 approach = Approach.bend
 scenario = Scenario.approach
 approach_method = Method.linreg
 approach_gd = GeneDataType.mean
 gender = Gender.F
-geo = GeoType.islands_shores
 
 limit = 55
 pval = 0.001
@@ -114,7 +132,6 @@ config = Config(
     scenario=scenario,
     approach_method=approach_method,
     approach_gd=approach_gd,
-    geo=geo,
     gender=gender
 )
 

@@ -10,7 +10,7 @@ geo = 'islands_shores';
 gender = 'F';
 disease_type = 'healthy';
 
-age_lim = 65;
+age_lim = 55;
 
 num_genes = 5;
 
