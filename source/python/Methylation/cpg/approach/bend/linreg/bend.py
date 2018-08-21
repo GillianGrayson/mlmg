@@ -54,7 +54,14 @@ def save_bend_linreg(config, limit, pval, num_opt=1000):
         if (max(p_value_l, p_value_m) < pval):
             cpgs_passed.append(cpg_names_l[cpg_id_l])
 
-            genes_passed.append(cpg_gene_dict.get(cpg_names_l[cpg_id_l]))
+            genes = cpg_gene_dict.get(cpg_names_l[cpg_id_l])
+            if len(genes) > 0:
+                if genes[0] == '':
+                    genes_passed.append('nan')
+                else:
+                    genes_passed.append(";".join(genes))
+            else:
+                genes_passed.append('nan')
 
             angles.append(angle)
 
@@ -113,17 +120,35 @@ def save_bend_linreg(config, limit, pval, num_opt=1000):
                        p_value_ms_opt,
                        std_err_ms_opt])
 
+    raw_config = Config(db=config.db,
+                        dt=config.dt,
+                        approach=config.approach,
+                        scenario=config.scenario,
+                        approach_method=config.approach_method,
+                        gender=Gender.any)
+
+    cpg_str_list = []
+    cpg_name_raw, cpg_vals_raw = load_cpg_data(raw_config)
+    for cpg in cpgs_opt:
+        cpg_vals = cpg_vals_raw[cpg_name_raw.index(cpg)]
+        curr_cpg_str = cpg
+        for id in range(0, len(cpg_vals)):
+            curr_cpg_str += (' ' + str(format(cpg_vals[id], '0.8e')))
+        cpg_str_list.append(curr_cpg_str)
+
+    fn = get_result_path(config, 'bend_data_' + str(limit) + '.txt')
+    np.savetxt(fn, cpg_str_list, fmt="%s")
+
 
 db = DataBaseType.GSE40279
 dt = DataType.cpg
 approach = Approach.bend
 scenario = Scenario.approach
 approach_method = Method.linreg
-approach_gd = GeneDataType.mean
 gender = Gender.F
 
 limit = 55
-pval = 0.001
+pval = 0.00001
 
 config = Config(
     db=db,
@@ -131,7 +156,6 @@ config = Config(
     approach=approach,
     scenario=scenario,
     approach_method=approach_method,
-    approach_gd=approach_gd,
     gender=gender
 )
 
