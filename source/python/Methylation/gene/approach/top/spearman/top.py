@@ -5,6 +5,7 @@ from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
 from scipy import stats
 import math
+from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 
 
 def save_top_spearman(config):
@@ -25,5 +26,13 @@ def save_top_spearman(config):
     rhos_sorted = list(np.array(gene_rhos)[order])
     genes_sorted = list(np.array(gene_names)[order])
 
+    metrics_sorted_np = np.asarray(rhos_sorted).reshape(-1, 1)
+    bandwidth = estimate_bandwidth(metrics_sorted_np)
+    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+    ms.fit(metrics_sorted_np)
+    labels_mean_shift = list(ms.labels_)
+    af = AffinityPropagation().fit(metrics_sorted_np)
+    labels_affinity_propagation = list(af.labels_)
+
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, rhos_sorted])
+    save_features(fn, [genes_sorted, rhos_sorted, labels_mean_shift, labels_affinity_propagation])
