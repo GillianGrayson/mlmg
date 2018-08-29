@@ -70,5 +70,5 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=500):
     labels_affinity_propagation = list(af.labels_)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, counts_sorted, labels_mean_shift, labels_affinity_propagation])
+    save_features(fn, [genes_sorted, labels_mean_shift, labels_affinity_propagation, counts_sorted])
 

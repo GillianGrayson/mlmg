@@ -26,7 +26,7 @@ def save_top_spearman(config):
     rhos_sorted = list(np.array(gene_rhos)[order])
     genes_sorted = list(np.array(gene_names)[order])
 
-    metrics_sorted_np = np.asarray(rhos_sorted).reshape(-1, 1)
+    metrics_sorted_np = np.asarray(list(map(abs, rhos_sorted))).reshape(-1, 1)
     bandwidth = estimate_bandwidth(metrics_sorted_np)
     ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
     ms.fit(metrics_sorted_np)
@@ -35,4 +35,4 @@ def save_top_spearman(config):
     labels_affinity_propagation = list(af.labels_)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, rhos_sorted, labels_mean_shift, labels_affinity_propagation])
+    save_features(fn, [genes_sorted, labels_mean_shift, labels_affinity_propagation, rhos_sorted])

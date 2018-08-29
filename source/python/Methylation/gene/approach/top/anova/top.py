@@ -37,6 +37,6 @@ def save_top_anova(config):
     labels_affinity_propagation = list(af.labels_)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, pvals_sorted, labels_mean_shift, labels_affinity_propagation])
+    save_features(fn, [genes_sorted, labels_mean_shift, labels_affinity_propagation, pvals_sorted])
 
 

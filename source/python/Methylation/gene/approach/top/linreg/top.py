@@ -30,7 +30,7 @@ def save_top_linreg(config):
     intercepts_sorted = list(np.array(intercepts)[order_mean])
     genes_sorted = list(np.array(genes)[order_mean])
 
-    metrics_sorted_np = np.asarray(r_values_sorted).reshape(-1, 1)
+    metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
     bandwidth = estimate_bandwidth(metrics_sorted_np)
     ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
     ms.fit(metrics_sorted_np)
@@ -39,4 +39,4 @@ def save_top_linreg(config):
     labels_affinity_propagation = list(af.labels_)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, r_values_sorted, p_values_sorted, slopes_sorted, intercepts_sorted, labels_mean_shift, labels_affinity_propagation])
+    save_features(fn, [genes_sorted, labels_mean_shift, labels_affinity_propagation, r_values_sorted, p_values_sorted, slopes_sorted, intercepts_sorted])
