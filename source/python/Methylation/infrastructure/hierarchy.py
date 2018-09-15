@@ -11,10 +11,11 @@ def create_hierarchy(config):
     scenarios = [Scenario.approach.value, Scenario.validation.value]
 
     validations = [Validation.simple.value]
-    approaches = [Approach.top.value, Approach.clustering.value]
+    approaches = [Approach.top.value, Approach.clustering.value, Approach.bend.value]
 
     val_methods = [Method.linreg.value, Method.linreg_mult.value, Method.match.value]
     apr_top_methods = [Method.anova.value, Method.enet.value, Method.linreg.value, Method.manova.value, Method.spearman.value]
+    apr_bend_methods = [ Method.linreg.value]
     apr_cluster_methods = []
 
     genders = [Gender.any.value, Gender.F.value, Gender.M.value]
@@ -48,6 +49,54 @@ def create_hierarchy(config):
                     if approach == Approach.top.value:
 
                         for method in apr_top_methods:
+
+                            method_path = approach_path + '/' + method
+                            if not os.path.exists(method_path):
+                                os.makedirs(method_path)
+
+                            for gender in genders:
+
+                                gender_path = method_path + '/' + gender
+                                if not os.path.exists(gender_path):
+                                    os.makedirs(gender_path)
+
+                                for disease in diseases:
+
+                                    disease_path = gender_path + '/' + disease
+                                    if not os.path.exists(disease_path):
+                                        os.makedirs(disease_path)
+
+                                    if data_type == DataType.bop.value:
+
+                                        pass
+
+                                    elif data_type == DataType.cpg.value:
+
+                                        pass
+
+                                    elif data_type == DataType.gene.value:
+
+                                        for gd in gds:
+
+                                            gd_path = disease_path + '/' + gd
+                                            if not os.path.exists(gd_path):
+                                                os.makedirs(gd_path)
+
+                                            if gd == GeneDataType.from_cpg.value or gd == GeneDataType.from_bop.value:
+
+                                                pass
+
+                                            else:
+
+                                                for geo in geos:
+
+                                                    geo_path = gd_path + '/' + geo
+                                                    if not os.path.exists(geo_path):
+                                                        os.makedirs(geo_path)
+
+                    if approach == Approach.bend.value:
+
+                        for method in apr_bend_methods:
 
                             method_path = approach_path + '/' + method
                             if not os.path.exists(method_path):
@@ -163,9 +212,64 @@ def create_hierarchy(config):
 
                         elif method == Method.linreg_mult.value:
 
-                            pass
+                            for approach in approaches:
 
-config = Config(db=DataBaseType.GSE61256,
+                                approach_path = method_path + '/' + approach
+                                if not os.path.exists(approach_path):
+                                    os.makedirs(approach_path)
+
+                                if approach == Approach.top.value:
+
+                                    for method in apr_top_methods:
+
+                                        method_apr_path = approach_path + '/' + method
+                                        if not os.path.exists(method_apr_path):
+                                            os.makedirs(method_apr_path)
+
+                                        for gender in genders:
+
+                                            gender_path = method_apr_path + '/' + gender
+                                            if not os.path.exists(gender_path):
+                                                os.makedirs(gender_path)
+
+                                            for disease in diseases:
+
+                                                disease_path = gender_path + '/' + disease
+                                                if not os.path.exists(disease_path):
+                                                    os.makedirs(disease_path)
+
+                                                if data_type == DataType.bop.value:
+
+                                                    pass
+
+                                                elif data_type == DataType.cpg.value:
+
+                                                    pass
+
+                                                elif data_type == DataType.gene.value:
+
+                                                    for geo in geos:
+
+                                                        geo_path = disease_path + '/' + geo
+                                                        if not os.path.exists(geo_path):
+                                                            os.makedirs(geo_path)
+
+                                                        for gd_o in gds:
+
+                                                            gd_path_order = geo_path + '/' + gd_o
+                                                            if not os.path.exists(gd_path_order):
+                                                                os.makedirs(gd_path_order)
+
+                                                            for gd_v in gds:
+
+                                                                gd_path_vals = gd_path_order + '/' + gd_v
+                                                                if not os.path.exists(gd_path_vals):
+                                                                    os.makedirs(gd_path_vals)
+
+
+
+
+config = Config(db=DataBaseType.GSE40279,
                 read_only=True)
 
 create_hierarchy(config)

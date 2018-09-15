@@ -30,13 +30,13 @@ def get_result_path(config, file_name):
                 path += '/' + config.validation_method.value
                 if config.validation_method is Method.linreg_mult:
 
-                    path += '/' + config.geo_type.value + '/' + \
-                            'approach(' + config.approach.value + ')_' + \
-                            'method(' + config.approach_method.value + ')_' + \
-                            'gender(' + config.gender.value + ')_' + \
-                            'disease(' + config.disease.value + ')_' + \
-                            'order(' + config.approach_gd.value + ')_' + \
-                            'vals(' + config.validation_gd.value + ')'
+                    path += '/' + config.approach.value + \
+                            '/' + config.approach_method.value + \
+                            '/' + config.gender.value + \
+                            '/' + config.disease.value + \
+                            '/' + config.geo_type.value + \
+                            '/' + config.approach_gd.value + \
+                            '/' + config.validation_gd.value
 
                 elif config.validation_method is Method.match:
 
@@ -66,6 +66,13 @@ def get_result_path(config, file_name):
                     '/' + config.approach_gd.value
 
             if config.approach is Approach.top:
+                if config.approach_gd is GeneDataType.from_cpg:
+                    path += ''
+                elif config.approach_gd is GeneDataType.from_bop:
+                    path += ''
+                else:
+                    path += '/' + config.geo_type.value
+            if config.approach is Approach.bend:
                 if config.approach_gd is GeneDataType.from_cpg:
                     path += ''
                 elif config.approach_gd is GeneDataType.from_bop:
