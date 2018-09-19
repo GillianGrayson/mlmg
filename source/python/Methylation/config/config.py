@@ -51,7 +51,7 @@ class Config:
             self.fs = FSType.local_big
         elif host_name == 'DESKTOP-4BEQ7MS':
             self.fs = FSType.local_ab
-        elif host_name == 'master':
+        elif host_name == 'master' or host_name[0:4] == 'node':
             self.fs = FSType.unn
 
         # Core data
