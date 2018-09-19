@@ -5,6 +5,7 @@ import os
 def create_hierarchy(config):
 
     db_path = get_path(config, '') + 'result'
+    print(db_path)
 
     data_types = [DataType.bop.value, DataType.gene.value, DataType.cpg.value]
 
@@ -271,5 +272,7 @@ def create_hierarchy(config):
 
 config = Config(db=DataBaseType.GSE40279,
                 read_only=True)
+
+
 
 create_hierarchy(config)

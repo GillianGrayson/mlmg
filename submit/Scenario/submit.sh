@@ -10,4 +10,4 @@ printf "$2 \n\n"
 
 cd $1
 
-srun python $2
+srun python -m $2

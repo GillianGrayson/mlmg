@@ -43,6 +43,7 @@ class Config:
 
         # FS type
         host_name = socket.gethostname()
+        print(host_name)
         self.fs = FSType.local_big
         if host_name == 'MSI':
             self.fs = FSType.local_msi
@@ -50,6 +51,8 @@ class Config:
             self.fs = FSType.local_big
         elif host_name == 'DESKTOP-4BEQ7MS':
             self.fs = FSType.local_ab
+        elif host_name == 'master' or host_name[0:4] == 'node':
+            self.fs = FSType.unn
 
         # Core data
         if not read_only:
