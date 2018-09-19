@@ -50,6 +50,8 @@ class Config:
             self.fs = FSType.local_big
         elif host_name == 'DESKTOP-4BEQ7MS':
             self.fs = FSType.local_ab
+        elif host_name == 'master':
+            self.fs = FSType.unn
 
         # Core data
         if not read_only:
