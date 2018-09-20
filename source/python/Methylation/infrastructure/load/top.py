@@ -60,7 +60,7 @@ def load_top_gene_linreg_dict(config, num_top):
 
     top_dict = {}
     for id in range(0, len(names)):
-        top_dict[names[id]] = [id, metrics[id], clusters[id], slopes[id]]
+        top_dict[names[id]] = [id, metrics[id], sorted_clusters[id], slopes[id]]
 
     return top_dict
 
