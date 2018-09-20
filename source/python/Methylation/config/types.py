@@ -26,6 +26,7 @@ class Approach(Enum):
     top = 'top'
     clustering = 'clustering'
     bend = 'bend'
+    statistics = 'statistics'
 
 
 class Validation(Enum):
@@ -129,3 +130,7 @@ class CellPop(Enum):
     b_cell = 'Bcell'
     mono = 'Mono'
     gran = 'Gran'
+
+class CpGCondition(Enum):
+    regular = 'regular'
+    x = 'x'

@@ -62,9 +62,9 @@ def load_cpg_data(config):
                     vals_passed.append(vals)
                     cpgs_passed.append(cpg)
 
-            num_lines += 1
-            if num_lines % config.print_rate == 0:
-                print('num_lines: ' + str(num_lines))
+        num_lines += 1
+        if num_lines % config.print_rate == 0:
+            print('num_lines: ' + str(num_lines))
 
     f.close()
 

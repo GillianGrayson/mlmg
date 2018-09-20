@@ -10,7 +10,7 @@ geo = 'islands_shores';
 gender = 'M';
 disease_type = 'any';
 
-gene = 'OTUD7A'
+gene = 'CACNG7'
 
 fn = sprintf('../../../../data/%s/result/gene/approach/top/linreg/%s/%s/%s/%s/top.txt', ...
     base, ...

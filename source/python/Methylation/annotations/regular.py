@@ -1,5 +1,13 @@
 from config.types import *
 
+def cpg_condition(config, annotation):
+    if config.cpg_condition == CpGCondition.regular:
+        return regular_condition(config, annotation)
+    elif config.cpg_condition == CpGCondition.x:
+        return x_condition(config, annotation)
+    else:
+        return regular_condition(config, annotation)
+
 def regular_condition(config, annotation):
     geo_type = config.geo_type
     dna_region = config.dna_region
@@ -51,6 +59,57 @@ def regular_condition(config, annotation):
 
     return result
 
+def x_condition(config, annotation):
+    geo_type = config.geo_type
+    dna_region = config.dna_region
+
+    cpg = annotation[Annotation.cpg.value]
+    gene = annotation[Annotation.gene.value]
+    chr = annotation[Annotation.chr.value]
+    geo = annotation[Annotation.geo.value]
+
+    target_geo = []
+    if geo_type is GeoType.islands:
+        target_geo.append('Island')
+    elif geo_type is GeoType.shores:
+        target_geo.append('N_Shore')
+        target_geo.append('S_Shore')
+    elif geo_type is GeoType.shores_s:
+        target_geo.append('S_Shore')
+    elif geo_type is GeoType.shores_n:
+        target_geo.append('N_Shore')
+    elif geo_type is GeoType.islands_shores:
+        target_geo.append('Island')
+        target_geo.append('N_Shore')
+        target_geo.append('S_Shore')
+
+    is_target_geo = False
+    if len(target_geo) == 0:
+        is_target_geo = True
+    else:
+        if geo in target_geo:
+            is_target_geo = True
+
+    is_dna_region_match = False
+    if dna_region is DNARegion.any:
+        is_dna_region_match = True
+    elif dna_region is DNARegion.genic:
+        if len(gene) > 0:
+            is_dna_region_match = True
+    elif dna_region is DNARegion.non_genic:
+        if len(gene) == 0:
+            is_dna_region_match = True
+
+    result = False
+    if len(cpg) > 2:
+        if cpg[0:2] == 'cg' or cpg[0:2] == 'rs' or cpg[0:2] == 'ch':
+            if chr == 'X':
+                if is_target_geo:
+                    if is_dna_region_match:
+                        result = True
+
+    return result
+
 def get_dict_cpg_gene(config):
     annotations = config.annotations
 
@@ -76,7 +135,7 @@ def get_dict_cpg_gene(config):
         annotation[Annotation.geo.value] = curr_geo
         annotation[Annotation.map_info.value] = curr_map_info
 
-        is_passed = regular_condition(config, annotation)
+        is_passed = cpg_condition(config, annotation)
 
         if is_passed:
             all_genes = list(set(curr_gene.split(';')))
@@ -109,7 +168,7 @@ def get_dict_gene_chr(config):
         annotation[Annotation.geo.value] = curr_geo
         annotation[Annotation.map_info.value] = curr_map_info
 
-        is_passed = regular_condition(config, annotation)
+        is_passed = cpg_condition(config, annotation)
 
         if is_passed:
             all_genes = list(set(curr_gene.split(';')))
@@ -148,7 +207,7 @@ def get_dict_gene_cpg(config):
         annotation[Annotation.geo.value] = curr_geo
         annotation[Annotation.map_info.value] = curr_map_info
 
-        is_passed = regular_condition(config, annotation)
+        is_passed = cpg_condition(config, annotation)
 
         if is_passed:
             all_genes = list(set(curr_gene.split(';')))
@@ -185,7 +244,7 @@ def get_dict_cpg_map_info(config):
         annotation[Annotation.geo.value] = curr_geo
         annotation[Annotation.map_info.value] = curr_map_info
 
-        is_passed = regular_condition(config, annotation)
+        is_passed = cpg_condition(config, annotation)
 
         if is_passed:
             dict_cpg_map[curr_cpg] = curr_map_info
