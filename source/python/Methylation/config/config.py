@@ -1,6 +1,7 @@
 from config.types import *
 from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
+from infrastructure.load.cell_pop import *
 from infrastructure.load.indexes import get_indexes
 import socket
 
@@ -58,6 +59,7 @@ class Config:
         if not read_only:
             self.annotations = load_annotations(self)
             self.attributes = load_attributes(self)
+            self.cell_pop = load_cell_pop(self)
             self.indexes = get_indexes(self)
 
         # Aux data

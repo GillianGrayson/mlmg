@@ -16,7 +16,10 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=500, win
     atr_table = []
     atr_cols = []
     for atr_type in attributes_types:
-        atr_table.append(get_attributes(config, atr_type))
+        if isinstance(atr_type, Attribute):
+            atr_table.append(get_attributes(config, atr_type))
+        elif isinstance(atr_type, CellPop):
+            atr_table.append(get_cell_pop(config, [atr_type]))
         atr_cols.append(atr_type.value)
 
     num_bops = 0
@@ -32,7 +35,7 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=500, win
             pvals_on_bop = []
             for win_id in range(0, len(cpgs_passed) - 2):
                 val_table = []
-                val_cols  = []
+                val_cols = []
                 for cpg_id in range(0, window):
                     cpg = cpgs_passed[win_id + cpg_id]
                     beta = betas[cpgs.index(cpg)]
