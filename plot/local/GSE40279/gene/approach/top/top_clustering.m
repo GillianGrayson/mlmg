@@ -1,8 +1,8 @@
 clear all;
 
 base = 'GSE40279';
-method = 'spearman';
-gender_type = 'any';
+method = 'linreg';
+gender_type = 'F';
 disease_type = 'any';
 gd_approach = 'mean';
 geo = 'islands_shores';
@@ -33,6 +33,17 @@ max_cluster = max(cluster_data);
 min_cluster = min(cluster_data);
 num_clusters = max_cluster - min_cluster + 1;
 
+curr_cluster = cluster_data(1);
+curr_sorted = 0;
+sorted_clusters = zeros(size(cluster_data, 1), 1);
+for i = 1:size(cluster_data, 1)
+    if(cluster_data(i) ~= curr_cluster)
+        curr_cluster = cluster_data(i);
+        curr_sorted = curr_sorted + 1;
+    end
+    sorted_clusters(i) = curr_sorted;
+end
+
 figure
 subplot(2, 1, 1)
 h = plot(x, metrics_data, 'Marker', 'o', 'MarkerFaceColor', 'w');
@@ -51,7 +62,7 @@ for c_id = 1:num_clusters
     ys = [];
     for p_id = 1:num_genes
         x_curr = x(p_id);
-        y_curr = cluster_data(p_id);
+        y_curr = sorted_clusters(p_id);
         if y_curr == cluster_curr
             xs = vertcat(xs, x_curr);
             ys = vertcat(ys, y_curr);
