@@ -21,6 +21,7 @@ def load_attributes(config):
             attributes[keys[key_id]].append(vals[key_id].rstrip())
 
     f.close()
+
     return attributes
 
 def get_attributes(config, attribute=Attribute.age):

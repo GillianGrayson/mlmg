@@ -66,6 +66,8 @@ def load_cpg_data(config):
             if num_lines % config.print_rate == 0:
                 print('num_lines: ' + str(num_lines))
 
+    f.close()
+
     return cpgs_passed, vals_passed
 
 def load_cpg_pval_data(config):
@@ -93,6 +95,8 @@ def load_cpg_pval_data(config):
         num_lines += 1
         if num_lines % config.print_rate == 0:
             print('num_lines: ' + str(num_lines))
+
+    f.close()
 
     return cpgs_passed, vals_passed
 

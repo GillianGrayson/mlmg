@@ -5,6 +5,7 @@ from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
 from scipy import stats
 import math
+from method.clustering.order import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 
 
@@ -31,8 +32,10 @@ def save_top_spearman(config):
     ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
     ms.fit(metrics_sorted_np)
     labels_mean_shift = list(ms.labels_)
+    clusters_mean_shift = clustering_order(labels_mean_shift)
     af = AffinityPropagation().fit(metrics_sorted_np)
     labels_affinity_propagation = list(af.labels_)
+    clusters_affinity_prop = clustering_order(labels_affinity_propagation)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, labels_mean_shift, labels_affinity_propagation, rhos_sorted])
+    save_features(fn, [genes_sorted, clusters_mean_shift, clusters_affinity_prop, rhos_sorted])
