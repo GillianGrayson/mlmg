@@ -37,5 +37,5 @@ def load_annotations(config):
                 annotations[key].append(vals[key_id].rstrip())
 
     f.close()
-
+    
     return annotations
