@@ -36,4 +36,6 @@ def load_annotations(config):
             elif key == Annotation.bop.value:
                 annotations[key].append(vals[key_id].rstrip())
 
+    f.close()
+
     return annotations

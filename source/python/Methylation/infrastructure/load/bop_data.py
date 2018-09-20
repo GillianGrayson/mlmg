@@ -15,4 +15,6 @@ def load_bop_cpg_dict(config):
         cpgs = list(map(str.strip, cpgs))
         dict_bop_cpg[bop] = cpgs
 
+    f.close()
+
     return dict_bop_cpg

@@ -20,6 +20,8 @@ def load_attributes(config):
         for key_id in range(0, len(keys)):
             attributes[keys[key_id]].append(vals[key_id].rstrip())
 
+    f.close()
+
     return attributes
 
 def get_attributes(config, attribute=Attribute.age):

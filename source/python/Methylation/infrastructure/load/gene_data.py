@@ -21,6 +21,8 @@ def load_gene_data(config):
             genes_passed.append(gene)
             vals_passed.append(vals)
 
+    f.close()
+
     return genes_passed, vals_passed
 
 def get_raw_dict(config):

@@ -115,3 +115,4 @@ class Annotation(Enum):
     class_type = 'Class'
     geo = 'RELATION_TO_UCSC_CPG_ISLAND'
     bop = 'BOP'
+

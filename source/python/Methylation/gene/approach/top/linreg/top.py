@@ -17,7 +17,7 @@ def save_top_linreg(config):
     intercepts = []
     for id in range(0, len(genes)):
         val = vals[id]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(val, attributes)
+        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, val)
         r_values.append(r_value)
         p_values.append(p_value)
         slopes.append(slope)
