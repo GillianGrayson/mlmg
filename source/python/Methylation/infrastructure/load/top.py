@@ -26,22 +26,26 @@ def load_top_gene_names(config, num_top):
     gene_names = gene_names[0:num_top]
     return gene_names
 
-def load_top_gene_dict(config, num_top):
+def load_top_gene_linreg_dict(config, num_top):
     fn = 'top.txt'
     fn = get_result_path(config, fn)
     f = open(fn)
     names = []
     metrics = []
+    slopes = []
     clusters = []
     for line in f:
         cols = line.split(' ')
         gene = cols[0].rstrip()
+        slope = float(cols[5].rstrip())
         metric = float(cols[3].rstrip())
         cluster = int(cols[1].rstrip())
         names.append(gene)
+        slopes.append(slope)
         metrics.append(metric)
         clusters.append(cluster)
     names = names[0:num_top]
+    slopes = slopes[0:num_top]
     metrics = metrics[0:num_top]
     clusters = clusters[0:num_top]
 
@@ -56,7 +60,7 @@ def load_top_gene_dict(config, num_top):
 
     top_dict = {}
     for id in range(0, len(names)):
-        top_dict[names[id]] = [id, metrics[id], clusters[id]]
+        top_dict[names[id]] = [id, metrics[id], clusters[id], slopes[id]]
 
     return top_dict
 
