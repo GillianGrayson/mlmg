@@ -4,12 +4,11 @@ from infrastructure.load.cpg_data import load_cpg_data
 from statsmodels.multivariate.manova import MANOVA
 from statsmodels.stats.multitest import multipletests
 from infrastructure.save.features import save_features
-from infrastructure.load.bop_data import load_bop_cpg_dict
 import pandas as pd
 
 
 def save_top_manova(config, attributes_types, attribute_target, num_top=500, window=3, test=MANOVATest.pillai_bartlett):
-    dict_bop_cpgs = load_bop_cpg_dict(config)
+    dict_bop_cpgs = get_dict_bop_cpgs(config)
     dict_bop_genes = get_dict_bop_genes(config, dict_bop_cpgs)
     cpgs, betas = load_cpg_data(config)
 
