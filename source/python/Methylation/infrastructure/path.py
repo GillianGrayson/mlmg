@@ -97,15 +97,23 @@ def get_result_path(config, file_name):
 
         elif config.scenario is Scenario.approach:
 
-            path += '/' + config.approach.value + \
-                    '/' + config.approach_method.value + \
-                    '/' + config.gender.value + \
-                    '/' + config.disease.value
+            if config.approach is Approach.top:
 
-            if config.approach_method is Approach.top:
+                path += '/' + config.approach.value + \
+                        '/' + config.approach_method.value + \
+                        '/' + config.gender.value + \
+                        '/' + config.disease.value
+
+            elif config.approach is Approach.clustering:
+
                 path += ''
-            elif config.approach_method is Approach.clustering:
-                path += ''
+
+            elif config.approach is Approach.statistics:
+
+                path += '/' + config.approach.value + \
+                        '/' + config.gender.value + \
+                        '/' + config.disease.value + \
+                        '/' + config.geo_type.value
 
     elif config.dt is DataType.bop:
 

@@ -14,7 +14,7 @@ import math
 db = DataBaseType.GSE52588
 dt = DataType.cpg
 approach = Approach.statistics
-scenario = Scenario.validation
+scenario = Scenario.approach
 genders = [Gender.any, Gender.M, Gender.F]
 geos = [GeoType.islands_shores, GeoType.islands, GeoType.any]
 cpg_condition = CpGCondition.x
@@ -48,6 +48,11 @@ for gender in genders:
             for beta in curr_cpg_vals:
                 int_id = math.floor((beta - int_begin) * num_int / (int_end - int_begin + 1.0e-8))
                 pdf[int_id] += 1
+
+        pdf = np.asarray(pdf)
+        sum_pdf = np.sum(pdf)
+        pdf = pdf / (sum_pdf * int_shift)
+        print('pdf norm: ' + str(np.sum(pdf) * int_shift))
 
         fn = 'top.txt'
         fn = get_result_path(config, fn)

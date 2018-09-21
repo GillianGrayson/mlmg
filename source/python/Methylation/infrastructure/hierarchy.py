@@ -153,7 +153,23 @@ def create_hierarchy(config):
 
                     elif approach == Approach.statistics.value:
 
-                        todo = 0
+                        for gender in genders:
+
+                            gender_path = approach_path + '/' + gender
+                            if not os.path.exists(gender_path):
+                                os.makedirs(gender_path)
+
+                            for disease in diseases:
+
+                                disease_path = gender_path + '/' + disease
+                                if not os.path.exists(disease_path):
+                                    os.makedirs(disease_path)
+
+                                for geo in geos:
+
+                                    geo_path = disease_path + '/' + geo
+                                    if not os.path.exists(geo_path):
+                                        os.makedirs(geo_path)
 
             elif scenario == Scenario.validation.value:
 
@@ -274,7 +290,7 @@ def create_hierarchy(config):
 
 
 
-config = Config(db=DataBaseType.GSE40279,
+config = Config(db=DataBaseType.GSE52588,
                 read_only=True)
 
 
