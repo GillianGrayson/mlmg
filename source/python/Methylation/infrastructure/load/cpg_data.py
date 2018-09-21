@@ -70,6 +70,37 @@ def load_cpg_data(config):
 
     return cpgs_passed, vals_passed
 
+def load_cpg_data_raw(config):
+    indexes = config.indexes
+    dict_cpg_gene = get_dict_cpg_gene(config)
+
+    fn = 'average_beta.txt'
+    full_path = get_path(config, fn)
+    f = open(full_path)
+    for skip_id in range(0, config.num_skip_lines):
+        skip_line = f.readline()
+
+    num_lines = 0
+    cpgs_passed = []
+    vals_passed = []
+
+    for line in f:
+        col_vals = line_proc(config, line)
+        cpg = col_vals[0]
+        vals = col_vals[1::]
+        vals = list(np.array(vals)[indexes])
+
+        vals_passed.append(vals)
+        cpgs_passed.append(cpg)
+
+        num_lines += 1
+        if num_lines % config.print_rate == 0:
+            print('num_lines: ' + str(num_lines))
+
+    f.close()
+
+    return cpgs_passed, vals_passed
+
 def load_cpg_pval_data(config):
     indexes = config.indexes
 
