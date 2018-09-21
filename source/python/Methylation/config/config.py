@@ -4,6 +4,7 @@ from infrastructure.load.attributes import *
 from infrastructure.load.cell_pop import *
 from infrastructure.load.indexes import get_indexes
 import socket
+import getpass
 
 
 class Config:
