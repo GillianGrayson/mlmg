@@ -21,7 +21,7 @@ config = Config(
     db=db
 )
 
-classes = [ClassType.any, ClassType.class_a, ClassType.class_b, ClassType.class_c, ClassType.class_d]
+classes = [ClassType.class_a, ClassType.class_b, ClassType.class_c, ClassType.class_d]
 
 for class_type in classes:
     print('class: ' + class_type.value)

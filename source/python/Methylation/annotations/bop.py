@@ -4,7 +4,7 @@ from annotations.regular import get_dict_cpg_gene
 
 
 def bop_condition(config, annotation):
-    target_ct = config.class_type
+    cpg_classes = config.cpg_classes
     dna_region = config.dna_region
 
     cpg = annotation[Annotation.cpg.value]
@@ -12,8 +12,10 @@ def bop_condition(config, annotation):
     gene = annotation[Annotation.gene.value]
     ct = annotation[Annotation.class_type.value]
 
+    classes_values = [x.values for x in cpg_classes]
+
     is_class_match = False
-    if target_ct is ClassType.any or ct == target_ct.value:
+    if ct in classes_values:
         is_class_match = True
 
     is_dna_region_match = False

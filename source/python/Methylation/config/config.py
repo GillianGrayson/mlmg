@@ -23,7 +23,7 @@ class Config:
                  validation_gd=GeneDataType.mean,
                  geo=GeoType.any,
                  dna_region=DNARegion.any,
-                 cpg_class=ClassType.any,
+                 cpg_classes=(ClassType.class_a, ClassType.class_b, ClassType.class_c, ClassType.class_d),
                  cpg_condition=CpGCondition.regular
                  ):
         # Config data
@@ -40,7 +40,7 @@ class Config:
         self.approach_gd = approach_gd
         self.validation_gd = validation_gd
         self.geo_type = geo
-        self.class_type = cpg_class
+        self.cpg_classes = cpg_classes
         self.dna_region = dna_region
         self.cpg_condition = cpg_condition
 
