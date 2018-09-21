@@ -29,10 +29,10 @@ def save_cpg_by_gene(config, fn):
 
 
 config = Config(
-    db=DataBaseType.GSE40279,
-    geo=GeoType.any
+    db=DataBaseType.GSE52588,
+    geo=GeoType.islands_shores
 )
 
-fn = 'graph_genes_1'
+fn = 'genes_not_in_list'
 fn = get_suppl_path(config, fn)
 save_cpg_by_gene(config, fn)
