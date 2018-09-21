@@ -84,6 +84,7 @@ class DNARegion(Enum):
 class Method(Enum):
     enet = 'enet'
     linreg = 'linreg'
+    linreg_modified = 'linreg_modified'
     anova = 'anova'
     spearman = 'spearman'
     manova = 'manova'
