@@ -7,7 +7,7 @@ import pickle
 
 def load_attributes(config):
     fn_txt = 'attributes.txt'
-    fn_pkl = 'annotations.pkl'
+    fn_pkl = 'attributes.pkl'
     fn_txt = get_path(config, fn_txt)
     fn_pkl = get_path(config, fn_pkl)
 
