@@ -56,7 +56,13 @@ class Config:
         elif host_name == 'DESKTOP-4BEQ7MS':
             self.fs = FSType.local_ab
         elif host_name == 'master' or host_name[0:4] == 'node':
-            self.fs = FSType.unn
+            user = getpass.getuser()
+            if user == 'yusipov_i':
+                self.fs = FSType.unn
+            elif user == 'kalyakulina_a':
+                self.fs = FSType.unn_ab
+            else:
+                self.fs = FSType.unn
 
         # Core data
         if not read_only:
