@@ -72,7 +72,6 @@ class ClassType(Enum):
     class_b = 'ClassB'
     class_c = 'ClassC'
     class_d = 'ClassD'
-    any = 'any'
 
 
 class DNARegion(Enum):

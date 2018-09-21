@@ -3,9 +3,13 @@ from config.types import *
 
 
 def load_annotations(config):
-    fn = 'annotations.txt'
-    fn = get_path(config, fn)
-    f = open(fn)
+    fn_txt = 'annotations.txt'
+    fn_pkl = 'annotations.txt'
+
+
+
+    fn_txt = get_path(config, fn_txt)
+    f = open(fn_txt)
 
     key_line = f.readline()
     keys = key_line.split('\t')

@@ -14,7 +14,7 @@ approach = Approach.top
 approach_method = Method.manova
 gender = Gender.any
 disease = Disease.any
-cpg_class = ClassType.class_a
+cpg_classes = (ClassType.class_a, ClassType.class_b)
 attributes_types = [Attribute.age, CellPop.plasma_blast, CellPop.cd8_p, CellPop.cd8_naive, CellPop.cd4_naive,
                     CellPop.cd8_t, CellPop.cd4_t, CellPop.nk, CellPop.b_cell, CellPop.mono, CellPop.gran]
 attribute_target = Attribute.age
@@ -27,7 +27,7 @@ config = Config(
     approach_method=approach_method,
     gender=gender,
     disease=disease,
-    cpg_class=cpg_class,
+    cpg_classes=cpg_classes,
 )
 
 top_proc(config, attributes_types, attribute_target)
