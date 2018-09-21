@@ -24,6 +24,7 @@ class Config:
                  geo=GeoType.any,
                  dna_region=DNARegion.any,
                  cpg_class=ClassType.any,
+                 cpg_condition=CpGCondition.regular
                  ):
         # Config data
         self.read_only = read_only
@@ -41,6 +42,7 @@ class Config:
         self.geo_type = geo
         self.class_type = cpg_class
         self.dna_region = dna_region
+        self.cpg_condition = cpg_condition
 
         # FS type
         host_name = socket.gethostname()

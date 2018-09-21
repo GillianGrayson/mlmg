@@ -49,18 +49,9 @@ def load_top_gene_linreg_dict(config, num_top):
     metrics = metrics[0:num_top]
     clusters = clusters[0:num_top]
 
-    curr_cluster = clusters[0]
-    mod_cluster = 0
-    sorted_clusters = []
-    for cl_id in range(0, len(clusters)):
-        if clusters[cl_id] != curr_cluster:
-            curr_cluster = clusters[cl_id]
-            mod_cluster += 1
-        sorted_clusters.append(mod_cluster)
-
     top_dict = {}
     for id in range(0, len(names)):
-        top_dict[names[id]] = [id, metrics[id], sorted_clusters[id], slopes[id]]
+        top_dict[names[id]] = [id, metrics[id], clusters[id], slopes[id]]
 
     return top_dict
 

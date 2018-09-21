@@ -12,12 +12,12 @@ def create_hierarchy(config):
     scenarios = [Scenario.approach.value, Scenario.validation.value]
 
     validations = [Validation.simple.value]
-    approaches = [Approach.top.value, Approach.clustering.value, Approach.bend.value]
+    approaches = [Approach.top.value, Approach.clustering.value, Approach.bend.value, Approach.statistics.value]
 
     val_methods = [Method.linreg.value, Method.linreg_mult.value, Method.match.value]
     apr_top_methods = [Method.anova.value, Method.enet.value, Method.linreg.value, Method.manova.value, Method.spearman.value]
     apr_bend_methods = [ Method.linreg.value]
-    apr_cluster_methods = []
+    apr_clustering_methods = []
 
     genders = [Gender.any.value, Gender.F.value, Gender.M.value]
 
@@ -145,11 +145,31 @@ def create_hierarchy(config):
 
                     elif approach == Approach.clustering.value:
 
-                        for method in apr_cluster_methods:
+                        for method in apr_clustering_methods:
 
                             method_path = approach_path + '/' + method
                             if not os.path.exists(method_path):
                                 os.makedirs(method_path)
+
+                    elif approach == Approach.statistics.value:
+
+                        for gender in genders:
+
+                            gender_path = approach_path + '/' + gender
+                            if not os.path.exists(gender_path):
+                                os.makedirs(gender_path)
+
+                            for disease in diseases:
+
+                                disease_path = gender_path + '/' + disease
+                                if not os.path.exists(disease_path):
+                                    os.makedirs(disease_path)
+
+                                for geo in geos:
+
+                                    geo_path = disease_path + '/' + geo
+                                    if not os.path.exists(geo_path):
+                                        os.makedirs(geo_path)
 
             elif scenario == Scenario.validation.value:
 
@@ -270,7 +290,7 @@ def create_hierarchy(config):
 
 
 
-config = Config(db=DataBaseType.GSE40279,
+config = Config(db=DataBaseType.GSE52588,
                 read_only=True)
 
 
