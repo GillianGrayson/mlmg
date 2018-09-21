@@ -36,9 +36,9 @@ D3 = Config(
     disease=Disease.any,
 )
 
-D1_genes = load_top_gene_names(D1, num_top)
-D2_genes = load_top_gene_names(D2, num_top)
-D3_genes = load_top_gene_names(D3, num_top)
+D1_genes = load_top_data(D1, num_top, 1)
+D2_genes = load_top_data(D2, num_top, 1)
+D3_genes = load_top_data(D3, num_top, 1)
 
 I_genes = list(set(list(set(D1_genes).intersection(D1_genes))).intersection(D3_genes))
 
