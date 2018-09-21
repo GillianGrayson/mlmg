@@ -26,6 +26,17 @@ def load_top_gene_names(config, num_top):
     gene_names = gene_names[0:num_top]
     return gene_names
 
+def load_top_data(config, num_top, index):
+    fn = 'top.txt'
+    fn = get_result_path(config, fn)
+    f = open(fn)
+    gene_names = []
+    for line in f:
+        gene = line.split(' ')[index].rstrip()
+        gene_names.append(gene)
+    gene_names = gene_names[0:num_top]
+    return gene_names
+
 def load_top_gene_linreg_dict(config, num_top):
     fn = 'top.txt'
     fn = get_result_path(config, fn)
