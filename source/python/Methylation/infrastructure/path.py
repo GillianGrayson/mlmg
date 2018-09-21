@@ -155,9 +155,9 @@ def get_gene_data_path(config, file_name):
     path += '/' + file_name
     return path
 
-def get_bop_data_path(config, file_name):
+def get_bop_data_path(config, cpg_class, file_name):
     path = config.fs.value + '/' + config.db.value + '/' + 'bop_data'
-    path += '/' + config.class_type.value
+    path += '/' + cpg_class.value
     path += '/' + file_name
     return path
 
