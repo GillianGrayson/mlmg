@@ -7,6 +7,7 @@ class FSType(Enum):
     local_ab = 'D:/Aaron/Bio/mlmg/data'
     unn = '/common/home/yusipov_i/Work/mlmg/data'
     mpipks = '/data/biophys/yusipov/mlmg/data'
+    unn_ab = '/common/home/kalyakulina_a/Work/mlmg/data'
 
 
 class DataBaseType(Enum):
