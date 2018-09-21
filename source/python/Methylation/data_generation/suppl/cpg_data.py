@@ -1,12 +1,12 @@
 import numpy as np
 from config.config import *
 from annotations.regular import *
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_cpg_data_raw
 from infrastructure.path import *
 
 
 def save_cpg_data(config, fn):
-    cpgs, vals = load_cpg_data(config)
+    cpgs, vals = load_cpg_data_raw(config)
 
     f = open(fn + '.txt')
     target_cpgs = f.read().splitlines()
@@ -14,9 +14,9 @@ def save_cpg_data(config, fn):
     str_list = []
     for cpg in target_cpgs:
         curr_vals = vals[cpgs.index(cpg)]
-        curr_str = cpg
+        curr_str = cpg + ' '
         for id in range(0, len(curr_vals)):
-            curr_str += (' ' + str(format(curr_vals[id], '0.8e')))
+            curr_str += curr_vals[id] + ' '
         str_list.append(curr_str)
 
     np.savetxt(fn + '_cpgs.txt', str_list, fmt="%s")
