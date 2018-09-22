@@ -17,7 +17,7 @@ def top_proc(config):
         save_top_anova(config)
     elif config.approach_method is Method.spearman:
         save_top_spearman(config)
-    elif config.approach_method is Method.linreg_modified:
+    elif config.approach_method is Method.linreg_with_rejection:
         save_top_linreg_modified(config)
 
 
@@ -25,7 +25,7 @@ db = DataBaseType.GSE40279
 dt = DataType.gene
 approach = Approach.top
 scenario = Scenario.approach
-approach_methods = [Method.linreg_modified, Method.linreg, Method.spearman, Method.anova, Method.enet]
+approach_methods = [Method.linreg_with_rejection, Method.linreg, Method.spearman, Method.anova, Method.enet]
 approach_gd = GeneDataType.mean
 genders = [Gender.F, Gender.M, Gender.any]
 geos = [GeoType.islands_shores]

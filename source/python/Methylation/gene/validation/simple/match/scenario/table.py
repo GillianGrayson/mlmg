@@ -4,7 +4,7 @@ import pandas as pd
 
 num_top = 500
 
-method = Method.linreg_modified
+method = Method.linreg_with_rejection
 
 config_f = Config(
     read_only=True,
