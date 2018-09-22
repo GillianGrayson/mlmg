@@ -15,8 +15,15 @@ approach_method = Method.manova
 gender = Gender.any
 disease = Disease.any
 cpg_classes = (ClassType.class_a)
-attributes_types = [Attribute.age, Attribute.gender, Attribute.group, Attribute.batch,
-                    CellPop.cd8_t, CellPop.cd4_t, CellPop.nk, CellPop.b_cell, CellPop.mono, CellPop.gran]
+attributes_types = [Attribute.age,
+                    Attribute.gender,
+                    CellPop.cd4_t,
+                    CellPop.nk,
+                    CellPop.b_cell,
+                    CellPop.mono,
+                    CellPop.gran,
+                    CellPop.cd8_t,
+                    Attribute.batch]
 attribute_target = Attribute.age
 
 config = Config(
