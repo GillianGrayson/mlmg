@@ -47,8 +47,12 @@ def get_attributes(config, attribute=Attribute.age):
     if attribute is Attribute.age:
         atr = list(map(int, list(np.array(config.attributes[attribute.value])[indexes])))
     elif attribute is Attribute.gender:
-        atr = list(map(str, list(np.array(config.attributes[attribute.value])[indexes])))
+        atr = list(map(int, list(np.array(config.attributes[attribute.value])[indexes])))
     elif attribute is Attribute.disease:
         atr = list(map(str, list(np.array(config.attributes[attribute.value])[indexes])))
+    elif attribute is Attribute.group:
+        atr = list(map(int, list(np.array(config.attributes[attribute.value])[indexes])))
+    elif attribute is Attribute.batch:
+        atr = list(map(int, list(np.array(config.attributes[attribute.value])[indexes])))
 
     return atr

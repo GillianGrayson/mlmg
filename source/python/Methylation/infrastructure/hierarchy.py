@@ -290,7 +290,7 @@ def create_hierarchy(config):
 
 
 
-config = Config(db=DataBaseType.GSE40279,
+config = Config(db=DataBaseType.GSE52588_TEST,
                 read_only=True)
 
 

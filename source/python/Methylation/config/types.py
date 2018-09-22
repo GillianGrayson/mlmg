@@ -15,6 +15,7 @@ class DataBaseType(Enum):
     GSE52588 = 'GSE52588'
     GSE30870 = 'GSE30870'
     GSE61256 = 'GSE61256'
+    GSE52588_TEST = 'GSE52588_TEST'
 
 
 class DataType(Enum):
@@ -107,6 +108,8 @@ class Attribute(Enum):
     age = 'age'
     gender = 'gender'
     disease = 'disease'
+    group = 'Group'
+    batch = 'Batch'
 
 
 class Annotation(Enum):

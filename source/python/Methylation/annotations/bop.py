@@ -12,7 +12,10 @@ def bop_condition(config, annotation):
     gene = annotation[Annotation.gene.value]
     ct = annotation[Annotation.class_type.value]
 
-    classes_values = [x.value for x in cpg_classes]
+    if isinstance(cpg_classes, ClassType):
+        classes_values = [cpg_classes.value]
+    else:
+        classes_values = [x.value for x in cpg_classes]
 
     is_class_match = False
     if ct in classes_values:
