@@ -47,7 +47,6 @@ class Config:
 
         # FS type
         host_name = socket.gethostname()
-        print(host_name)
         self.fs = FSType.local_big
         if host_name == 'MSI':
             self.fs = FSType.local_msi

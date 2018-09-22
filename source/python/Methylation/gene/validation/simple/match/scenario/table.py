@@ -1,9 +1,10 @@
 from config.config import *
 from infrastructure.load.top import *
+import pandas as pd
 
 num_top = 500
 
-method = Method.linreg
+method = Method.linreg_with_rejection
 
 config_f = Config(
     read_only=True,
@@ -167,3 +168,10 @@ for i_id in range(0, len(i_names)):
     strs.append(curr_str)
 fn = 'i.txt'
 np.savetxt(fn, strs, fmt="%s")
+
+df = pd.DataFrame({'Top_F': i_f_ids_sorted,
+                   'Top_M': i_m_ids_sorted,
+                   'CorrCoeff_F': i_f_metrics_sorted})
+writer = pd.ExcelWriter('pandas_simple.xlsx', engine='xlsxwriter')
+df.to_excel(writer, index=False, sheet_name='Intersection')
+writer.save()

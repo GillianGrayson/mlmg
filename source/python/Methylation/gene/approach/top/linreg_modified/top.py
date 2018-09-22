@@ -8,9 +8,10 @@ from method.clustering.order import *
 from scipy import stats
 
 
-def save_top_linreg_modified(config):
+def save_top_linreg_modified(config, part=0.05):
     attributes = get_attributes(config)
     genes, vals = load_gene_data(config)
+    part_int = int(part * len(attributes))
 
     p_values = []
     r_values = []
@@ -19,6 +20,25 @@ def save_top_linreg_modified(config):
     for id in range(0, len(genes)):
         val = vals[id]
         slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, val)
+
+        diffs = []
+        for p_id in range(0, len(attributes)):
+            curr_x = attributes[p_id]
+            curr_y = val[p_id]
+            pred_y = slope * curr_x + intercept
+            diffs.append(abs(pred_y - curr_y))
+
+        order = np.argsort(list(map(abs, diffs)))[::-1]
+        bad_ids = order[0:part_int]
+        good_ids = np.linspace(0, len(attributes) - 1, len(attributes), dtype=int)
+        good_ids = list(set(good_ids) - set(bad_ids))
+        good_ids.sort()
+
+        val_good = list(np.array(val)[good_ids])
+        attributes_good = list(np.array(attributes)[good_ids])
+
+        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes_good, val_good)
+
         r_values.append(r_value)
         p_values.append(p_value)
         slopes.append(slope)

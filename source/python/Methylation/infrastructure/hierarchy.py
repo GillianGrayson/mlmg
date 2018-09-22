@@ -15,7 +15,7 @@ def create_hierarchy(config):
     approaches = [Approach.top.value, Approach.clustering.value, Approach.bend.value, Approach.statistics.value]
 
     val_methods = [Method.linreg.value, Method.linreg_mult.value, Method.match.value]
-    apr_top_methods = [Method.anova.value, Method.enet.value, Method.linreg.value, Method.manova.value, Method.spearman.value]
+    apr_top_methods = [Method.anova.value, Method.enet.value, Method.linreg.value, Method.linreg_with_rejection.value, Method.manova.value, Method.spearman.value]
     apr_bend_methods = [ Method.linreg.value]
     apr_clustering_methods = []
 
@@ -290,9 +290,8 @@ def create_hierarchy(config):
 
 
 
-config = Config(db=DataBaseType.GSE52588,
+config = Config(db=DataBaseType.GSE40279,
                 read_only=True)
-
 
 
 create_hierarchy(config)
