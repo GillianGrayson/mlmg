@@ -5,15 +5,17 @@ gender_ann = 'gender';
 disease_ann = 'disease';
 
 base = 'GSE40279';
+method = 'linreg_modified';
 data_type = 'mean';
 geo = 'islands_shores';
 gender = 'M';
 disease_type = 'any';
 
-gene = 'CACNG7'
+gene = 'CACNG7';
 
-fn = sprintf('../../../../data/%s/result/gene/approach/top/linreg/%s/%s/%s/%s/top.txt', ...
+fn = sprintf('../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
     base, ...
+    method, ...
     gender, ...
     disease_type, ...
     data_type, ...
@@ -106,7 +108,6 @@ data = importdata(fn);
 genes_names = data.textdata;
 genes_data = data.data;
 
-figure;
 
 gene_name = string(gene);
 idx = find(genes_names==gene_name);
@@ -125,13 +126,14 @@ x_lin = [min(ages_passed), max(ages_passed)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
 hold all;
-h = plot(ages_passed, gene_data_passed, 'o');
+h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+color = get(h, 'Color');
 
 hold all;
 h = plot(x_lin, y_lin, '-', 'LineWidth', 3);
-legend(h, gene_name);
-
+legend(h, sprintf('%s: %s', gene_name, gender));
+set(h, 'Color', color)
 set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
