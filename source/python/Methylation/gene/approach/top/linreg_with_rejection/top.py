@@ -8,7 +8,7 @@ from method.clustering.order import *
 from scipy import stats
 
 
-def save_top_linreg_modified(config, part=0.05):
+def save_top_linreg_with_rejection(config, part=0.05):
     attributes = get_attributes(config)
     genes, vals = load_gene_data(config)
     part_int = int(part * len(attributes))

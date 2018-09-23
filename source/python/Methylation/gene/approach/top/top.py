@@ -3,7 +3,7 @@ from infrastructure.load.top import *
 from gene.approach.top.enet.params import save_params_enet
 from gene.approach.top.enet.top import save_top_enet
 from gene.approach.top.linreg.top import save_top_linreg
-from gene.approach.top.linreg_modified.top import save_top_linreg_modified
+from gene.approach.top.linreg_with_rejection.top import save_top_linreg_with_rejection
 from gene.approach.top.anova.top import save_top_anova
 from gene.approach.top.spearman.top import save_top_spearman
 
@@ -18,7 +18,7 @@ def top_proc(config):
     elif config.approach_method is Method.spearman:
         save_top_spearman(config)
     elif config.approach_method is Method.linreg_with_rejection:
-        save_top_linreg_modified(config)
+        save_top_linreg_with_rejection(config)
 
 
 db = DataBaseType.GSE40279
