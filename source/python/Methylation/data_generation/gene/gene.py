@@ -53,7 +53,7 @@ def save_gene_data(config):
         gene_mean_der_normed_str_list.append(curr_mean_der_normed_str)
 
         num_genes += 1
-        if num_genes % config.print_rate == 0:
+        if num_genes % 100 == 0:
             print('num_genes: ' + str(num_genes))
 
     # mean
@@ -79,13 +79,16 @@ def save_gene_data(config):
 
 
 db = DataBaseType.GSE52588
-geos = [GeoType.any, GeoType.islands, GeoType.islands_shores]
+geos = [GeoType.islands_shores, GeoType.any, GeoType.islands]
 
 for geo in geos:
 
+    print('geo: ' + str(geo))
+
     config = Config(
         db=db,
-        geo=geo
+        geo=geo,
+        dna_region=DNARegion.genic
     )
 
     save_gene_data(config)

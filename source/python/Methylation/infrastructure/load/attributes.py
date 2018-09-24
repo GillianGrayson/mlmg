@@ -38,6 +38,7 @@ def load_attributes(config):
     if not is_pkl:
         f = open(fn_pkl, 'wb')
         pickle.dump(attributes, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
 
     return attributes
 
