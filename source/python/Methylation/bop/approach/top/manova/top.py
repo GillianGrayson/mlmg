@@ -7,7 +7,7 @@ from infrastructure.save.features import save_features
 import pandas as pd
 
 
-def save_top_manova(config, attributes_types, attribute_target, num_top=500, window=3, test=MANOVATest.pillai_bartlett):
+def save_top_manova(config, attributes_types, attribute_target, window=3, test=MANOVATest.pillai_bartlett):
     dict_bop_cpgs = get_dict_bop_cpgs(config)
     dict_bop_genes = get_dict_bop_genes(config, dict_bop_cpgs)
     cpgs, betas = load_cpg_data(config)
@@ -76,8 +76,8 @@ def save_top_manova(config, attributes_types, attribute_target, num_top=500, win
 
     reject, pvals_corrected, alphacSidak, alphacBonf = multipletests(bops_pvals, 0.05, method='fdr_bh')
     order = np.argsort(pvals_corrected)
-    bops_opt = list(np.array(bops_passed)[order])[0:num_top]
-    pvals_opt = list(np.array(pvals_corrected)[order])[0:num_top]
+    bops_opt = list(np.array(bops_passed)[order])
+    pvals_opt = list(np.array(pvals_corrected)[order])
     genes_opt = []
     genes_from_bop = []
     for bop in bops_opt:
