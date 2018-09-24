@@ -34,6 +34,7 @@ class Approach(Enum):
 
 class Validation(Enum):
     simple = 'simple'
+    match = 'match'
 
 
 class Scenario(Enum):
