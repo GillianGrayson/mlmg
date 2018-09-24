@@ -1,3 +1,4 @@
+from config.method import Method
 from config.types import *
 
 def get_root(config):
@@ -66,13 +67,6 @@ def get_result_path(config, file_name):
                     '/' + config.approach_gd.value
 
             if config.approach is Approach.top:
-                if config.approach_gd is GeneDataType.from_cpg:
-                    path += ''
-                elif config.approach_gd is GeneDataType.from_bop:
-                    path += ''
-                else:
-                    path += '/' + config.geo_type.value
-            if config.approach is Approach.bend:
                 if config.approach_gd is GeneDataType.from_cpg:
                     path += ''
                 elif config.approach_gd is GeneDataType.from_bop:

@@ -1,4 +1,3 @@
-from config.types import *
 from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
 from infrastructure.load.cell_pop import *

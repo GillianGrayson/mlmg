@@ -1,5 +1,5 @@
 import numpy as np
-from config.types import Method
+from config.method import Method
 from infrastructure.path import get_param_path
 
 

@@ -28,7 +28,6 @@ class DataType(Enum):
 class Approach(Enum):
     top = 'top'
     clustering = 'clustering'
-    bend = 'bend'
     statistics = 'statistics'
 
 
@@ -82,20 +81,6 @@ class DNARegion(Enum):
     genic = 'genic'
     non_genic = 'non_genic'
     any = 'any'
-
-
-class Method(Enum):
-    enet = 'enet'
-    linreg = 'linreg'
-    linreg_with_rejection = 'linreg_with_rejection'
-    anova = 'anova'
-    spearman = 'spearman'
-    manova = 'manova'
-    random_forest = 'random_forest'
-    k_means = 'k_means'
-    mean_shift = 'mean_shift'
-    linreg_mult = 'linreg_mult'
-    match = 'match'
 
 
 class MANOVATest(Enum):

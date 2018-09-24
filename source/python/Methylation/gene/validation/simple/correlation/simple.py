@@ -1,9 +1,7 @@
 from config.config import *
 from infrastructure.load.top import *
-from infrastructure.save.features import save_features
 from annotations.regular import get_dict_gene_cpg
 from infrastructure.load.cpg_data import load_cpg_data
-import xlsxwriter
 from scipy import stats
 
 
