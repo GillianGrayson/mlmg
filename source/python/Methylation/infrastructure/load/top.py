@@ -66,6 +66,21 @@ def load_top_gene_linreg_dict(config, num_top):
 
     return top_dict
 
+def load_top_dict(config, keys):
+    fn = 'top.txt'
+    fn = get_result_path(config, fn)
+    f = open(fn)
+    top_dict = {}
+    for line in f:
+        cols = line.split(' ')
+        for key_id in range(0, len(keys)):
+            key = keys[key_id]
+            if key not in top_dict:
+                top_dict[key] = [cols[key_id]]
+            else:
+                top_dict[key].append(cols[key_id])
+    return top_dict
+
 def load_top_gene_vals(config, genes_top):
     indexes = config.indexes
     dict_top = {}
