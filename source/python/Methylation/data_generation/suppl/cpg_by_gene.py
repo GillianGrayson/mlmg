@@ -17,7 +17,6 @@ def save_cpg_by_gene(config, fn):
         gene_cpgs = gene_cpg_dict[gene]
         for gene_cpg in gene_cpgs:
             if gene_cpg in cpgs:
-                index = cpgs.index(gene_cpg)
                 curr_vals = vals[cpgs.index(gene_cpg)]
                 curr_str = gene + ' ' + gene_cpg
                 for id in range(0, len(curr_vals)):
@@ -33,6 +32,6 @@ config = Config(
     geo=GeoType.islands_shores
 )
 
-fn = 'genes_not_in_list'
+fn = 'top_thr_corr_graph_not_in_list'
 fn = get_suppl_path(config, fn)
 save_cpg_by_gene(config, fn)

@@ -1,4 +1,8 @@
 from config.types import *
+from infrastructure.path import *
+import os.path
+import pickle
+
 
 def cpg_condition(config, annotation):
     if config.cpg_condition == CpGCondition.regular:
@@ -111,35 +115,48 @@ def x_condition(config, annotation):
     return result
 
 def get_dict_cpg_gene(config):
-    annotations = config.annotations
+    fn_pkl = 'dict_cpg_gene_' + config.cpg_condition.value + '_' + config.geo_type.value + '_' + config.dna_region.value + '.pkl'
+    fn_pkl = get_path(config, fn_pkl)
 
-    cpg = annotations[Annotation.cpg.value]
-    gene = annotations[Annotation.gene.value]
-    chr = annotations[Annotation.chr.value]
-    geo = annotations[Annotation.geo.value]
-    map_info = annotations[Annotation.map_info.value]
+    is_pkl = os.path.isfile(fn_pkl)
 
-    dict_cpg_gene = {}
-    for i in range(0, len(cpg)):
+    if is_pkl:
+        f = open(fn_pkl, 'rb')
+        dict_cpg_gene = pickle.load(f)
+        f.close()
+    else:
+        annotations = config.annotations
+        cpg = annotations[Annotation.cpg.value]
+        gene = annotations[Annotation.gene.value]
+        chr = annotations[Annotation.chr.value]
+        geo = annotations[Annotation.geo.value]
+        map_info = annotations[Annotation.map_info.value]
 
-        curr_cpg = cpg[i]
-        curr_gene = gene[i]
-        curr_chr = chr[i]
-        curr_geo = geo[i]
-        curr_map_info = map_info[i]
+        dict_cpg_gene = {}
+        for i in range(0, len(cpg)):
 
-        annotation = {}
-        annotation[Annotation.cpg.value] = curr_cpg
-        annotation[Annotation.gene.value] = curr_gene
-        annotation[Annotation.chr.value] = curr_chr
-        annotation[Annotation.geo.value] = curr_geo
-        annotation[Annotation.map_info.value] = curr_map_info
+            curr_cpg = cpg[i]
+            curr_gene = gene[i]
+            curr_chr = chr[i]
+            curr_geo = geo[i]
+            curr_map_info = map_info[i]
 
-        is_passed = cpg_condition(config, annotation)
+            annotation = {}
+            annotation[Annotation.cpg.value] = curr_cpg
+            annotation[Annotation.gene.value] = curr_gene
+            annotation[Annotation.chr.value] = curr_chr
+            annotation[Annotation.geo.value] = curr_geo
+            annotation[Annotation.map_info.value] = curr_map_info
 
-        if is_passed:
-            all_genes = list(set(curr_gene.split(';')))
-            dict_cpg_gene[curr_cpg] = all_genes
+            is_passed = cpg_condition(config, annotation)
+
+            if is_passed:
+                all_genes = list(set(curr_gene.split(';')))
+                dict_cpg_gene[curr_cpg] = all_genes
+
+        f = open(fn_pkl, 'wb')
+        pickle.dump(dict_cpg_gene, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
 
     return dict_cpg_gene
 
@@ -220,33 +237,46 @@ def get_dict_gene_cpg(config):
     return dict_gene_cpg
 
 def get_dict_cpg_map_info(config):
-    annotations = config.annotations
+    fn_pkl = 'dict_cpg_map_info_' + config.cpg_condition.value + '_' + config.geo_type.value + '_' + config.dna_region.value + '.pkl'
+    fn_pkl = get_path(config, fn_pkl)
 
-    cpg = annotations[Annotation.cpg.value]
-    gene = annotations[Annotation.gene.value]
-    chr = annotations[Annotation.chr.value]
-    geo = annotations[Annotation.geo.value]
-    map_info = annotations[Annotation.map_info.value]
+    is_pkl = os.path.isfile(fn_pkl)
 
-    dict_cpg_map = {}
-    for i in range(0, len(cpg)):
+    if is_pkl:
+        f = open(fn_pkl, 'rb')
+        dict_cpg_map_info = pickle.load(f)
+        f.close()
+    else:
+        annotations = config.annotations
+        cpg = annotations[Annotation.cpg.value]
+        gene = annotations[Annotation.gene.value]
+        chr = annotations[Annotation.chr.value]
+        geo = annotations[Annotation.geo.value]
+        map_info = annotations[Annotation.map_info.value]
 
-        curr_cpg = cpg[i]
-        curr_gene = gene[i]
-        curr_chr = chr[i]
-        curr_geo = geo[i]
-        curr_map_info = map_info[i]
+        dict_cpg_map_info = {}
+        for i in range(0, len(cpg)):
 
-        annotation = {}
-        annotation[Annotation.cpg.value] = curr_cpg
-        annotation[Annotation.gene.value] = curr_gene
-        annotation[Annotation.chr.value] = curr_chr
-        annotation[Annotation.geo.value] = curr_geo
-        annotation[Annotation.map_info.value] = curr_map_info
+            curr_cpg = cpg[i]
+            curr_gene = gene[i]
+            curr_chr = chr[i]
+            curr_geo = geo[i]
+            curr_map_info = map_info[i]
 
-        is_passed = cpg_condition(config, annotation)
+            annotation = {}
+            annotation[Annotation.cpg.value] = curr_cpg
+            annotation[Annotation.gene.value] = curr_gene
+            annotation[Annotation.chr.value] = curr_chr
+            annotation[Annotation.geo.value] = curr_geo
+            annotation[Annotation.map_info.value] = curr_map_info
 
-        if is_passed:
-            dict_cpg_map[curr_cpg] = curr_map_info
+            is_passed = cpg_condition(config, annotation)
 
-    return dict_cpg_map
+            if is_passed:
+                dict_cpg_map_info[curr_cpg] = curr_map_info
+
+        f = open(fn_pkl, 'wb')
+        pickle.dump(dict_cpg_map_info, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
+
+    return dict_cpg_map_info

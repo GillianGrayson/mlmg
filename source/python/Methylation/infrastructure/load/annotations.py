@@ -53,5 +53,6 @@ def load_annotations(config):
     if not is_pkl:
         f = open(fn_pkl, 'wb')
         pickle.dump(annotations, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
 
     return annotations
