@@ -37,141 +37,138 @@ keys = ['bop', 'gene', 'pval']
 f_top_dict = load_top_dict(config_f, keys)
 m_top_dict = load_top_dict(config_m, keys)
 
-f_names = list(f_top_dict.keys())
-m_names = list(m_top_dict.keys())
+f_gene_names = list(f_top_dict['gene'])
+m_gene_names = list(m_top_dict['gene'])
 
-i_names = list(set(f_names).intersection(m_names))
-only_f_names = list(set(f_names) - set(i_names))
-only_m_names = list(set(m_names) - set(i_names))
+i_gene_names = list(set(f_gene_names).intersection(m_gene_names))
+only_f_gene_names = list(set(f_gene_names) - set(i_gene_names))
+only_m_gene_names = list(set(m_gene_names) - set(i_gene_names))
+
+f_bop_names = list(f_top_dict['bop'])
+m_bop_names = list(m_top_dict['bop'])
+
+i_bop_names = list(set(f_bop_names).intersection(m_bop_names))
+only_f_bop_names = list(set(f_bop_names) - set(i_bop_names))
+only_m_bop_names = list(set(m_bop_names) - set(i_bop_names))
 
 only_f_ids = []
-only_f_metrics = []
-only_f_clusters = []
-only_f_slopes = []
-only_f_m_metrics = []
-only_f_m_slopes = []
-for f_id in range(0, len(only_f_names)):
-    name = only_f_names[f_id]
-    only_f_ids.append(f_top_dict[name][0])
-    only_f_metrics.append(f_top_dict[name][1])
-    only_f_clusters.append(f_top_dict[name][2])
-    only_f_slopes.append(f_top_dict[name][3])
-    only_f_m_metrics.append(m_all_dict[name][1])
-    only_f_m_slopes.append(m_all_dict[name][3])
+only_f_bop = []
+only_f_gene = []
+only_f_p_value = []
+
+for f_id in range(0, len(only_f_bop_names)):
+    name = only_f_bop_names[f_id]
+    index = f_bop_names.index(name)
+    only_f_ids.append(index)
+    only_f_gene.append(f_top_dict['gene'][index])
+    only_f_p_value.append(f_top_dict['pval'][index])
+
 only_f_order = np.argsort(only_f_ids)
+only_f_bop_names_sorted = list(np.array(only_f_bop_names)[only_f_order])
 only_f_ids_sorted = list(np.array(only_f_ids)[only_f_order])
-only_f_names_sorted = list(np.array(only_f_names)[only_f_order])
-only_f_metrics_sorted = list(np.array(only_f_metrics)[only_f_order])
-only_f_clusters_sorted = list(np.array(only_f_clusters)[only_f_order])
-only_f_slopes_sorted = list(np.array(only_f_slopes)[only_f_order])
-only_f_m_metrics_sorted = list(np.array(only_f_m_metrics)[only_f_order])
-only_f_m_slopes_sorted = list(np.array(only_f_m_slopes)[only_f_order])
+only_f_gene_sorted = list(np.array(only_f_gene)[only_f_order])
+only_f_p_value_sorted = list(np.array(only_f_p_value)[only_f_order])
+
 strs = []
-for f_id in range(0, len(only_f_names)):
-    name = only_f_names_sorted[f_id]
+for f_id in range(0, len(only_f_bop_names)):
+    name = only_f_bop_names_sorted[f_id]
     curr_str = name
-    curr_str += (' ' + str(format(only_f_ids_sorted[f_id], 'd')))
-    curr_str += (' ' + str(format(only_f_clusters_sorted[f_id], 'd')))
-    curr_str += (' ' + str(format(only_f_metrics_sorted[f_id], '0.4f')))
-    curr_str += (' ' + str(format(only_f_slopes_sorted[f_id], '0.4e')))
-    curr_str += (' ' + str(format(only_f_m_metrics_sorted[f_id], '0.4f')))
-    curr_str += (' ' + str(format(only_f_m_slopes_sorted[f_id], '0.4e')))
+    curr_str += (' ' + str(format(only_f_ids_sorted[f_id] + 1, 'd')))
+    curr_str += (' ' + only_f_gene_sorted[f_id])
+    curr_str += (' ' + str(format(float(only_f_p_value_sorted[f_id]), '0.4e')))
     strs.append(curr_str)
 fn = 'only_f.txt'
-np.savetxt(fn, strs, fmt="%s")
+#np.savetxt(fn, strs, fmt="%s")
 
 only_m_ids = []
-only_m_metrics = []
-only_m_clusters = []
-only_m_slopes = []
-only_m_f_metrics = []
-only_m_f_slopes = []
-for m_id in range(0, len(only_m_names)):
-    name = only_m_names[m_id]
-    only_m_ids.append(m_top_dict[name][0])
-    only_m_metrics.append(m_top_dict[name][1])
-    only_m_clusters.append(m_top_dict[name][2])
-    only_m_slopes.append(m_top_dict[name][3])
-    only_m_f_metrics.append(f_all_dict[name][1])
-    only_m_f_slopes.append(f_all_dict[name][3])
+only_m_bop = []
+only_m_gene = []
+only_m_p_value = []
+
+for m_id in range(0, len(only_m_bop_names)):
+    name = only_m_bop_names[m_id]
+    index = m_bop_names.index(name)
+    only_m_ids.append(index)
+    only_m_gene.append(m_top_dict['gene'][index])
+    only_m_p_value.append(m_top_dict['pval'][index])
+
 only_m_order = np.argsort(only_m_ids)
+only_m_bop_names_sorted = list(np.array(only_m_bop_names)[only_m_order])
 only_m_ids_sorted = list(np.array(only_m_ids)[only_m_order])
-only_m_names_sorted = list(np.array(only_m_names)[only_m_order])
-only_m_metrics_sorted = list(np.array(only_m_metrics)[only_m_order])
-only_m_clusters_sorted = list(np.array(only_m_clusters)[only_m_order])
-only_m_slopes_sorted = list(np.array(only_m_slopes)[only_m_order])
-only_m_f_metrics_sorted = list(np.array(only_m_f_metrics)[only_m_order])
-only_m_f_slopes_sorted = list(np.array(only_m_f_slopes)[only_m_order])
+only_m_gene_sorted = list(np.array(only_m_gene)[only_m_order])
+only_m_p_value_sorted = list(np.array(only_m_p_value)[only_m_order])
+
 strs = []
-for m_id in range(0, len(only_m_names)):
-    name = only_m_names_sorted[m_id]
+for m_id in range(0, len(only_m_bop_names)):
+    name = only_m_bop_names_sorted[m_id]
     curr_str = name
-    curr_str += (' ' + str(format(only_m_ids_sorted[m_id], 'd')))
-    curr_str += (' ' + str(format(only_m_clusters_sorted[m_id], 'd')))
-    curr_str += (' ' + str(format(only_m_metrics_sorted[m_id], '0.4f')))
-    curr_str += (' ' + str(format(only_m_slopes_sorted[m_id], '0.4e')))
-    curr_str += (' ' + str(format(only_m_f_metrics_sorted[m_id], '0.4f')))
-    curr_str += (' ' + str(format(only_m_f_slopes_sorted[m_id], '0.4e')))
+    curr_str += (' ' + str(format(only_m_ids_sorted[m_id] + 1, 'd')))
+    curr_str += (' ' + only_m_gene_sorted[m_id])
+    curr_str += (' ' + str(format(float(only_m_p_value_sorted[m_id]), '0.4e')))
     strs.append(curr_str)
 fn = 'only_m.txt'
-np.savetxt(fn, strs, fmt="%s")
+#np.savetxt(fn, strs, fmt="%s")
 
 i_f_ids = []
 i_m_ids = []
-i_f_metrics = []
-i_m_metrics = []
-i_f_slopes = []
-i_m_slopes = []
-i_f_clusters = []
-i_m_clusters = []
-i_diff_metrics = []
-i_diff_slopes = []
-for i_id in range(0, len(i_names)):
-    name = i_names[i_id]
-    i_f_ids.append(f_top_dict[name][0])
-    i_m_ids.append(m_top_dict[name][0])
-    i_f_metrics.append(f_top_dict[name][1])
-    i_m_metrics.append(m_top_dict[name][1])
-    i_f_slopes.append(f_top_dict[name][3])
-    i_m_slopes.append(m_top_dict[name][3])
-    i_f_clusters.append(f_top_dict[name][2])
-    i_m_clusters.append(m_top_dict[name][2])
-    i_diff_metrics.append(f_top_dict[name][1] - m_top_dict[name][1])
-    i_diff_slopes.append(f_top_dict[name][3] - m_top_dict[name][3])
+i_f_bop = []
+i_m_bop = []
+i_f_gene = []
+i_m_gene = []
+i_f_p_value = []
+i_m_p_value = []
+
+for i_id in range(0, len(i_bop_names)):
+    name = i_bop_names[i_id]
+    f_index = f_bop_names.index(name)
+    m_index = m_bop_names.index(name)
+    i_f_ids.append(f_index)
+    i_m_ids.append(m_index)
+    i_f_gene.append(f_top_dict['gene'][f_index])
+    i_m_gene.append(m_top_dict['gene'][m_index])
+    i_f_p_value.append(f_top_dict['pval'][f_index])
+    i_m_p_value.append(m_top_dict['pval'][m_index])
+
 i_order = np.argsort(i_f_ids)
-i_names_sorted = list(np.array(i_names)[i_order])
+i_bop_names_sorted = list(np.array(i_bop_names)[i_order])
 i_f_ids_sorted = list(np.array(i_f_ids)[i_order])
 i_m_ids_sorted = list(np.array(i_m_ids)[i_order])
-i_f_metrics_sorted = list(np.array(i_f_metrics)[i_order])
-i_m_metrics_sorted = list(np.array(i_m_metrics)[i_order])
-i_f_slopes_sorted = list(np.array(i_f_slopes)[i_order])
-i_m_slopes_sorted = list(np.array(i_m_slopes)[i_order])
-i_f_clusters_sorted = list(np.array(i_f_clusters)[i_order])
-i_m_clusters_sorted = list(np.array(i_m_clusters)[i_order])
-i_diff_metrics_sorted = list(np.array(i_diff_metrics)[i_order])
-i_diff_slopes_sorted = list(np.array(i_diff_slopes)[i_order])
+i_f_gene_sorted = list(np.array(i_f_gene)[i_order])
+i_m_gene_sorted = list(np.array(i_m_gene)[i_order])
+i_f_p_value_sorted = list(np.array(i_f_p_value)[i_order])
+i_m_p_value_sorted = list(np.array(i_m_p_value)[i_order])
 
 strs = []
-for i_id in range(0, len(i_names)):
-    name = i_names_sorted[i_id]
+for i_id in range(0, len(i_bop_names)):
+    name = i_bop_names_sorted[i_id]
     curr_str = name
-    curr_str += (' ' + str(format(i_f_ids_sorted[i_id], 'd')))
-    curr_str += (' ' + str(format(i_m_ids_sorted[i_id], 'd')))
-    curr_str += (' ' + str(format(i_f_metrics_sorted[i_id], '0.4f')))
-    curr_str += (' ' + str(format(i_m_metrics_sorted[i_id], '0.4f')))
-    curr_str += (' ' + str(format(i_f_slopes_sorted[i_id], '0.4e')))
-    curr_str += (' ' + str(format(i_m_slopes_sorted[i_id], '0.4e')))
-    curr_str += (' ' + str(format(i_f_clusters_sorted[i_id], 'd')))
-    curr_str += (' ' + str(format(i_m_clusters_sorted[i_id], 'd')))
-    curr_str += (' ' + str(format(i_diff_metrics_sorted[i_id], '0.4f')))
-    curr_str += (' ' + str(format(i_diff_slopes_sorted[i_id], '0.4e')))
+    curr_str += (' ' + str(format(i_f_ids_sorted[i_id] + 1, 'd')))
+    curr_str += (' ' + str(format(i_m_ids_sorted[i_id] + 1, 'd')))
+    curr_str += (' ' + i_f_gene_sorted[i_id])
+    curr_str += (' ' + i_m_gene_sorted[i_id])
+    curr_str += (' ' + str(format(float(i_m_p_value_sorted[i_id]), '0.4e')))
+    curr_str += (' ' + str(format(float(i_f_p_value_sorted[i_id]), '0.4e')))
     strs.append(curr_str)
 fn = 'i.txt'
-np.savetxt(fn, strs, fmt="%s")
+#np.savetxt(fn, strs, fmt="%s")
 
-df = pd.DataFrame({'Top_F': i_f_ids_sorted,
-                   'Top_M': i_m_ids_sorted,
-                   'CorrCoeff_F': i_f_metrics_sorted})
+df_F = pd.DataFrame({'F Gene': only_f_gene_sorted,
+                     'F Top': [x+1 for x in only_f_ids_sorted],
+                     'F Bop': only_f_bop_names_sorted,
+                     'F P_val': only_f_p_value_sorted})
+df_I = pd.DataFrame({'I Gene': i_f_gene_sorted,
+                     'I Top_F': [x+1 for x in i_f_ids_sorted],
+                     'I Top_M': [x+1 for x in i_m_ids_sorted],
+                     'I Bop': i_bop_names_sorted,
+                     'I_P_val_F': i_f_p_value_sorted,
+                     'I_P_val_M': i_m_p_value_sorted})
+df_M = pd.DataFrame({'M Gene': only_m_gene_sorted,
+                     'M Top': [x+1 for x in only_m_ids_sorted],
+                     'M Bop': only_m_bop_names_sorted,
+                     'M P_val': only_m_p_value_sorted})
+
 writer = pd.ExcelWriter('pandas_simple.xlsx', engine='xlsxwriter')
-df.to_excel(writer, index=False, sheet_name='Intersection')
+df_F.to_excel(writer, index=False, sheet_name='F')
+df_M.to_excel(writer, index=False, sheet_name='M')
+df_I.to_excel(writer, index=False, sheet_name='I')
 writer.save()
