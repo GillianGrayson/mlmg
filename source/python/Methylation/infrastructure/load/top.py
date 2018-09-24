@@ -1,7 +1,9 @@
 from infrastructure.path import *
 from infrastructure.load.routines import line_proc
 from infrastructure.path import get_result_path
+from config.method import *
 import numpy as np
+import os.path
 
 
 def load_top_gene_names_by_article(config, fn):
@@ -37,40 +39,15 @@ def load_top_data(config, num_top, index):
     gene_names = gene_names[0:num_top]
     return gene_names
 
-def load_top_gene_linreg_dict(config, num_top):
+def load_top_dict(config, keys, num_top=1000000):
     fn = 'top.txt'
-    fn = get_result_path(config, fn)
-    f = open(fn)
-    names = []
-    metrics = []
-    slopes = []
-    clusters = []
-    for line in f:
-        cols = line.split(' ')
-        gene = cols[0].rstrip()
-        slope = float(cols[5].rstrip())
-        metric = float(cols[3].rstrip())
-        cluster = int(cols[1].rstrip())
-        names.append(gene)
-        slopes.append(slope)
-        metrics.append(metric)
-        clusters.append(cluster)
-    names = names[0:num_top]
-    slopes = slopes[0:num_top]
-    metrics = metrics[0:num_top]
-    clusters = clusters[0:num_top]
-
-    top_dict = {}
-    for id in range(0, len(names)):
-        top_dict[names[id]] = [id, metrics[id], clusters[id], slopes[id]]
-
-    return top_dict
-
-def load_top_dict(config, keys):
-    fn = 'top.txt'
+    params_last_run_dict = load_top_params_last_run_dict(config)
+    if params_last_run_dict:
+        fn = get_top_fn(config.approach_method, params_last_run_dict)
     fn = get_result_path(config, fn)
     f = open(fn)
     top_dict = {}
+    num_lines = 0
     for line in f:
         cols = line.split(' ')
         for key_id in range(0, len(keys)):
@@ -79,7 +56,23 @@ def load_top_dict(config, keys):
                 top_dict[key] = [cols[key_id]]
             else:
                 top_dict[key].append(cols[key_id])
+        num_lines += 1
+        if num_lines >= num_top:
+            break
     return top_dict
+
+def load_top_params_last_run_dict(config):
+    fn = 'params_last_run.txt'
+    fn = get_result_path(config, fn)
+    params_last_run_dict = {}
+    if os.path.isfile(fn):
+        f = open(fn)
+        for line in f:
+            cols = line.split(' ')
+            key = cols[0]
+            val = float(cols[1])
+            params_last_run_dict[key] = val
+    return params_last_run_dict
 
 def load_top_gene_vals(config, genes_top):
     indexes = config.indexes

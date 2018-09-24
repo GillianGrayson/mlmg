@@ -1,6 +1,5 @@
 from config.config import *
 from infrastructure.load.top import *
-from infrastructure.save.features import save_features
 import xlsxwriter
 
 

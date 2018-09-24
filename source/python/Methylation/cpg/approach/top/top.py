@@ -1,6 +1,5 @@
 from config.config import *
 from infrastructure.load.top import *
-from cpg.approach.top.enet.params import save_params_enet
 from cpg.approach.top.enet.top import save_top_enet
 from cpg.approach.top.linreg.top import save_top_linreg
 from cpg.approach.top.anova.top import save_top_anova

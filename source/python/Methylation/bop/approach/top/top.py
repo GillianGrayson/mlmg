@@ -1,5 +1,6 @@
 from config.config import *
 from bop.approach.top.manova.top import save_top_manova
+from config.method import Method
 
 
 def top_proc(config, attributes_types, attribute_target):
