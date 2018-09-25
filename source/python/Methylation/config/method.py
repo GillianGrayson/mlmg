@@ -77,6 +77,17 @@ def get_method_metrics(method):
                    'r_value_right',
                    'p_value_right',
                    'std_err_right']
+    elif method is Method.linreg_variance:
+        metrics = ['cluster_mean_shift',
+                   'cluster_affinity_prop',
+                   'r_value',
+                   'p_values',
+                   'slope',
+                   'intercept',
+                   'r_value_diff',
+                   'p_values_diff',
+                   'slope_diff',
+                   'intercept_diff']
     elif method is Method.manova:
         metrics = ['pval']
 

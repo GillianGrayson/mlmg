@@ -10,7 +10,7 @@ data_type = DataType.gene
 scenario = Scenario.approach
 approach = Approach.top
 
-approach_method = Method.linreg_bend
+approach_method = Method.linreg_variance
 approach_method_metrics = get_method_metrics(approach_method)
 
 disease = Disease.any
