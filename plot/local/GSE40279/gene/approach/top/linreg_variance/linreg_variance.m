@@ -5,15 +5,15 @@ gender_ann = 'gender';
 disease_ann = 'disease';
 
 base = 'GSE40279';
-method = 'linreg';
+method = 'linreg_variance';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'any';
+gender = 'F';
 disease_type = 'any';
 
-gene = 'FAM187B';
+gene = 'OSBPL10';
 
-fn = sprintf('../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
+fn = sprintf('../../../../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
     base, ...
     method, ...
     gender, ...
@@ -25,8 +25,10 @@ top_data = importdata(fn);
 genes = top_data.textdata;
 slopes = top_data.data(:, 5);
 intercepts = top_data.data(:, 6);
+slopes_diff = top_data.data(:, 9);
+intercepts_diff = top_data.data(:, 10);
 
-fn = sprintf('../../../../data/%s/attributes.txt', base);
+fn = sprintf('../../../../../../../data/%s/attributes.txt', base);
 ann = importdata(fn);
 
 keys = strsplit(string(ann{1}), ' ')';
@@ -100,7 +102,7 @@ for id = 1:size(indexes, 1)
     ages_passed(id) = ages(index);
 end
 
-fn = sprintf('../../../../data/%s/gene_data/%s/%s/gene_data.txt', ...
+fn = sprintf('../../../../../../../data/%s/gene_data/%s/%s/gene_data.txt', ...
     base, ...
     data_type, ...
     geo);
@@ -122,12 +124,21 @@ gene_id = find(genes==gene_name);
 
 slope = slopes(gene_id);
 intercept = intercepts(gene_id);
+slope_diff = slopes_diff(gene_id);
+intercept_diff = intercepts_diff(gene_id);
 x_lin = [min(ages_passed), max(ages_passed)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
+errors = zeros(size(ages_passed, 1), 1);
+for i = 1:size(ages_passed, 1)
+    errors(i) = abs(gene_data_passed(i) - (ages_passed(i) * slope + intercept));
+end
+errors_lin = [slope_diff * x_lin(1) + intercept_diff, slope_diff * x_lin(2) + intercept_diff];
+
 figure
+subplot(2, 1, 1)
 hold all;
-h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
+h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w', 'Color', 'b');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 color = get(h, 'Color');
 
@@ -139,6 +150,22 @@ set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
 ylabel('$\beta$', 'Interpreter', 'latex');
+
+subplot(2, 1, 2)
+hold all;
+h = plot(ages_passed, errors, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w', 'Color', 'r');
+set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+color = get(h, 'Color');
+
+hold all;
+h = plot(x_lin, errors_lin, '-', 'LineWidth', 3);
+legend(h, sprintf('%s: %s', gene_name, gender));
+set(h, 'Color', color)
+set(gca, 'FontSize', 30);
+xlabel('age', 'Interpreter', 'latex');
+set(gca, 'FontSize', 30);
+ylabel('$\Delta$', 'Interpreter', 'latex');
+
 
 box on;
 
