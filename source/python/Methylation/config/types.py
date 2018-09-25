@@ -107,6 +107,7 @@ class Attribute(Enum):
     age_acceleration_ds_vs_controls_other_regions = 'age_acceleration_ds_vs_controls_other_regions'
     age_acceleration_residual = 'age_acceleration_residual'
     post_mortem_interval = 'post_mortem_interval'
+    supplementary_file = 'supplementary_file'
 
 
 class Annotation(Enum):

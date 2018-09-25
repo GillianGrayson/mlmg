@@ -46,9 +46,9 @@ config_m = Config(
 keys = ['gene'] + approach_method_metrics
 
 f_top_dict = load_top_dict(config_f, keys, num_top)
-f_all_dict = load_top_dict(config_f, keys, 25000)
+f_all_dict = load_top_dict(config_f, keys)
 m_top_dict = load_top_dict(config_m, keys, num_top)
-m_all_dict = load_top_dict(config_m, keys, 25000)
+m_all_dict = load_top_dict(config_m, keys)
 
 f_genes = f_top_dict['gene']
 m_genes = m_top_dict['gene']

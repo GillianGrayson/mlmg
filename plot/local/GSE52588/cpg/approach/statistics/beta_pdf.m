@@ -5,9 +5,9 @@ gender_ann = 'gender';
 disease_ann = 'disease';
 
 base = 'GSE52588';
-gender = 'any';
-disease = 'any';
-geo = 'islands_shores';
+gender = 'F';
+disease = 'down_syndrome';
+geo = 'any';
 
 fn = sprintf('../../../../../../data/%s/result/cpg/approach/statistics/%s/%s/%s/top.txt', ...
     base, ...

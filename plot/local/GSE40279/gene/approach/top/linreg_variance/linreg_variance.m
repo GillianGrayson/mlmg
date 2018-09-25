@@ -8,10 +8,10 @@ base = 'GSE40279';
 method = 'linreg_variance';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'any';
+gender = 'F';
 disease_type = 'any';
 
-gene = 'FAM187B';
+gene = 'HLA-DRB1';
 
 start_bin_age = 20;
 end_bin_age = 100;
@@ -139,27 +139,6 @@ for i = 1:size(ages_passed, 1)
 end
 errors_lin = [slope_diff * x_lin(1) + intercept_diff, slope_diff * x_lin(2) + intercept_diff];
 
-
-bin_shift = (end_bin_age - start_bin_age) / num_bins;
-bin_centers = linspace(start_bin_age + bin_shift * 0.5, end_bin_age - 0.5 * bin_shift, num_bins);
-age_parts = {};
-for bin_id = 1:num_bins
-    age_parts{bin_id} = [];
-end
-
-for age_id = 1:size(ages, 1)
-    curr_age = ages(age_id);
-    if curr_age >= start_bin_age && curr_age <= end_bin_age
-        int_id = floor((curr_age - start_bin_age) * num_bins / (end_bin_age - start_bin_age) + eps) + 1;
-        age_parts{int_id} = vertcat(age_parts{int_id}, gene_data_passed(age_id));
-    end
-end
-
-stds = zeros(num_bins, 1);
-for bin_id = 1:num_bins
-    stds(bin_id) = std(age_parts{bin_id} - mean(age_parts{bin_id}));
-end
-
 figure
 subplot(2, 1, 1)
 hold all;
@@ -181,10 +160,6 @@ hold all;
 h = plot(ages_passed, errors, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w', 'Color', 'r');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 color = get(h, 'Color');
-
-hold all;
-h = plot(bin_centers, stds, 'x', 'MarkerSize', 10, 'Color', 'g', 'LineStyle', '-', 'LineWidth', 3);
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 hold all;
 h = plot(x_lin, errors_lin, '-', 'LineWidth', 3);
