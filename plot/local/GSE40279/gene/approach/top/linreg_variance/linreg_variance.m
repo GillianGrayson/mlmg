@@ -8,10 +8,14 @@ base = 'GSE40279';
 method = 'linreg_variance';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'F';
+gender = 'any';
 disease_type = 'any';
 
-gene = 'OSBPL10';
+gene = 'FAM187B';
+
+start_bin_age = 20;
+end_bin_age = 100;
+num_bins = 8;
 
 fn = sprintf('../../../../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
     base, ...
@@ -135,6 +139,27 @@ for i = 1:size(ages_passed, 1)
 end
 errors_lin = [slope_diff * x_lin(1) + intercept_diff, slope_diff * x_lin(2) + intercept_diff];
 
+
+bin_shift = (end_bin_age - start_bin_age) / num_bins;
+bin_centers = linspace(start_bin_age + bin_shift * 0.5, end_bin_age - 0.5 * bin_shift, num_bins);
+age_parts = {};
+for bin_id = 1:num_bins
+    age_parts{bin_id} = [];
+end
+
+for age_id = 1:size(ages, 1)
+    curr_age = ages(age_id);
+    if curr_age >= start_bin_age && curr_age <= end_bin_age
+        int_id = floor((curr_age - start_bin_age) * num_bins / (end_bin_age - start_bin_age) + eps) + 1;
+        age_parts{int_id} = vertcat(age_parts{int_id}, gene_data_passed(age_id));
+    end
+end
+
+stds = zeros(num_bins, 1);
+for bin_id = 1:num_bins
+    stds(bin_id) = std(age_parts{bin_id} - mean(age_parts{bin_id}));
+end
+
 figure
 subplot(2, 1, 1)
 hold all;
@@ -158,6 +183,10 @@ set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 color = get(h, 'Color');
 
 hold all;
+h = plot(bin_centers, stds, 'x', 'MarkerSize', 10, 'Color', 'g', 'LineStyle', '-', 'LineWidth', 3);
+set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+
+hold all;
 h = plot(x_lin, errors_lin, '-', 'LineWidth', 3);
 legend(h, sprintf('%s: %s', gene_name, gender));
 set(h, 'Color', color)
@@ -166,8 +195,8 @@ xlabel('age', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
 ylabel('$\Delta$', 'Interpreter', 'latex');
 
-
 box on;
+
 
 
 

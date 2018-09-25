@@ -41,7 +41,7 @@ def save_top_linreg_variance(config):
         slopes_diff.append(slope)
         intercepts_diff.append(intercept)
 
-    order_mean = np.argsort(list(map(abs, r_values)))[::-1]
+    order_mean = np.argsort(list(map(abs, r_values_diff)))[::-1]
     genes_sorted = list(np.array(genes)[order_mean])
     p_values_sorted = list(np.array(p_values)[order_mean])
     r_values_sorted = list(np.array(r_values)[order_mean])
@@ -53,7 +53,7 @@ def save_top_linreg_variance(config):
     intercepts_diff_sorted = list(np.array(intercepts_diff)[order_mean])
 
 
-    metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
+    metrics_sorted_np = np.asarray(list(map(abs, r_values_diff_sorted))).reshape(-1, 1)
     bandwidth = estimate_bandwidth(metrics_sorted_np)
     ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
     ms.fit(metrics_sorted_np)

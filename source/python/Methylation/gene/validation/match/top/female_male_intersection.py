@@ -173,7 +173,7 @@ for x in approach_method_metrics:
 
 i_df = pd.DataFrame(i_dict)
 
-writer = pd.ExcelWriter(approach_method.value + '.xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(approach_method.value +'_top(' + str(num_top) + ').xlsx', engine='xlsxwriter')
 only_f_df.to_excel(writer, index=False, sheet_name='only_f')
 only_m_df.to_excel(writer, index=False, sheet_name='only_m')
 i_df.to_excel(writer, index=False, sheet_name='i')
