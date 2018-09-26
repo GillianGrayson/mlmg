@@ -11,7 +11,11 @@ geo = 'islands_shores';
 gender = 'F';
 disease_type = 'any';
 
-gene = 'OSBPL10';
+gene = 'HLA-DRB1';
+
+start_bin_age = 20;
+end_bin_age = 100;
+num_bins = 8;
 
 fn = sprintf('../../../../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
     base, ...
@@ -166,8 +170,8 @@ xlabel('age', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
 ylabel('$\Delta$', 'Interpreter', 'latex');
 
-
 box on;
+
 
 
 
