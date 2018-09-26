@@ -8,10 +8,10 @@ base = 'GSE40279';
 method = 'linreg_variance';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'F';
+gender = 'M';
 disease_type = 'any';
 
-gene = 'HLA-DRB1';
+gene = 'ZC3HAV1L';
 
 start_bin_age = 20;
 end_bin_age = 100;
@@ -130,7 +130,7 @@ slope = slopes(gene_id);
 intercept = intercepts(gene_id);
 slope_diff = slopes_diff(gene_id);
 intercept_diff = intercepts_diff(gene_id);
-x_lin = [min(ages_passed), max(ages_passed)];
+x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
 errors = zeros(size(ages_passed, 1), 1);
@@ -152,6 +152,7 @@ legend(h, sprintf('%s: %s', gene_name, gender));
 set(h, 'Color', color)
 set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
+xlim([min(ages), max(ages)])
 set(gca, 'FontSize', 30);
 ylabel('$\beta$', 'Interpreter', 'latex');
 
@@ -167,6 +168,7 @@ legend(h, sprintf('%s: %s', gene_name, gender));
 set(h, 'Color', color)
 set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
+xlim([min(ages), max(ages)])
 set(gca, 'FontSize', 30);
 ylabel('$\Delta$', 'Interpreter', 'latex');
 
