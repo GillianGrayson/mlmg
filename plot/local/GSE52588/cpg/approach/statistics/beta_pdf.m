@@ -5,7 +5,7 @@ gender_ann = 'gender';
 disease_ann = 'disease';
 
 base = 'GSE52588';
-gender = 'F';
+gender = 'M';
 disease = 'down_syndrome';
 geo = 'any';
 
