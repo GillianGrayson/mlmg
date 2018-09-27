@@ -250,7 +250,7 @@ def create_hierarchy(config):
                                                                     os.makedirs(gd_path_vals)
 
 
-config = Config(db=DataBaseType.GSE40279,
+config = Config(db=DataBaseType.GSE87571,
                 read_only=True)
 
 

@@ -29,11 +29,11 @@ def top_proc(config):
         save_top_linreg_variance(config)
 
 
-db = DataBaseType.GSE40279
+db = DataBaseType.GSE87571
 dt = DataType.gene
 approach = Approach.top
 scenario = Scenario.approach
-approach_methods = [Method.linreg_variance]
+approach_methods = [Method.linreg, Method.linreg_variance]
 approach_gd = GeneDataType.mean
 genders = [Gender.F, Gender.M, Gender.any]
 geos = [GeoType.islands_shores]

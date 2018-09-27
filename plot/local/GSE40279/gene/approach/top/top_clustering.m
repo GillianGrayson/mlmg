@@ -1,14 +1,14 @@
 clear all;
 
-base = 'GSE40279';
+base = 'GSE87571';
 method = 'linreg';
-gender_type = 'F';
+gender_type = 'any';
 disease_type = 'any';
 gd_approach = 'mean';
 geo = 'islands_shores';
 
 cluster_id = 1;
-num_genes = 500;
+num_genes = 5000;
 x = linspace(1, num_genes, num_genes);
 
 markers = ['o', '+', '*', '.', 'x', 's', 'd', '^', 'v', '>', '<', 'p', 'h']';
@@ -44,15 +44,17 @@ for i = 1:size(cluster_data, 1)
     sorted_clusters(i) = curr_sorted;
 end
 
+abs_metrics_data = abs(metrics_data);
+
 figure
 subplot(2, 1, 1)
-h = plot(x, metrics_data, 'Marker', 'o', 'MarkerFaceColor', 'w');
+h = plot(x, abs_metrics_data, 'Marker', 'o', 'MarkerFaceColor', 'w');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 title(sprintf('%s', method))
 set(gca, 'FontSize', 30);
 xlabel('n', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
-ylabel('metrics', 'Interpreter', 'latex');
+ylabel('|metrics|', 'Interpreter', 'latex');
 hold all
 
 subplot(2, 1, 2)
