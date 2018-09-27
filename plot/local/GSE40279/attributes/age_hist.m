@@ -1,16 +1,16 @@
 clear all;
 
-base = 'GSE52588';
+base = 'GSE87571';
 age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-gender_type = 'F';
-disease_type = 'healthy';
+gender_type = 'M';
+disease_type = 'any';
 
 edges = 0:5:110;
 
-fn = sprintf('../../../data/%s/attributes.txt', base);
+fn = sprintf('../../../../data/%s/attributes.txt', base);
 ann = importdata(fn);
 
 keys = strsplit(string(ann{1}), ' ')';

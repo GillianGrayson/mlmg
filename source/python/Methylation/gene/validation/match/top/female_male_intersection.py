@@ -3,14 +3,14 @@ from infrastructure.load.top import *
 from config.method import *
 import pandas as pd
 
-num_top = 500
+num_top = 2000
 
-data_base_type = DataBaseType.GSE40279
+data_base_type = DataBaseType.GSE87571
 data_type = DataType.gene
 scenario = Scenario.approach
 approach = Approach.top
 
-approach_method = Method.linreg_variance
+approach_method = Method.linreg
 approach_method_metrics = get_method_metrics(approach_method)
 
 disease = Disease.any
@@ -173,7 +173,7 @@ for x in approach_method_metrics:
 
 i_df = pd.DataFrame(i_dict)
 
-writer = pd.ExcelWriter(approach_method.value +'_top(' + str(num_top) + ').xlsx', engine='xlsxwriter')
+writer = pd.ExcelWriter(data_base_type.value + '_' + approach_method.value +'_top(' + str(num_top) + ').xlsx', engine='xlsxwriter')
 only_f_df.to_excel(writer, index=False, sheet_name='only_f')
 only_m_df.to_excel(writer, index=False, sheet_name='only_m')
 i_df.to_excel(writer, index=False, sheet_name='i')

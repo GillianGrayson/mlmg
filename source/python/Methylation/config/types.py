@@ -17,6 +17,7 @@ class DataBaseType(Enum):
     GSE61256 = 'GSE61256'
     GSE63347 = 'GSE63347'
     GSE52588_TEST = 'GSE52588_TEST'
+    GSE87571 = 'GSE87571'
 
 
 class DataType(Enum):

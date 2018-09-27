@@ -4,14 +4,14 @@ age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-base = 'GSE40279';
+base = 'GSE87571';
 method = 'linreg';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'any';
+gender = 'F';
 disease_type = 'any';
 
-gene = 'FAM187B';
+gene = 'LIMD1';
 
 fn = sprintf('../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
     base, ...
@@ -122,7 +122,7 @@ gene_id = find(genes==gene_name);
 
 slope = slopes(gene_id);
 intercept = intercepts(gene_id);
-x_lin = [min(ages_passed), max(ages_passed)];
+x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
 figure
