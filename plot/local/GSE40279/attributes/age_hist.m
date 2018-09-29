@@ -5,7 +5,7 @@ age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-gender_type = 'M';
+gender_type = 'any';
 disease_type = 'any';
 
 edges = 0:5:110;

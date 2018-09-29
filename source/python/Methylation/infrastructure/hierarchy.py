@@ -3,6 +3,10 @@ import os
 
 from config.method import Method
 
+def create_bop_data_fs(config):
+    path = get_path(config, '') + 'bop_data'
+
+
 
 def create_hierarchy(config):
 
