@@ -1,4 +1,4 @@
-from annotations.regular import get_dict_cpg_gene
+from annotations.gene import get_dict_cpg_gene
 from infrastructure.path import get_path
 from config.types import *
 from infrastructure.load.routines import line_proc

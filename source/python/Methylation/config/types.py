@@ -76,6 +76,8 @@ class ClassType(Enum):
     class_b = 'ClassB'
     class_c = 'ClassC'
     class_d = 'ClassD'
+    class_ab = 'ClassAB'
+    any = 'any'
 
 
 class DNARegion(Enum):
@@ -119,6 +121,13 @@ class Annotation(Enum):
     class_type = 'Class'
     geo = 'RELATION_TO_UCSC_CPG_ISLAND'
     bop = 'BOP'
+
+
+class ChromosomeTypes(Enum):
+    all = 'all'
+    non_gender = 'non_gender'
+    x = 'x'
+    y = 'y'
 
 
 class CellPop(Enum):

@@ -1,5 +1,6 @@
 from config.config import *
 from infrastructure.load.top import *
+from gene.approach.top.enet.params import save_params_enet
 from gene.approach.top.enet.top import save_top_enet
 from gene.approach.top.linreg.top import save_top_linreg
 from gene.approach.top.linreg_with_rejection.top import save_top_linreg_with_rejection
@@ -12,6 +13,7 @@ from gene.approach.top.linreg_variance.top import save_top_linreg_variance
 
 def top_proc(config):
     if config.approach_method is Method.enet:
+        save_params_enet(config)
         save_top_enet(config)
     elif config.approach_method is Method.linreg:
         save_top_linreg(config)
@@ -33,7 +35,7 @@ db = DataBaseType.GSE87571
 dt = DataType.gene
 approach = Approach.top
 scenario = Scenario.approach
-approach_methods = [Method.linreg, Method.linreg_variance]
+approach_methods = [Method.enet, Method.anova, Method.linreg, Method.linreg_variance, Method.linreg_bend, Method.linreg_dispersion, Method.linreg_with_rejection, Method.spearman]
 approach_gd = GeneDataType.mean
 genders = [Gender.F, Gender.M, Gender.any]
 geos = [GeoType.islands_shores]

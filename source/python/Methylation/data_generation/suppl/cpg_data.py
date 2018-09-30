@@ -1,6 +1,6 @@
 import numpy as np
 from config.config import *
-from annotations.regular import *
+from annotations.gene import *
 from infrastructure.load.cpg_data import load_cpg_data_raw
 from infrastructure.path import *
 
