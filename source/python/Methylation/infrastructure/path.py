@@ -16,6 +16,49 @@ def get_suppl_path(config, file_name):
     path = config.fs.value + '/' + config.db.value + '/suppl_data/' + config.geo_type.value +  '/' + file_name
     return path
 
+def get_bop_data_path(config, file_name):
+    path = config.fs.value + \
+           '/' + config.db.value + \
+           '/' + 'bop_data' + \
+           '/' + config.dna_region.value + \
+           '/' + config.chromosome_type.value + \
+           '/' + config.cpg_classes.value + \
+           '/' + file_name
+
+    return path
+
+def get_gene_data_path(config, file_name):
+    path = config.fs.value + \
+           '/' + config.db.value + \
+           '/' + 'gene_data' + '/' + \
+           '/' + config.dna_region.value + \
+           '/' + config.chromosome_type.value + \
+           '/' + config.geo_type.value + \
+           '/' + file_name
+
+    return path
+
+
+def get_gene_data_with_type_path(config, file_name):
+    if config.scenario is Scenario.validation:
+        gd_path = config.validation_gd.value
+    elif config.scenario is Scenario.approach:
+        gd_path = config.approach_gd.value
+    else:
+        gd_path = config.validation_gd.value
+
+    path = config.fs.value + \
+           '/' + config.db.value + \
+           '/' + 'gene_data' + '/' + \
+           '/' + config.dna_region.value + \
+           '/' + config.chromosome_type.value + \
+           '/' + config.geo_type.value + \
+           '/' + gd_path + \
+           '/' + file_name
+
+    return path
+
+
 def get_result_path(config, file_name):
     path = config.fs.value + '/' + config.db.value + '/' + 'result'
 
@@ -134,24 +177,6 @@ def get_result_path(config, file_name):
             elif config.approach_method is Approach.clustering:
                 path += ''
 
-    path += '/' + file_name
-    return path
-
-def get_gene_data_path(config, file_name):
-    path = config.fs.value + '/' + config.db.value + '/' + 'gene_data'
-
-    if config.scenario is Scenario.validation:
-        path += '/' + config.validation_gd.value
-    elif config.scenario is Scenario.approach:
-        path += '/' + config.approach_gd.value
-
-    path += '/' + config.geo_type.value
-    path += '/' + file_name
-    return path
-
-def get_bop_data_path(config, cpg_class, file_name):
-    path = config.fs.value + '/' + config.db.value + '/' + 'bop_data'
-    path += '/' + cpg_class.value
     path += '/' + file_name
     return path
 

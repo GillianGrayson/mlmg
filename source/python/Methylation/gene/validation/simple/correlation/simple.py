@@ -1,6 +1,6 @@
 from config.config import *
 from infrastructure.load.top import *
-from annotations.regular import get_dict_gene_cpg
+from annotations.gene import get_dict_gene_cpg
 from infrastructure.load.cpg_data import load_cpg_data
 from scipy import stats
 

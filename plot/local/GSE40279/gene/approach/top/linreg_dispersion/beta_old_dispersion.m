@@ -7,14 +7,14 @@ disease_ann = 'disease';
 base = 'GSE40279';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'any';
+gender = 'M';
 disease_type = 'healthy';
 
 age_lim = 65;
 
-gene_id = 1;
+gene_id = 5;
 
-fn = sprintf('../../../../../../data/%s/result/gene/approach/bend/linreg/%s/any/%s/%s/old_dispersion_age(%d).txt', ...
+fn = sprintf('../../../../../../../data/%s/result/gene/approach/top/linreg_dispersion/%s/any/%s/%s/old_dispersion_age(%d).txt', ...
     base, ...
     gender, ...
     data_type, ...
@@ -24,7 +24,7 @@ bend_data = importdata(fn);
 
 gene = bend_data.textdata(gene_id);
 
-fn = sprintf('../../../../../../data/%s/attributes.txt', base);
+fn = sprintf('../../../../../../../data/%s/attributes.txt', base);
 ann = importdata(fn);
 
 keys = strsplit(string(ann{1}), ' ')';
@@ -120,7 +120,7 @@ for id = 1:size(indexes_more, 1)
    ages_more(id) = ages(index);
 end
 
-fn = sprintf('../../../../../../data/%s/gene_data/%s/%s/gene_data.txt', ...
+fn = sprintf('../../../../../../../data/%s/gene_data/%s/%s/gene_data.txt', ...
     base, ...
     data_type, ...
     geo);

@@ -37,7 +37,7 @@ config = Config(
     approach_method=approach_method,
     gender=gender,
     disease=disease,
-    cpg_classes=cpg_classes,
+    class_type=cpg_classes,
 )
 
 top_proc(config, attributes_types, attribute_target)

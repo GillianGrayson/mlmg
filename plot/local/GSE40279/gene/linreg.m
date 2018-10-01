@@ -4,14 +4,14 @@ age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-base = 'GSE87571';
+base = 'GSE40279';
 method = 'linreg';
 data_type = 'mean';
 geo = 'islands_shores';
-gender = 'F';
+gender = 'any';
 disease_type = 'any';
 
-gene = 'LIMD1';
+gene = 'ELOVL2';
 
 fn = sprintf('../../../../data/%s/result/gene/approach/top/%s/%s/%s/%s/%s/top.txt', ...
     base, ...

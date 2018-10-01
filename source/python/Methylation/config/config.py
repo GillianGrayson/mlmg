@@ -23,7 +23,8 @@ class Config:
                  validation_gd=GeneDataType.mean,
                  geo=GeoType.any,
                  dna_region=DNARegion.any,
-                 cpg_classes=(ClassType.class_a, ClassType.class_b, ClassType.class_c, ClassType.class_d),
+                 class_type=ClassType.class_ab,
+                 chromosome_type=ChromosomeTypes.non_gender,
                  cpg_condition=CpGCondition.regular
                  ):
         # Config data
@@ -40,8 +41,9 @@ class Config:
         self.approach_gd = approach_gd
         self.validation_gd = validation_gd
         self.geo_type = geo
-        self.cpg_classes = cpg_classes
+        self.cpg_classes = class_type
         self.dna_region = dna_region
+        self.chromosome_type = chromosome_type
         self.cpg_condition = cpg_condition
 
         # FS type

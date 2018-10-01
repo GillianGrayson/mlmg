@@ -1,7 +1,92 @@
 from config.config import *
 import os
-
 from config.method import Method
+
+
+def create_bop_data_fs(config):
+    path = get_path(config, '') + 'bop_data'
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    dna_regions = [x.value for x in DNARegion] # Level 0
+    chromosome_types = [x.value for x in ChromosomeTypes] # Level 1
+    class_types = [x.value for x in ClassType] # Level 2
+
+    dna_region_file = open(path + '/' + 'dna_region.txt', 'w')
+    for dna_region in dna_regions:
+        dna_region_file.write(dna_region + '\n')
+        dna_region_path = path + '/' + dna_region
+        if not os.path.exists(dna_region_path):
+            os.makedirs(dna_region_path)
+
+        chromosome_file = open(dna_region_path + '/' + 'chromosome_types.txt', 'w')
+        for chromosome_type in chromosome_types:
+            chromosome_file.write(chromosome_type + '\n')
+            chromosome_path = dna_region_path + '/' + chromosome_type
+            if not os.path.exists(chromosome_path):
+                os.makedirs(chromosome_path)
+
+            class_file = open(chromosome_path + '/' + 'class_types.txt', 'w')
+            for class_type in class_types:
+                class_file.write(class_type + '\n')
+                class_path = chromosome_path + '/' + class_type
+                if not os.path.exists(class_path):
+                    os.makedirs(class_path)
+
+            class_file.close()
+
+        chromosome_file.close()
+
+    dna_region_file.close()
+
+
+def create_gene_data_fs(config):
+    path = get_path(config, '') + 'gene_data'
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    dna_regions = [x.value for x in DNARegion] # Level 0
+    chromosome_types = [x.value for x in ChromosomeTypes] # Level 1
+    gene_data_types = [x.value for x in GeneDataType] # Level 2
+    geo_types = [x.value for x in GeoType] # Level 3
+
+    dna_region_file = open(path + '/' + 'dna_region.txt', 'w')
+    for dna_region in dna_regions:
+        dna_region_file.write(dna_region + '\n')
+        dna_region_path = path + '/' + dna_region
+        if not os.path.exists(dna_region_path):
+            os.makedirs(dna_region_path)
+
+        chromosome_file = open(dna_region_path + '/' + 'chromosome_types.txt', 'w')
+        for chromosome_type in chromosome_types:
+            chromosome_file.write(chromosome_type + '\n')
+            chromosome_path = dna_region_path + '/' + chromosome_type
+            if not os.path.exists(chromosome_path):
+                os.makedirs(chromosome_path)
+
+            geo_file = open(chromosome_path + '/' + 'geo_types.txt', 'w')
+            for geo_type in geo_types:
+                geo_file.write(geo_type + '\n')
+                geo_path = chromosome_path + '/' + geo_type
+                if not os.path.exists(geo_path):
+                    os.makedirs(geo_path)
+
+                gene_data_file = open(geo_path + '/' + 'gene_data_types.txt', 'w')
+                for gene_data_type in gene_data_types:
+                    gene_data_file.write(gene_data_type + '\n')
+                    gene_data_path = geo_path + '/' + gene_data_type
+                    if not os.path.exists(gene_data_path):
+                        os.makedirs(gene_data_path)
+
+                gene_data_file.close()
+
+            geo_file.close()
+
+        chromosome_file.close()
+
+    dna_region_file.close()
+
+
 
 
 def create_hierarchy(config):
@@ -255,3 +340,5 @@ config = Config(db=DataBaseType.GSE87571,
 
 
 create_hierarchy(config)
+create_bop_data_fs(config)
+create_gene_data_fs(config)

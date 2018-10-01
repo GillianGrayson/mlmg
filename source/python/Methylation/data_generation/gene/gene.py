@@ -1,7 +1,7 @@
 import numpy as np
 from config.config import *
 from infrastructure.load.gene_data import get_raw_dict
-from infrastructure.path import get_gene_data_path
+from infrastructure.path import get_gene_data_with_type_path
 from config.types import *
 
 def save_gene_data(config):
@@ -59,22 +59,22 @@ def save_gene_data(config):
     # mean
     config.approach_gd = GeneDataType.mean
     config.validation_gd = GeneDataType.mean
-    fn = get_gene_data_path(config, 'gene_data.txt')
+    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_mean_str_list, fmt="%s")
     # std
     config.approach_gd = GeneDataType.std
     config.validation_gd = GeneDataType.std
-    fn = get_gene_data_path(config, 'gene_data.txt')
+    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_std_str_list, fmt="%s")
     # mean_der
     config.approach_gd = GeneDataType.mean_der
     config.validation_gd = GeneDataType.mean_der
-    fn = get_gene_data_path(config, 'gene_data.txt')
+    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_mean_der_str_list, fmt="%s")
     # mean_der_normed
     config.approach_gd = GeneDataType.mean_der_normed
     config.validation_gd = GeneDataType.mean_der_normed
-    fn = get_gene_data_path(config, 'gene_data.txt')
+    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
     np.savetxt(fn, gene_mean_der_normed_str_list, fmt="%s")
 
 
