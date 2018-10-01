@@ -3,6 +3,8 @@ from infrastructure.path import get_path
 from config.types import *
 from infrastructure.load.routines import line_proc
 import numpy as np
+import os.path
+import pickle
 
 
 def get_non_inc_cpgs(config):
@@ -32,43 +34,53 @@ def load_cpg_data(config):
     indexes = config.indexes
     dict_cpg_gene = get_dict_cpg_gene(config)
 
-    fn = 'average_beta.txt'
-    full_path = get_path(config, fn)
-    f = open(full_path)
-    for skip_id in range(0, config.num_skip_lines):
-        skip_line = f.readline()
+    fn_txt = get_path(config, 'average_beta.txt')
+    fn_pkl = get_path(config, 'average_beta.pkl')
 
-    num_lines = 0
-    cpgs_passed = []
-    vals_passed = []
+    is_pkl = os.path.isfile(fn_pkl)
+    if is_pkl:
+        f = open(fn_pkl, 'rb')
+        dict_cpg_data = pickle.load(f)
+        f.close()
+    else:
+        f = open(fn_txt)
+        for skip_id in range(0, config.num_skip_lines):
+            skip_line = f.readline()
 
-    cpg_non_inc = get_non_inc_cpgs(config)
+        cpg_non_inc = get_non_inc_cpgs(config)
 
-    for line in f:
+        dict_cpg_data = {}
+        num_lines = 0
+        for line in f:
 
-        col_vals = line_proc(config, line)
+            col_vals = line_proc(config, line)
 
-        is_none = False
-        if config.miss_tag in col_vals:
-            is_none = True
+            is_none = False
+            if config.miss_tag in col_vals:
+                is_none = True
 
-        if not is_none:
-            cpg = col_vals[0]
-            vals = list(map(float, col_vals[1::]))
-            vals = list(np.array(vals)[indexes])
+            if not is_none:
+                cpg = col_vals[0]
+                vals = list(map(float, col_vals[1::]))
+                vals = list(np.array(vals)[indexes])
 
-            if cpg not in cpg_non_inc:
-                if cpg in dict_cpg_gene:
-                    vals_passed.append(vals)
-                    cpgs_passed.append(cpg)
+                if cpg not in cpg_non_inc:
+                    if cpg in dict_cpg_gene:
+                        dict_cpg_data[cpg] = vals
 
-        num_lines += 1
-        if num_lines % config.print_rate == 0:
-            print('num_lines: ' + str(num_lines))
+            num_lines += 1
+            if num_lines % config.print_rate == 0:
+                print('num_lines: ' + str(num_lines))
+        f.close()
 
-    f.close()
+        f = open(fn_pkl, 'wb')
+        pickle.dump(dict_cpg_data, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
 
-    return cpgs_passed, vals_passed
+    cpgs_passed = dict_cpg_data.keys()
+    vals_passed = dict_cpg_data.values()
+
+    return list(cpgs_passed), list(vals_passed)
 
 def load_cpg_data_raw(config):
     indexes = config.indexes

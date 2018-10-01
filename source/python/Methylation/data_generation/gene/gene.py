@@ -79,7 +79,7 @@ def save_gene_data(config):
 
 
 db = DataBaseType.GSE87571
-geos = [GeoType.islands_shores, GeoType.any, GeoType.islands]
+geos = [GeoType.islands_shores]
 
 for geo in geos:
 
