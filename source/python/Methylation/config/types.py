@@ -86,6 +86,11 @@ class DNARegion(Enum):
     any = 'any'
 
 
+class InfoType(Enum):
+    result = 'result'
+    param = 'param'
+
+
 class MANOVATest(Enum):
     wilks = 'wilks'
     pillai_bartlett = 'pillai_bartlett'

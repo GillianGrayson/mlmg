@@ -1,45 +1,25 @@
 from config.config import *
 import os
 from config.method import Method
+import itertools
 
-def create_fs(categories, init_path):
-    curr_path = init_path
-    for category in categories.reverse():
-        for instance in category:
 
-            result_path = class_path + '/' + 'result'
-            if not os.path.exists(result_path):
-                os.makedirs(result_path)
+def create_fs(categories_vals, categories_names, init_path):
+    all = list(itertools.product(*categories_vals))
+    for dir_list in all:
+        path = init_path
+        for id in range(0, len(dir_list)):
+            create_fs_description_file(path + '/' + categories_names[id] + '.txt', categories_vals[id])
+            path += '/' + dir_list[id]
+            if not os.path.exists(path):
+                os.makedirs(path)
 
-            # Approach
-            scenario_path = result_path + '/' + Scenario.approach.value
-            if not os.path.exists(scenario_path):
-                os.makedirs(scenario_path)
 
-            for approach in approaches:
-                approach_path = scenario_path + '/' + approach.value
-                if not os.path.exists(approach_path):
-                    os.makedirs(approach_path)
-
-                for method in approach_methods:
-                    method_path = approach_path + '/' + method.value
-                    if not os.path.exists(method_path):
-                        os.makedirs(method_path)
-
-                    for gender in genders:
-                        gender_path = method_path + '/' + gender.value
-                        if not os.path.exists(gender_path):
-                            os.makedirs(gender_path)
-
-                        for disease in diseases:
-                            disease_path = gender_path + '/' + disease.value
-                            if not os.path.exists(disease_path):
-                                os.makedirs(disease_path)
-
-            # Validation
-            scenario_path = result_path + '/' + Scenario.validation.value
-            if not os.path.exists(scenario_path):
-                os.makedirs(scenario_path)
+def create_fs_description_file(fn, instances):
+    f = open(fn, 'w')
+    for x in instances:
+        f.write(x + '\n')
+    f.close()
 
 
 def create_bop_data_fs(config):
@@ -47,36 +27,42 @@ def create_bop_data_fs(config):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    dna_regions = [x.value for x in DNARegion] # Level 0
-    chromosome_types = [x.value for x in ChromosomeTypes] # Level 1
-    class_types = [x.value for x in ClassType] # Level 2
+    dna_regions = [x.value for x in DNARegion]
+    chromosome_types = [x.value for x in ChromosomeTypes]
+    class_types = [x.value for x in ClassType]
 
-    dna_region_file = open(path + '/' + 'dna_region.txt', 'w')
-    for dna_region in dna_regions:
-        dna_region_file.write(dna_region + '\n')
-        dna_region_path = path + '/' + dna_region
-        if not os.path.exists(dna_region_path):
-            os.makedirs(dna_region_path)
+    info_types = [x.value for x in InfoType]
 
-        chromosome_file = open(dna_region_path + '/' + 'chromosome_types.txt', 'w')
-        for chromosome_type in chromosome_types:
-            chromosome_file.write(chromosome_type + '\n')
-            chromosome_path = dna_region_path + '/' + chromosome_type
-            if not os.path.exists(chromosome_path):
-                os.makedirs(chromosome_path)
+    scenarios = [x.value for x in Scenario]
+    approaches = [Approach.top.value]
+    methods = [Method.manova.value, Method.match.value]
+    genders = [Gender.any.value,
+               Gender.F.value,
+               Gender.M.value]
+    diseases = [Disease.any.value,
+                Disease.healthy.value,
+                Disease.down_syndrome.value]
 
-            class_file = open(chromosome_path + '/' + 'class_types.txt', 'w')
-            for class_type in class_types:
-                class_file.write(class_type + '\n')
-                class_path = chromosome_path + '/' + class_type
-                if not os.path.exists(class_path):
-                    os.makedirs(class_path)
 
-            class_file.close()
-
-        chromosome_file.close()
-
-    dna_region_file.close()
+    create_fs([dna_regions,
+               chromosome_types,
+               class_types,
+               info_types,
+               scenarios,
+               approaches,
+               methods,
+               genders,
+               diseases],
+              ['dna_regions',
+               'chromosome_types',
+               'class_types',
+               'info_types',
+               'scenarios',
+               'approaches',
+               'methods',
+               'genders',
+               'diseases'],
+              path)
 
 
 def create_gene_data_fs(config):
@@ -84,74 +70,20 @@ def create_gene_data_fs(config):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    dna_regions = [x.value for x in DNARegion] # Level 0
-    chromosome_types = [x.value for x in ChromosomeTypes] # Level 1
-    gene_data_types = [x.value for x in GeneDataType] # Level 2
-    geo_types = [x.value for x in GeoType] # Level 3
+    dna_regions = [x.value for x in DNARegion]
+    chromosome_types = [x.value for x in ChromosomeTypes]
+    geo_types = [x.value for x in GeoType]
+    gene_data_types = [x.value for x in GeneDataType]
 
-    dna_region_file = open(path + '/' + 'dna_region.txt', 'w')
-    for dna_region in dna_regions:
-        dna_region_file.write(dna_region + '\n')
-        dna_region_path = path + '/' + dna_region
-        if not os.path.exists(dna_region_path):
-            os.makedirs(dna_region_path)
-
-        chromosome_file = open(dna_region_path + '/' + 'chromosome_types.txt', 'w')
-        for chromosome_type in chromosome_types:
-            chromosome_file.write(chromosome_type + '\n')
-            chromosome_path = dna_region_path + '/' + chromosome_type
-            if not os.path.exists(chromosome_path):
-                os.makedirs(chromosome_path)
-
-            geo_file = open(chromosome_path + '/' + 'geo_types.txt', 'w')
-            for geo_type in geo_types:
-                geo_file.write(geo_type + '\n')
-                geo_path = chromosome_path + '/' + geo_type
-                if not os.path.exists(geo_path):
-                    os.makedirs(geo_path)
-
-                gene_data_file = open(geo_path + '/' + 'gene_data_types.txt', 'w')
-                for gene_data_type in gene_data_types:
-                    gene_data_file.write(gene_data_type + '\n')
-                    gene_data_path = geo_path + '/' + gene_data_type
-                    if not os.path.exists(gene_data_path):
-                        os.makedirs(gene_data_path)
-
-                gene_data_file.close()
-
-            geo_file.close()
-
-        chromosome_file.close()
-
-    dna_region_file.close()
-
-
-def create_result_bop_fs(config):
-    db_path = get_path(config, '') + 'result' + '/' + DataType.bop.value
-
-    # Level 0
-    scenarios = [Scenario.approach.value,
-                 Scenario.validation.value]
-
-    # Level 1
-    approaches = [Approach.top.value]
-    validations = [Validation.simple.value]
-
-    # Level 2
-    approach_methods = [Method.manova.value]
-    validation_methods = [Method.match.value]
-
-    # Level 3
-    genders = [Gender.any.value,
-               Gender.F.value,
-               Gender.M.value]
-
-    # Level 4
-    diseases = [Disease.any.value,
-                Disease.healthy.value,
-                Disease.down_syndrome.value]
-
-
+    create_fs([dna_regions,
+               chromosome_types,
+               geo_types,
+               gene_data_types],
+              ['dna_regions',
+               'chromosome_types',
+               'geo_types',
+               'gene_data_types'],
+              path)
 
 
 def create_hierarchy(config):
