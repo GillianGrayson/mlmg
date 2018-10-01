@@ -2,6 +2,45 @@ from config.config import *
 import os
 from config.method import Method
 
+def create_fs(categories, init_path):
+    curr_path = init_path
+    for category in categories.reverse():
+        for instance in category:
+
+            result_path = class_path + '/' + 'result'
+            if not os.path.exists(result_path):
+                os.makedirs(result_path)
+
+            # Approach
+            scenario_path = result_path + '/' + Scenario.approach.value
+            if not os.path.exists(scenario_path):
+                os.makedirs(scenario_path)
+
+            for approach in approaches:
+                approach_path = scenario_path + '/' + approach.value
+                if not os.path.exists(approach_path):
+                    os.makedirs(approach_path)
+
+                for method in approach_methods:
+                    method_path = approach_path + '/' + method.value
+                    if not os.path.exists(method_path):
+                        os.makedirs(method_path)
+
+                    for gender in genders:
+                        gender_path = method_path + '/' + gender.value
+                        if not os.path.exists(gender_path):
+                            os.makedirs(gender_path)
+
+                        for disease in diseases:
+                            disease_path = gender_path + '/' + disease.value
+                            if not os.path.exists(disease_path):
+                                os.makedirs(disease_path)
+
+            # Validation
+            scenario_path = result_path + '/' + Scenario.validation.value
+            if not os.path.exists(scenario_path):
+                os.makedirs(scenario_path)
+
 
 def create_bop_data_fs(config):
     path = get_path(config, '') + 'bop_data'
@@ -85,6 +124,32 @@ def create_gene_data_fs(config):
         chromosome_file.close()
 
     dna_region_file.close()
+
+
+def create_result_bop_fs(config):
+    db_path = get_path(config, '') + 'result' + '/' + DataType.bop.value
+
+    # Level 0
+    scenarios = [Scenario.approach.value,
+                 Scenario.validation.value]
+
+    # Level 1
+    approaches = [Approach.top.value]
+    validations = [Validation.simple.value]
+
+    # Level 2
+    approach_methods = [Method.manova.value]
+    validation_methods = [Method.match.value]
+
+    # Level 3
+    genders = [Gender.any.value,
+               Gender.F.value,
+               Gender.M.value]
+
+    # Level 4
+    diseases = [Disease.any.value,
+                Disease.healthy.value,
+                Disease.down_syndrome.value]
 
 
 
