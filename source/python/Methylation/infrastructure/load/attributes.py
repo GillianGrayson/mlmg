@@ -12,7 +12,6 @@ def load_attributes(config):
     fn_pkl = get_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
-
     if is_pkl:
         f = open(fn_pkl, 'rb')
         attributes = pickle.load(f)
@@ -35,7 +34,6 @@ def load_attributes(config):
 
         f.close()
 
-    if not is_pkl:
         f = open(fn_pkl, 'wb')
         pickle.dump(attributes, f, pickle.HIGHEST_PROTOCOL)
         f.close()

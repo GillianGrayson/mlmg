@@ -3,25 +3,40 @@ from infrastructure.path import get_gene_data_path
 from annotations.gene import get_dict_cpg_gene, get_dict_cpg_map_info
 from infrastructure.load.cpg_data import load_cpg_data, get_non_inc_cpgs
 from infrastructure.load.attributes import get_attributes
+import os.path
+import pickle
+
 
 def load_gene_data(config):
     indexes = config.indexes
-    genes_passed = []
-    vals_passed = []
-    fn = 'gene_data.txt'
-    path = get_gene_data_path(config, fn)
-    f = open(path)
-    for line in f:
-        col_vals = line.split(' ')
-        gene = col_vals[0]
-        vals = list(map(float, col_vals[1::]))
-        vals = list(np.array(vals)[indexes])
-        nans = np.isnan(vals)
-        if True not in nans:
-            genes_passed.append(gene)
-            vals_passed.append(vals)
 
-    f.close()
+    fn_txt = get_gene_data_path(config, 'gene_data.txt')
+    fn_pkl = get_gene_data_path(config, 'gene_data.pkl')
+
+    is_pkl = os.path.isfile(fn_pkl)
+    if is_pkl:
+        f = open(fn_pkl, 'rb')
+        dict_gene_data = pickle.load(f)
+        f.close()
+    else:
+        dict_gene_data = {}
+        f = open(fn_txt)
+        for line in f:
+            col_vals = line.split(' ')
+            gene = col_vals[0]
+            vals = list(map(float, col_vals[1::]))
+            vals = list(np.array(vals)[indexes])
+            nans = np.isnan(vals)
+            if True not in nans:
+                dict_gene_data[gene] = vals
+        f.close()
+
+        f = open(fn_pkl, 'wb')
+        pickle.dump(dict_gene_data, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
+
+    genes_passed = list(dict_gene_data.keys())
+    vals_passed = list(dict_gene_data.values())
 
     return genes_passed, vals_passed
 
