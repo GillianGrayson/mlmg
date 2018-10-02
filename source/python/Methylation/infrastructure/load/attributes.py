@@ -1,5 +1,5 @@
 from config.types import *
-from infrastructure.path import get_path
+from infrastructure.path.path import get_path
 import numpy as np
 import os.path
 import pickle

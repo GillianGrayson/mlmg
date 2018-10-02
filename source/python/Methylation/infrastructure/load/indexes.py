@@ -1,4 +1,4 @@
-from infrastructure.path import *
+from config.types import *
 
 def get_indexes(config):
     geo_accessions = config.attributes[Attribute.geo_accession.value]

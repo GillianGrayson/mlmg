@@ -1,5 +1,5 @@
 from config.types import *
-from infrastructure.path import *
+from infrastructure.path.path import *
 from annotations.conditions import *
 import os.path
 import pickle
@@ -16,7 +16,7 @@ def gene_condition(config, annotation):
 
 def get_dict_cpg_gene(config):
     fn_pkl = 'dict_cpg_gene.pkl'
-    fn_pkl = get_gene_data_path(config, fn_pkl)
+    fn_pkl = get_data_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
     if is_pkl:
@@ -60,7 +60,7 @@ def get_dict_cpg_gene(config):
 
 def get_dict_gene_chr(config):
     fn_pkl = 'dict_gene_chr.pkl'
-    fn_pkl = get_gene_data_path(config, fn_pkl)
+    fn_pkl = get_data_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
     if is_pkl:
@@ -110,7 +110,7 @@ def get_dict_gene_chr(config):
 
 def get_dict_gene_cpg(config):
     fn_pkl = 'dict_gene_cpg.pkl'
-    fn_pkl = get_gene_data_path(config, fn_pkl)
+    fn_pkl = get_data_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
     if is_pkl:
@@ -158,7 +158,7 @@ def get_dict_gene_cpg(config):
 
 def get_dict_cpg_map_info(config):
     fn_pkl = 'dict_cpg_map_info.pkl'
-    fn_pkl = get_gene_data_path(config, fn_pkl)
+    fn_pkl = get_data_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
     if is_pkl:

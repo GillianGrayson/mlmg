@@ -1,11 +1,10 @@
 import os
-
-from config.types import DataType
+from config.types import *
 from infrastructure.directories.bop import get_class_types
 from infrastructure.directories.common import get_chromosome_types
 from infrastructure.directories.experiment import get_diseases, get_genders, get_scenarios, get_approaches, get_methods
 from infrastructure.directories.info_type import get_info_types
-from infrastructure.path import get_path
+from infrastructure.path.path import get_path
 from infrastructure.tree.routines import create_fs
 
 
@@ -23,7 +22,8 @@ def create_bop_data_tree(config):
     class_types = get_class_types(config)
 
     # Info type levels
-    info_types = get_info_types(config)
+    info_types = [InfoType.result.value, InfoType.param.value]
+    info_type_data = [InfoType.data.value]
 
     # Experiment levels
     diseases = get_diseases(config)
@@ -49,3 +49,11 @@ def create_bop_data_tree(config):
                'approaches',
                'methods'],
               path)
+
+    create_fs([chromosome_types,
+               class_types,
+               info_type_data],
+              ['chromosome_types',
+               'class_types',
+               'info_types'],
+              path, False)

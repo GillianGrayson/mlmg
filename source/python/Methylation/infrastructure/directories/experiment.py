@@ -3,7 +3,7 @@ from config.method import *
 
 
 def get_diseases(config):
-    if config.db is DataBaseType.GSE52588:
+    if config.data_base is DataBaseType.GSE52588:
         diseases = [x.value for x in Disease]
     else:
         diseases = [Disease.any.value]
@@ -21,11 +21,11 @@ def get_scenarios(config):
 
 
 def get_approaches(config):
-    if config.dt is DataType.bop:
+    if config.data_type is DataType.bop:
         approaches = [Approach.top.value]
-    elif config.dt is DataType.cpg:
+    elif config.data_type is DataType.cpg:
         approaches = [Approach.top.value]
-    elif config.dt is DataType.gene:
+    elif config.data_type is DataType.gene:
         approaches = [Approach.top.value,
                       Approach.statistics.value]
     else:
@@ -34,10 +34,10 @@ def get_approaches(config):
 
 
 def get_methods(config):
-    if config.dt is DataType.bop:
+    if config.data_type is DataType.bop:
         methods = [Method.manova.value,
                    Method.match.value]
-    elif config.dt is DataType.cpg:
+    elif config.data_type is DataType.cpg:
         methods = [Method.match.value,
                    Method.anova.value,
                    Method.enet.value,
@@ -48,7 +48,7 @@ def get_methods(config):
                    Method.linreg_dispersion.value,
                    Method.linreg_variance.value,
                    Method.spearman.value]
-    elif config.dt is DataType.gene:
+    elif config.data_type is DataType.gene:
         methods = [Method.match.value,
                    Method.anova.value,
                    Method.enet.value,

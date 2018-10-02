@@ -2,6 +2,8 @@ from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
 from infrastructure.load.cell_pop import *
 from infrastructure.load.indexes import get_indexes
+from config.types import *
+from config.method import *
 import socket
 import getpass
 

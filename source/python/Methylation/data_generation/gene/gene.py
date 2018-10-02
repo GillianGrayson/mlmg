@@ -1,8 +1,10 @@
 import numpy as np
 from config.config import *
 from infrastructure.load.gene_data import get_raw_dict
-from infrastructure.path import get_gene_data_with_type_path
+from infrastructure.path.path import get_data_path
 from config.types import *
+import os
+
 
 def save_gene_data(config):
 
@@ -57,38 +59,36 @@ def save_gene_data(config):
             print('num_genes: ' + str(num_genes))
 
     # mean
-    config.approach_gd = GeneDataType.mean
-    config.validation_gd = GeneDataType.mean
-    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
-    np.savetxt(fn, gene_mean_str_list, fmt="%s")
+    config.gene_data_type = GeneDataType.mean
+    fn = get_data_path(config, 'gene_data.txt')
+    if os.path.exists(get_data_path(config, '')):
+        np.savetxt(fn, gene_mean_str_list, fmt="%s")
     # std
-    config.approach_gd = GeneDataType.std
-    config.validation_gd = GeneDataType.std
-    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
-    np.savetxt(fn, gene_std_str_list, fmt="%s")
+    config.gene_data_type = GeneDataType.std
+    fn = get_data_path(config, 'gene_data.txt')
+    if os.path.exists(get_data_path(config, '')):
+        np.savetxt(fn, gene_std_str_list, fmt="%s")
     # mean_der
-    config.approach_gd = GeneDataType.mean_der
-    config.validation_gd = GeneDataType.mean_der
-    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
-    np.savetxt(fn, gene_mean_der_str_list, fmt="%s")
+    config.gene_data_type = GeneDataType.mean_der
+    fn = get_data_path(config, 'gene_data.txt')
+    if os.path.exists(get_data_path(config, '')):
+        np.savetxt(fn, gene_mean_der_str_list, fmt="%s")
     # mean_der_normed
-    config.approach_gd = GeneDataType.mean_der_normed
-    config.validation_gd = GeneDataType.mean_der_normed
-    fn = get_gene_data_with_type_path(config, 'gene_data.txt')
-    np.savetxt(fn, gene_mean_der_normed_str_list, fmt="%s")
+    config.gene_data_type = GeneDataType.mean_der_normed
+    fn = get_data_path(config, 'gene_data.txt')
+    if os.path.exists(get_data_path(config, '')):
+        np.savetxt(fn, gene_mean_der_normed_str_list, fmt="%s")
 
 
-db = DataBaseType.GSE87571
-geos = [GeoType.islands_shores]
+data_base = DataBaseType.GSE87571
+geo_types = [GeoType.islands_shores]
 
-for geo in geos:
-
-    print('geo: ' + str(geo))
-
+for geo_type in geo_types:
+    print('geo: ' + str(geo_type))
     config = Config(
-        db=db,
-        geo=geo,
+        data_base=data_base,
+        data_type=DataType.gene,
+        geo_type=geo_type,
         dna_region=DNARegion.genic
     )
-
     save_gene_data(config)
