@@ -1,7 +1,7 @@
 from method.enet.routines import *
 from attributes.categorical import get_attributes_dict
 from infrastructure.load.gene_data import load_gene_data
-from infrastructure.path import get_result_path
+from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
@@ -28,7 +28,6 @@ def save_top_anova(config):
     genes_sorted = list(np.array(gene_names)[order])
     pvals_sorted = list(np.array(pvals)[order])
 
-
     metrics_sorted_np = np.asarray(list(map(np.log10, pvals_sorted))).reshape(-1, 1)
     bandwidth = estimate_bandwidth(metrics_sorted_np)
     ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
@@ -40,6 +39,9 @@ def save_top_anova(config):
     clusters_affinity_prop = clustering_order(labels_affinity_propagation)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, clusters_mean_shift, clusters_affinity_prop, pvals_sorted])
+    save_features(fn, [genes_sorted,
+                       clusters_mean_shift,
+                       clusters_affinity_prop,
+                       pvals_sorted])
 
 
