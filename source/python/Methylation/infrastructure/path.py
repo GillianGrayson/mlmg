@@ -5,56 +5,50 @@ def get_root(config):
     return config.fs.value
 
 def get_origin_path(config, file_name):
-    path = config.fs.value + '/'  + file_name
+    path = config.fs.value + \
+           '/'  + file_name
     return path
 
 def get_path(config, file_name):
-    path = config.fs.value + '/' + config.db.value + '/' + file_name
+    path = config.fs.value + \
+           '/' + config.data_base.value + \
+           '/' + file_name
     return path
 
 def get_suppl_path(config, file_name):
-    path = config.fs.value + '/' + config.db.value + '/suppl_data/' + config.geo_type.value +  '/' + file_name
-    return path
-
-def get_bop_data_path(config, file_name):
     path = config.fs.value + \
-           '/' + config.db.value + \
-           '/' + 'bop_data' + \
-           '/' + config.dna_region.value + \
-           '/' + config.chromosome_type.value + \
-           '/' + config.cpg_classes.value + \
-           '/' + file_name
-
-    return path
-
-def get_gene_data_path(config, file_name):
-    path = config.fs.value + \
-           '/' + config.db.value + \
-           '/' + 'gene_data' + '/' + \
-           '/' + config.dna_region.value + \
-           '/' + config.chromosome_type.value + \
+           '/' + config.data_base.value + \
+           '/' + 'suppl_data' + \
            '/' + config.geo_type.value + \
            '/' + file_name
-
     return path
 
 
-def get_gene_data_with_type_path(config, file_name):
-    if config.scenario is Scenario.validation:
-        gd_path = config.validation_gd.value
-    elif config.scenario is Scenario.approach:
-        gd_path = config.approach_gd.value
+def get_data_path(config, file_name):
+    if config.data_type is DataType.bop:
+        path = config.fs.value + \
+               '/' + config.data_base.value + \
+               '/' + 'bop_data' + \
+               '/' + config.chromosome_type.value + \
+               '/' + config.cpg_classes.value + \
+               '/' + file_name
+    elif config.data_type is DataType.gene:
+        path = config.fs.value + \
+               '/' + config.data_base.value + \
+               '/' + 'gene_data' + \
+               '/' + config.chromosome_type.value + \
+               '/' + config.gene_data_type.value + \
+               '/' + config.geo_type.value + \
+               '/' + file_name
+    elif config.data_type is DataType.cpg:
+        path = config.fs.value + \
+               '/' + config.data_base.value + \
+               '/' + 'gene_data' + \
+               '/' + config.chromosome_type.value + \
+               '/' + config.dna_region.value + \
+               '/' + file_name
     else:
-        gd_path = config.validation_gd.value
-
-    path = config.fs.value + \
-           '/' + config.db.value + \
-           '/' + 'gene_data' + '/' + \
-           '/' + config.dna_region.value + \
-           '/' + config.chromosome_type.value + \
-           '/' + config.geo_type.value + \
-           '/' + gd_path + \
-           '/' + file_name
+        path = ''
 
     return path
 

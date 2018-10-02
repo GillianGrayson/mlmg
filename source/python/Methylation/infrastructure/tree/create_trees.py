@@ -1,89 +1,8 @@
-from config.config import *
 import os
-from config.method import Method
-import itertools
-
-
-def create_fs(categories_vals, categories_names, init_path):
-    all = list(itertools.product(*categories_vals))
-    for dir_list in all:
-        path = init_path
-        for id in range(0, len(dir_list)):
-            create_fs_description_file(path + '/' + categories_names[id] + '.txt', categories_vals[id])
-            path += '/' + dir_list[id]
-            if not os.path.exists(path):
-                os.makedirs(path)
-
-
-def create_fs_description_file(fn, instances):
-    f = open(fn, 'w')
-    for x in instances:
-        f.write(x + '\n')
-    f.close()
-
-
-def create_bop_data_fs(config):
-    path = get_path(config, '') + 'bop_data'
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-    dna_regions = [x.value for x in DNARegion]
-    chromosome_types = [x.value for x in ChromosomeTypes]
-    class_types = [x.value for x in ClassType]
-
-    info_types = [x.value for x in InfoType]
-
-    scenarios = [x.value for x in Scenario]
-    approaches = [Approach.top.value]
-    methods = [Method.manova.value, Method.match.value]
-    genders = [Gender.any.value,
-               Gender.F.value,
-               Gender.M.value]
-    diseases = [Disease.any.value,
-                Disease.healthy.value,
-                Disease.down_syndrome.value]
-
-
-    create_fs([dna_regions,
-               chromosome_types,
-               class_types,
-               info_types,
-               scenarios,
-               approaches,
-               methods,
-               genders,
-               diseases],
-              ['dna_regions',
-               'chromosome_types',
-               'class_types',
-               'info_types',
-               'scenarios',
-               'approaches',
-               'methods',
-               'genders',
-               'diseases'],
-              path)
-
-
-def create_gene_data_fs(config):
-    path = get_path(config, '') + 'gene_data'
-    if not os.path.exists(path):
-        os.makedirs(path)
-
-    dna_regions = [x.value for x in DNARegion]
-    chromosome_types = [x.value for x in ChromosomeTypes]
-    geo_types = [x.value for x in GeoType]
-    gene_data_types = [x.value for x in GeneDataType]
-
-    create_fs([dna_regions,
-               chromosome_types,
-               geo_types,
-               gene_data_types],
-              ['dna_regions',
-               'chromosome_types',
-               'geo_types',
-               'gene_data_types'],
-              path)
+from infrastructure.directories.experiment import *
+from infrastructure.tree.bop import create_bop_data_tree
+from infrastructure.tree.gene import create_gene_data_tree
+from infrastructure.tree.cpg import create_cpg_data_tree
 
 
 def create_hierarchy(config):
@@ -108,7 +27,7 @@ def create_hierarchy(config):
                        Method.linreg_variance.value,
                        Method.manova.value,
                        Method.spearman.value]
-    apr_bend_methods = [ Method.linreg.value]
+    apr_bend_methods = [Method.linreg.value]
     apr_clustering_methods = []
 
     genders = [Gender.any.value, Gender.F.value, Gender.M.value]
@@ -335,7 +254,6 @@ def create_hierarchy(config):
 config = Config(db=DataBaseType.GSE87571,
                 read_only=True)
 
-
-create_hierarchy(config)
-create_bop_data_fs(config)
-create_gene_data_fs(config)
+create_bop_data_tree(config)
+create_gene_data_tree(config)
+create_cpg_data_tree(config)
