@@ -5,7 +5,7 @@ num_top = 500
 
 D1 = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.bop,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -16,7 +16,7 @@ D1 = Config(
 
 D2 = Config(
     read_only=True,
-    db=DataBaseType.GSE30870,
+    db=DataBase.GSE30870,
     dt=DataType.bop,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -27,7 +27,7 @@ D2 = Config(
 
 D3 = Config(
     read_only=True,
-    db=DataBaseType.GSE52588,
+    db=DataBase.GSE52588,
     dt=DataType.bop,
     scenario=Scenario.approach,
     approach=Approach.top,

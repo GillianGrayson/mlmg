@@ -37,6 +37,16 @@ def create_gene_data_tree(config):
     create_fs([chromosome_types,
                geo_types,
                gene_data_types,
+               info_type_data],
+              ['chromosome_types',
+               'geo_types',
+               'gene_data_types',
+               'info_types'],
+              path, False)
+
+    create_fs([chromosome_types,
+               geo_types,
+               gene_data_types,
                info_types,
                diseases,
                genders,
@@ -54,12 +64,3 @@ def create_gene_data_tree(config):
                'methods'],
               path)
 
-    create_fs([chromosome_types,
-               geo_types,
-               gene_data_types,
-               info_type_data],
-              ['chromosome_types',
-               'geo_types',
-               'gene_data_types',
-               'info_types'],
-              path, False)

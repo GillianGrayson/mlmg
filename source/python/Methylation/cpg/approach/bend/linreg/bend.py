@@ -137,7 +137,7 @@ def save_bend_linreg(config, limit, pval, num_opt=1000):
     np.savetxt(fn, cpg_str_list, fmt="%s")
 
 
-db = DataBaseType.GSE40279
+db = DataBase.GSE40279
 dt = DataType.cpg
 approach = Approach.bend
 scenario = Scenario.approach

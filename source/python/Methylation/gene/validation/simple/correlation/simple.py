@@ -7,7 +7,7 @@ from scipy import stats
 
 num_top = 500
 
-db = DataBaseType.GSE40279
+db = DataBase.GSE40279
 dt = DataType.gene
 approach = Approach.top
 scenario = Scenario.approach

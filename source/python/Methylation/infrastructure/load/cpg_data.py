@@ -9,9 +9,9 @@ import pickle
 
 def get_non_inc_cpgs(config):
     cpg_non_inc = []
-    if config.data_base is DataBaseType.GSE40279:
+    if config.data_base is DataBase.GSE40279:
         cpg_non_inc = []
-    elif config.data_base is DataBaseType.GSE52588:
+    elif config.data_base is DataBase.GSE52588:
         pval_lim = 0.05
         pval_part = 0.75
 

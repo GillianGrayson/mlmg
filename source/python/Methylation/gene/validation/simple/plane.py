@@ -8,7 +8,7 @@ def plane_proc(config):
 
 
 config = Config(
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     approach=Approach.top,
     validation=Validation.simple,

@@ -6,7 +6,7 @@ from infrastructure.tree.cpg import create_cpg_data_tree
 from infrastructure.path.path import *
 
 
-config = Config(data_base=DataBaseType.GSE87571,
+config = Config(data_base=DataBase.GSE87571,
                 read_only=True)
 
 create_bop_data_tree(config)

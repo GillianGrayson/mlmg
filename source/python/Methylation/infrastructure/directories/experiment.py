@@ -3,7 +3,7 @@ from config.method import *
 
 
 def get_diseases(config):
-    if config.data_base is DataBaseType.GSE52588:
+    if config.data_base is DataBase.GSE52588:
         diseases = [x.value for x in Disease]
     else:
         diseases = [Disease.any.value]

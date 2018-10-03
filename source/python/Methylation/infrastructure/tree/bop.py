@@ -34,6 +34,14 @@ def create_bop_data_tree(config):
 
     create_fs([chromosome_types,
                class_types,
+               info_type_data],
+              ['chromosome_types',
+               'class_types',
+               'info_types'],
+              path, False)
+
+    create_fs([chromosome_types,
+               class_types,
                info_types,
                diseases,
                genders,
@@ -49,11 +57,3 @@ def create_bop_data_tree(config):
                'approaches',
                'methods'],
               path)
-
-    create_fs([chromosome_types,
-               class_types,
-               info_type_data],
-              ['chromosome_types',
-               'class_types',
-               'info_types'],
-              path, False)

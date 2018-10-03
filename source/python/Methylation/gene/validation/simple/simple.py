@@ -17,7 +17,7 @@ genders = [Gender.F, Gender.any, Gender.M]
 for gender in genders:
 
     config = Config(
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.validation,
         approach=Approach.top,

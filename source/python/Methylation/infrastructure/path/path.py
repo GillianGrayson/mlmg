@@ -4,6 +4,8 @@ from infrastructure.path.bop import *
 from infrastructure.path.gene import *
 from infrastructure.path.cpg import *
 from infrastructure.path.experiment import *
+import os.path
+
 
 def get_root(config):
     return config.fs.value
@@ -33,59 +35,61 @@ def get_suppl_path(config, file_name):
 
 def get_data_path(config, file_name):
     if config.data_type is DataType.bop:
-        path = get_bop_path(config) + \
-               '/' + InfoType.data.value + \
-               '/' + file_name
+        path = get_bop_path(config)
     elif config.data_type is DataType.gene:
-        path = get_gene_path(config)+ \
-               '/' + InfoType.data.value + \
-               '/' + file_name
+        path = get_gene_path(config)
     elif config.data_type is DataType.cpg:
-        path = get_cpg_path(config)+ \
-               '/' + InfoType.data.value + \
-               '/' + file_name
+        path = get_cpg_path(config)
     else:
         path = ''
+
+    path += '/' + InfoType.data.value
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    path += '/' + file_name
+
     return path
 
 
 def get_result_path(config, file_name):
     if config.data_type is DataType.bop:
-        path = get_bop_path(config) + \
-               '/' + InfoType.result.value + \
-               '/' + get_experiment_path(config) + \
-               '/' + file_name
+        path = get_bop_path(config)
     elif config.data_type is DataType.gene:
-        path = get_gene_path(config) + \
-               '/' + InfoType.result.value + \
-               '/' + get_experiment_path(config) + \
-               '/' + file_name
+        path = get_gene_path(config)
     elif config.data_type is DataType.cpg:
-        path = get_cpg_path(config) + \
-               '/' + InfoType.result.value + \
-               '/' + get_experiment_path(config) + \
-               '/' + file_name
+        path = get_cpg_path(config)
     else:
         path = ''
+
+    path += '/' + InfoType.result.value + \
+            '/' + get_experiment_path(config)
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    path += '/' + file_name
+
     return path
 
 
 def get_param_path(config, file_name):
     if config.data_type is DataType.bop:
-        path = get_bop_path(config) + \
-               '/' + InfoType.param.value + \
-               '/' + get_experiment_path(config) + \
-               '/' + file_name
+        path = get_bop_path(config)
     elif config.data_type is DataType.gene:
-        path = get_gene_path(config) + \
-               '/' + InfoType.param.value + \
-               '/' + get_experiment_path(config) + \
-               '/' + file_name
+        path = get_gene_path(config)
     elif config.data_type is DataType.cpg:
-        path = get_cpg_path(config) + \
-               '/' + InfoType.param.value + \
-               '/' + get_experiment_path(config) + \
-               '/' + file_name
+        path = get_cpg_path(config)
     else:
         path = ''
+
+    path += '/' + InfoType.param.value + \
+            '/' + get_experiment_path(config)
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    path += '/' + file_name
+
     return path

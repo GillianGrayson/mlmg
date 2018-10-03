@@ -11,7 +11,7 @@ import seaborn as sns
 import math
 
 
-db = DataBaseType.GSE52588
+db = DataBase.GSE52588
 dt = DataType.cpg
 approach = Approach.statistics
 scenario = Scenario.approach

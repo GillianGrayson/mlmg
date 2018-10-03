@@ -11,7 +11,7 @@ def get_config_dict(cpg_method=Method.enet,
 
     CPG_F = Config(
         read_only=True,
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.approach,
         approach=Approach.top,
@@ -23,7 +23,7 @@ def get_config_dict(cpg_method=Method.enet,
 
     GENE_F = Config(
         read_only=True,
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.approach,
         approach=Approach.top,
@@ -36,7 +36,7 @@ def get_config_dict(cpg_method=Method.enet,
 
     BOP_F = Config(
         read_only=True,
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.approach,
         approach=Approach.top,
@@ -48,7 +48,7 @@ def get_config_dict(cpg_method=Method.enet,
 
     CPG_M = Config(
         read_only=True,
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.approach,
         approach=Approach.top,
@@ -60,7 +60,7 @@ def get_config_dict(cpg_method=Method.enet,
 
     GENE_M = Config(
         read_only=True,
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.approach,
         approach=Approach.top,
@@ -73,7 +73,7 @@ def get_config_dict(cpg_method=Method.enet,
 
     BOP_M = Config(
         read_only=True,
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.approach,
         approach=Approach.top,

@@ -80,15 +80,16 @@ def save_gene_data(config):
         np.savetxt(fn, gene_mean_der_normed_str_list, fmt="%s")
 
 
-data_base = DataBaseType.GSE87571
+data_base = DataBase.GSE87571
 geo_types = [GeoType.islands_shores]
+chromosome_type=ChromosomeTypes.non_gender
 
 for geo_type in geo_types:
     print('geo: ' + str(geo_type))
     config = Config(
         data_base=data_base,
         data_type=DataType.gene,
+        chromosome_type=chromosome_type,
         geo_type=geo_type,
-        dna_region=DNARegion.genic
     )
     save_gene_data(config)

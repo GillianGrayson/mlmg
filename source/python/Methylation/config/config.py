@@ -12,15 +12,15 @@ class Config:
 
     def __init__(self,
                  read_only=False,
-                 data_base=DataBaseType.GSE40279,
+                 data_base=DataBase.GSE40279,
                  data_type=DataType.gene,
 
                  chromosome_type=ChromosomeTypes.non_gender,
 
                  class_type=ClassType.class_ab,
 
-                 gene_data_type=GeneDataType.mean,
                  geo_type=GeoType.islands_shores,
+                 gene_data_type=GeneDataType.mean,
 
                  dna_region=DNARegion.any,
 
@@ -42,8 +42,8 @@ class Config:
         self.class_type = class_type
 
         # GENE
-        self.gene_data_type = gene_data_type
         self.geo_type = geo_type
+        self.gene_data_type = gene_data_type
 
         # CPG
         self.dna_region = dna_region

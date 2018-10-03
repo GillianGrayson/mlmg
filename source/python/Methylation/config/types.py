@@ -10,7 +10,7 @@ class FSType(Enum):
     unn_ab = '/common/home/kalyakulina_a/Work/mlmg/data'
 
 
-class DataBaseType(Enum):
+class DataBase(Enum):
     GSE40279 = 'GSE40279'
     GSE52588 = 'GSE52588'
     GSE30870 = 'GSE30870'
@@ -30,12 +30,6 @@ class Approach(Enum):
     top = 'top'
     clustering = 'clustering'
     statistics = 'statistics'
-
-
-class Validation(Enum):
-    simple = 'simple'
-    match = 'match'
-
 
 class Scenario(Enum):
     approach = 'approach'
@@ -148,7 +142,3 @@ class CellPop(Enum):
     b_cell = 'Bcell'
     mono = 'Mono'
     gran = 'Gran'
-
-class CpGCondition(Enum):
-    regular = 'regular'
-    x = 'x'
