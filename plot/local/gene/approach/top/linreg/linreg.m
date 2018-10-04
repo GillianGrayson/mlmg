@@ -20,7 +20,7 @@ scenario = 'approach';
 approach = 'top';
 method = 'linreg';
 
-gene = 'OFD1';
+gene = 'RPGR';
 
 up = '../../../../../..';
 

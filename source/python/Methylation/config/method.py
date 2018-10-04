@@ -93,3 +93,17 @@ def get_method_metrics(method):
         metrics = ['pval']
 
     return metrics
+
+def get_method_main_metric(method):
+    metric = ''
+    if method is Method.linreg:
+        metric = 'r_value'
+    elif method is Method.manova:
+        metric = 'pval'
+    return metric
+
+def metric_processing(method, metric):
+    if method is Method.linreg:
+        return float(metric)
+    else:
+        return float(metric)
