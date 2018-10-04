@@ -107,6 +107,15 @@ rare_m_metrics = m_metrics_srt(1:num_rare);
 rare_diff = metrix_diff_srt(1:num_rare);
 
 figure
+hold all;
+h = plot([min(f_metrics_srt) max(f_metrics_srt)], [0 0], 'LineWidth', 2, 'Color', 'k');
+set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+
+hold all;
+h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 2, 'Color', 'k');
+set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+
+hold all
 h = plot(common_f_metrics, common_m_metrics, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
 set(gca, 'FontSize', 30);
 xlabel('metrics F', 'Interpreter', 'latex');
@@ -119,13 +128,7 @@ for  gene_id = 1:size(rare_genes, 1)
     legend(h, string(rare_genes(gene_id)))
 end
 
-hold all;
-h = plot([min(f_metrics_srt) max(f_metrics_srt)], [0 0], 'LineWidth', 3, 'Color', 'k');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
-hold all;
-h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 3, 'Color', 'k');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 propertyeditor('on')
 box on;
