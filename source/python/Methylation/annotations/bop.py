@@ -2,7 +2,7 @@ from config.types import *
 import numpy as np
 from annotations.gene import get_dict_cpg_gene
 from annotations.conditions import *
-from infrastructure.path import *
+from infrastructure.path.path import *
 import os.path
 import pickle
 
@@ -19,7 +19,7 @@ def bop_condition(config, annotation):
 
 def get_dict_bop_cpgs(config):
     fn_pkl = 'dict_bop_cpgs.pkl'
-    fn_pkl = get_bop_data_path(config, fn_pkl)
+    fn_pkl = get_data_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
     if is_pkl:
@@ -89,7 +89,7 @@ def get_dict_bop_cpgs(config):
 
 def get_dict_bop_genes(config, dict_bop_cpgs):
     fn_pkl = 'dict_bop_genes.pkl'
-    fn_pkl = get_bop_data_path(config, fn_pkl)
+    fn_pkl = get_data_path(config, fn_pkl)
 
     is_pkl = os.path.isfile(fn_pkl)
     if is_pkl:

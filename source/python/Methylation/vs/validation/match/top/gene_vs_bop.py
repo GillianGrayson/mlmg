@@ -5,7 +5,7 @@ import pandas as pd
 
 num_top = 1000
 
-data_base_type = DataBaseType.GSE40279
+data_base_type = DataBase.GSE40279
 
 scenario = Scenario.approach
 approach = Approach.top

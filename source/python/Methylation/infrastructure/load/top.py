@@ -1,6 +1,6 @@
 from infrastructure.path import *
 from infrastructure.load.routines import line_proc
-from infrastructure.path import get_result_path
+from infrastructure.path.path import *
 from config.method import *
 import numpy as np
 import os.path
@@ -78,7 +78,7 @@ def load_top_gene_vals(config, genes_top):
     indexes = config.indexes
     dict_top = {}
     fn = 'gene_data.txt'
-    fn = get_gene_data_path(config, fn)
+    fn = get_data_path(config, fn)
     f = open(fn)
     for line in f:
         col_vals = line.split(' ')

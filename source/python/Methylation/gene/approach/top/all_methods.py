@@ -12,50 +12,61 @@ from gene.approach.top.linreg_variance.top import save_top_linreg_variance
 
 
 def top_proc(config):
-    if config.approach_method is Method.enet:
+    if config.method is Method.enet:
         save_params_enet(config)
         save_top_enet(config)
-    elif config.approach_method is Method.linreg:
+    elif config.method is Method.linreg:
         save_top_linreg(config)
-    elif config.approach_method is Method.anova:
+    elif config.method is Method.anova:
         save_top_anova(config)
-    elif config.approach_method is Method.spearman:
+    elif config.method is Method.spearman:
         save_top_spearman(config)
-    elif config.approach_method is Method.linreg_with_rejection:
+    elif config.method is Method.linreg_with_rejection:
         save_top_linreg_with_rejection(config)
-    elif config.approach_method is Method.linreg_bend:
+    elif config.method is Method.linreg_bend:
         save_top_linreg_bend(config)
-    elif config.approach_method is Method.linreg_dispersion:
+    elif config.method is Method.linreg_dispersion:
         save_top_linreg_with_dispersion(config)
-    elif config.approach_method is Method.linreg_variance:
+    elif config.method is Method.linreg_variance:
         save_top_linreg_variance(config)
 
 
-db = DataBaseType.GSE87571
-dt = DataType.gene
-approach = Approach.top
+data_base = DataBase.GSE87571
+data_type = DataType.gene
 scenario = Scenario.approach
-approach_methods = [Method.enet, Method.anova, Method.linreg, Method.linreg_variance, Method.linreg_bend, Method.linreg_dispersion, Method.linreg_with_rejection, Method.spearman]
-approach_gd = GeneDataType.mean
+approach = Approach.top
+methods = [
+    Method.linreg,
+    Method.linreg_variance,
+    Method.linreg_bend,
+    Method.linreg_dispersion,
+    Method.linreg_with_rejection,
+    Method.spearman,
+    Method.anova,
+    Method.enet
+]
+gene_data_type = GeneDataType.mean
 genders = [Gender.F, Gender.M, Gender.any]
-geos = [GeoType.islands_shores]
+geo_types = [GeoType.islands_shores]
 
-for method in approach_methods:
+for method in methods:
     print(method.value)
     for gender in genders:
         print('\t' + gender.value)
-        for geo in geos:
-            print('\t\t' + geo.value)
+        for geo_type in geo_types:
+            print('\t\t' + geo_type.value)
 
             config = Config(
-                db=db,
-                dt=dt,
-                approach=approach,
+                data_base=data_base,
+                data_type=data_type,
+                geo_type=geo_type,
+                gene_data_type=gene_data_type,
+
+                gender=gender,
+
                 scenario=scenario,
-                approach_method=method,
-                approach_gd=approach_gd,
-                geo=geo,
-                gender=gender
+                approach=approach,
+                method=method
             )
 
             top_proc(config)

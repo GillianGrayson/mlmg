@@ -31,7 +31,7 @@ config_tmp = Config(read_only=True)
 
 A_F = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -43,7 +43,7 @@ A_F = Config(
 
 B_F = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -56,7 +56,7 @@ B_F = Config(
 
 C_F = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -68,7 +68,7 @@ C_F = Config(
 
 D_F = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -81,7 +81,7 @@ D_F = Config(
 
 A_M = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -93,7 +93,7 @@ A_M = Config(
 
 B_M = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -106,7 +106,7 @@ B_M = Config(
 
 C_M = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -118,7 +118,7 @@ C_M = Config(
 
 D_M = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.gene,
     scenario=Scenario.approach,
     approach=Approach.top,

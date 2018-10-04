@@ -8,7 +8,7 @@ method = Method.manova
 
 config_f = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.bop,
     scenario=Scenario.approach,
     approach=Approach.top,
@@ -21,7 +21,7 @@ config_f = Config(
 
 config_m = Config(
     read_only=True,
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     dt=DataType.bop,
     scenario=Scenario.approach,
     approach=Approach.top,

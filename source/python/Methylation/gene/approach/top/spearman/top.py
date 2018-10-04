@@ -1,7 +1,7 @@
 from method.enet.routines import *
 from infrastructure.load.attributes import get_attributes
 from infrastructure.load.gene_data import load_gene_data
-from infrastructure.path import get_result_path
+from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from scipy import stats
 import math
@@ -38,4 +38,7 @@ def save_top_spearman(config):
     clusters_affinity_prop = clustering_order(labels_affinity_propagation)
 
     fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, clusters_mean_shift, clusters_affinity_prop, rhos_sorted])
+    save_features(fn, [genes_sorted,
+                       clusters_mean_shift,
+                       clusters_affinity_prop,
+                       rhos_sorted])

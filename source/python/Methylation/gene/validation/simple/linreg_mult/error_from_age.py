@@ -67,7 +67,7 @@ for gender in genders:
     print('gender: ' + gender.value)
 
     config = Config(
-        db=DataBaseType.GSE40279,
+        db=DataBase.GSE40279,
         dt=DataType.gene,
         scenario=Scenario.validation,
         approach=Approach.top,

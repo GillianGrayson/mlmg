@@ -3,47 +3,58 @@ from infrastructure.load.top import *
 from config.method import *
 import pandas as pd
 
-num_top = 2000
+num_top = 500
 
-data_base_type = DataBaseType.GSE87571
+data_base = DataBase.GSE87571
 data_type = DataType.gene
-scenario = Scenario.approach
-approach = Approach.top
 
-approach_method = Method.linreg
-approach_method_metrics = get_method_metrics(approach_method)
+chromosome_type = ChromosomeTypes.non_gender
+
+gene_data_type = GeneDataType.mean
+geo_type = GeoType.islands_shores
 
 disease = Disease.any
-approach_gene_data_type = GeneDataType.mean
-geo_type = GeoType.islands_shores
+scenario = Scenario.approach
+approach = Approach.top
+method = Method.linreg
+
+method_metrics = get_method_metrics(method)
 
 config_f = Config(
     read_only=True,
-    db=data_base_type,
-    dt=data_type,
+    data_base=data_base,
+    data_type=data_type,
+
+    chromosome_type=chromosome_type,
+
+    geo_type=geo_type,
+    gene_data_type=gene_data_type,
+
+    disease=disease,
+    gender=Gender.F,
     scenario=scenario,
     approach=approach,
-    approach_method=approach_method,
-    gender=Gender.F,
-    disease=disease,
-    approach_gd=approach_gene_data_type,
-    geo=geo_type
+    method=method
 )
 
 config_m = Config(
     read_only=True,
-    db=data_base_type,
-    dt=data_type,
+    data_base=data_base,
+    data_type=data_type,
+
+    chromosome_type=chromosome_type,
+
+    geo_type=geo_type,
+    gene_data_type=gene_data_type,
+
+    disease=disease,
+    gender=Gender.M,
     scenario=scenario,
     approach=approach,
-    approach_method=approach_method,
-    gender=Gender.M,
-    disease=disease,
-    approach_gd=approach_gene_data_type,
-    geo=geo_type
+    method=method
 )
 
-keys = ['gene'] + approach_method_metrics
+keys = ['gene'] + method_metrics
 
 f_top_dict = load_top_dict(config_f, keys, num_top)
 f_all_dict = load_top_dict(config_f, keys)
@@ -62,7 +73,7 @@ only_f_dict = {}
 only_f_dict['gene'] = []
 only_f_dict['top'] = []
 only_f_dict['top_vs'] = []
-for x in approach_method_metrics:
+for x in method_metrics:
     only_f_dict[x] = []
     only_f_dict[x + '_vs'] = []
 
@@ -81,7 +92,7 @@ for f_id in range(0, len(only_f_genes)):
         only_f_dict['top_vs'].append(gene_id_vs)
     else:
         only_f_dict['top_vs'].append('None')
-    for x in approach_method_metrics:
+    for x in method_metrics:
         only_f_dict[x].append(f_top_dict[x][gene_id])
         if is_in_vs:
             only_f_dict[x + '_vs'].append(m_all_dict[x][gene_id_vs])
@@ -93,7 +104,7 @@ only_f_dict['gene'] = list(np.array(only_f_dict['gene'])[only_f_order])
 only_f_dict['top'] = list(np.array(only_f_dict['top'])[only_f_order])
 only_f_dict['top_vs'] = list(np.array(only_f_dict['top_vs'])[only_f_order])
 
-for x in approach_method_metrics:
+for x in method_metrics:
     only_f_dict[x] = list(np.array(only_f_dict[x])[only_f_order])
     only_f_dict[x + '_vs'] = list(np.array(only_f_dict[x + '_vs'])[only_f_order])
 
@@ -104,7 +115,7 @@ only_m_dict = {}
 only_m_dict['gene'] = []
 only_m_dict['top'] = []
 only_m_dict['top_vs'] = []
-for x in approach_method_metrics:
+for x in method_metrics:
     only_m_dict[x] = []
     only_m_dict[x + '_vs'] = []
 
@@ -123,7 +134,7 @@ for f_id in range(0, len(only_m_genes)):
         only_m_dict['top_vs'].append(gene_id_vs)
     else:
         only_m_dict['top_vs'].append('None')
-    for x in approach_method_metrics:
+    for x in method_metrics:
         only_m_dict[x].append(m_top_dict[x][gene_id])
         if is_in_vs:
             only_m_dict[x + '_vs'].append(f_all_dict[x][gene_id_vs])
@@ -135,7 +146,7 @@ only_m_dict['gene'] = list(np.array(only_m_dict['gene'])[only_m_order])
 only_m_dict['top'] = list(np.array(only_m_dict['top'])[only_m_order])
 only_m_dict['top_vs'] = list(np.array(only_m_dict['top_vs'])[only_m_order])
 
-for x in approach_method_metrics:
+for x in method_metrics:
     only_m_dict[x] = list(np.array(only_m_dict[x])[only_m_order])
     only_m_dict[x + '_vs'] = list(np.array(only_m_dict[x + '_vs'])[only_m_order])
 
@@ -146,7 +157,7 @@ i_dict = {}
 i_dict['gene'] = []
 i_dict['top_f'] = []
 i_dict['top_m'] = []
-for x in approach_method_metrics:
+for x in method_metrics:
     i_dict[x + '_f'] = []
     i_dict[x + '_m'] = []
 
@@ -158,7 +169,7 @@ for f_id in range(0, len(i_genes)):
     i_dict['gene'].append(gene)
     i_dict['top_f'].append(gene_id_f)
     i_dict['top_m'].append(gene_id_m)
-    for x in approach_method_metrics:
+    for x in method_metrics:
         i_dict[x + '_f'].append(f_top_dict[x][gene_id_f])
         i_dict[x + '_m'].append(m_top_dict[x][gene_id_m])
 
@@ -167,14 +178,28 @@ i_dict['gene'] = list(np.array(i_dict['gene'])[i_order])
 i_dict['top_f'] = list(np.array(i_dict['top_f'])[i_order])
 i_dict['top_m'] = list(np.array(i_dict['top_m'])[i_order])
 
-for x in approach_method_metrics:
+for x in method_metrics:
     i_dict[x + '_f'] = list(np.array(i_dict[x + '_f'])[i_order])
     i_dict[x + '_m'] = list(np.array(i_dict[x + '_m'])[i_order])
 
 i_df = pd.DataFrame(i_dict)
 
-writer = pd.ExcelWriter(data_base_type.value + '_' + approach_method.value +'_top(' + str(num_top) + ').xlsx', engine='xlsxwriter')
+fn = 'sets_' + 'method(' + method.value + ')_top(' + str(num_top) + ').xlsx'
+config_f.scenario = Scenario.validation
+config_f.method = Method.gender_specific
+fn_f = get_result_path(config_f, fn)
+writer = pd.ExcelWriter(fn_f, engine='xlsxwriter')
 only_f_df.to_excel(writer, index=False, sheet_name='only_f')
 only_m_df.to_excel(writer, index=False, sheet_name='only_m')
 i_df.to_excel(writer, index=False, sheet_name='i')
 writer.save()
+
+config_m.scenario = Scenario.validation
+config_m.method = Method.gender_specific
+fn_m = get_result_path(config_m, fn)
+writer = pd.ExcelWriter(fn_m, engine='xlsxwriter')
+only_f_df.to_excel(writer, index=False, sheet_name='only_f')
+only_m_df.to_excel(writer, index=False, sheet_name='only_m')
+i_df.to_excel(writer, index=False, sheet_name='i')
+writer.save()
+

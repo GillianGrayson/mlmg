@@ -17,7 +17,7 @@ def top_proc(config):
         save_top_spearman(config)
 
 
-db = DataBaseType.GSE40279,
+db = DataBase.GSE40279,
 dt = DataType.cpg,
 approach = Approach.top,
 scenario = Scenario.approach,
@@ -30,7 +30,7 @@ for method in approach_methods:
     for gender in gts:
         print('\t' + 'gender: ' + gender.value)
         config = Config(
-            db=DataBaseType.GSE40279,
+            db=DataBase.GSE40279,
             dt=DataType.cpg,
             approach=Approach.top,
             scenario=Scenario.approach,

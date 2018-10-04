@@ -23,7 +23,7 @@ def save_gene_chr(config):
 
 
 config = Config(
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     geo=GeoType.any
 )
 

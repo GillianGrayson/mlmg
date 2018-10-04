@@ -8,7 +8,7 @@ def top_proc(config, attributes_types, attribute_target):
         save_top_manova(config, attributes_types, attribute_target)
 
 
-db = DataBaseType.GSE40279
+db = DataBase.GSE40279
 dt = DataType.bop
 scenario = Scenario.approach
 approach = Approach.top

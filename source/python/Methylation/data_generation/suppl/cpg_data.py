@@ -24,7 +24,7 @@ def save_cpg_data(config, fn):
 
 
 config = Config(
-    db=DataBaseType.GSE52588,
+    db=DataBase.GSE52588,
     geo=GeoType.any
 )
 

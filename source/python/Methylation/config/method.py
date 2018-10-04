@@ -16,6 +16,7 @@ class Method(Enum):
     mean_shift = 'mean_shift'
     linreg_mult = 'linreg_mult'
     match = 'match'
+    gender_specific = 'gender_specific'
 
 def get_top_fn(method, params_dict):
     fn = 'top.txt'

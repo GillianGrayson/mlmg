@@ -1,4 +1,4 @@
-from infrastructure.path import *
+from infrastructure.path.path import *
 from config.types import *
 import numpy as np
 

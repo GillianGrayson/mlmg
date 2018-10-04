@@ -21,7 +21,7 @@ def save_gene_by_cpg(config, fn):
 
 
 config = Config(
-    db=DataBaseType.GSE40279,
+    db=DataBase.GSE40279,
     geo=GeoType.any
 )
 

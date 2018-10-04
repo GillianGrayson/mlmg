@@ -1,6 +1,6 @@
 import numpy as np
 from config.method import Method
-from infrastructure.path import get_param_path
+from infrastructure.path.path import get_param_path
 
 
 def load_params_dict(config):
@@ -9,7 +9,7 @@ def load_params_dict(config):
     params = np.loadtxt(path, dtype='U50')
 
     params_dict = {}
-    if config.approach_method is Method.enet:
+    if config.method is Method.enet:
         alpha = float(params[0][1])
         l1_ratio = float(params[1][1])
         params_dict['alpha'] = alpha

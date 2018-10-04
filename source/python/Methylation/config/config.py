@@ -2,6 +2,8 @@ from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
 from infrastructure.load.cell_pop import *
 from infrastructure.load.indexes import get_indexes
+from config.types import *
+from config.method import *
 import socket
 import getpass
 
@@ -10,41 +12,48 @@ class Config:
 
     def __init__(self,
                  read_only=False,
-                 db=DataBaseType.GSE40279,
-                 dt=DataType.gene,
-                 approach=Approach.top,
-                 validation=Validation.simple,
-                 scenario=Scenario.approach,
-                 approach_method=Method.linreg,
-                 validation_method=Method.linreg_mult,
-                 gender=Gender.any,
-                 disease=Disease.any,
-                 approach_gd=GeneDataType.mean,
-                 validation_gd=GeneDataType.mean,
-                 geo=GeoType.any,
-                 dna_region=DNARegion.any,
-                 class_type=ClassType.class_ab,
+                 data_base=DataBase.GSE40279,
+                 data_type=DataType.gene,
+
                  chromosome_type=ChromosomeTypes.non_gender,
-                 cpg_condition=CpGCondition.regular
+
+                 class_type=ClassType.class_ab,
+
+                 geo_type=GeoType.islands_shores,
+                 gene_data_type=GeneDataType.mean,
+
+                 dna_region=DNARegion.any,
+
+                 disease=Disease.any,
+                 gender=Gender.any,
+                 scenario=Scenario.approach,
+                 approach=Approach.top,
+                 method=Method.match,
                  ):
-        # Config data
+        # Global
         self.read_only = read_only
-        self.db = db
-        self.dt = dt
-        self.approach = approach
-        self.validation = validation
-        self.scenario = scenario
-        self.approach_method = approach_method
-        self.validation_method = validation_method
-        self.gender = gender
-        self.disease = disease
-        self.approach_gd = approach_gd
-        self.validation_gd = validation_gd
-        self.geo_type = geo
-        self.cpg_classes = class_type
-        self.dna_region = dna_region
+        self.data_base = data_base
+        self.data_type = data_type
+
+        # Common
         self.chromosome_type = chromosome_type
-        self.cpg_condition = cpg_condition
+
+        # BOP
+        self.class_type = class_type
+
+        # GENE
+        self.geo_type = geo_type
+        self.gene_data_type = gene_data_type
+
+        # CPG
+        self.dna_region = dna_region
+
+        # Experiment
+        self.disease = disease
+        self.gender = gender
+        self.scenario = scenario
+        self.approach = approach
+        self.method = method
 
         # FS type
         host_name = socket.gethostname()

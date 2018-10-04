@@ -6,7 +6,7 @@ import math
 
 num_top = 2000
 
-data_base_type = DataBaseType.GSE87571
+data_base_type = DataBase.GSE87571
 data_type = DataType.gene
 scenario = Scenario.approach
 approach = Approach.top
