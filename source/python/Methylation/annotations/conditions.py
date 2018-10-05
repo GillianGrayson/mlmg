@@ -5,9 +5,8 @@ def cpg_name_condition(config, annotation):
     cpg = annotation[Annotation.cpg.value]
 
     match = False
-    if len(cpg) > 2:
-        if cpg[0:2] == 'cg' or cpg[0:2] == 'rs' or cpg[0:2] == 'ch':
-            match = True
+    if len(cpg) > 0:
+        match = True
 
     return match
 

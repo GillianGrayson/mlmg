@@ -9,9 +9,9 @@ import pickle
 
 def bop_condition(config, annotation):
     match = False
-    if cpg_name_condition(config, annotation):
-        if dna_region_condition(config, annotation):
-            if chromosome_condition(config, annotation):
+    if chromosome_condition(config, annotation):
+        if cpg_name_condition(config, annotation):
+            if dna_region_condition(config, annotation):
                 if class_type_condition(config, annotation):
                     match = True
     return match

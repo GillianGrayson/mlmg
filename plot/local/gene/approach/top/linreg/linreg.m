@@ -15,12 +15,12 @@ gene_data_type = 'mean';
 info_type = 'result';
 
 disease = 'any';
-gender = 'M';
+gender = 'F';
 scenario = 'approach';
 approach = 'top';
 method = 'linreg';
 
-gene = 'RPGR';
+gene = 'YTHDC2';
 
 up = '../../../../../..';
 
