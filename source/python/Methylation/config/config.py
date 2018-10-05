@@ -55,6 +55,10 @@ class Config:
         self.approach = approach
         self.method = method
 
+        # Checking for GENE
+        if self.data_type is DataType.gene:
+            self.dna_region = DNARegion.genic
+
         # FS type
         host_name = socket.gethostname()
         self.fs = FSType.local_big
