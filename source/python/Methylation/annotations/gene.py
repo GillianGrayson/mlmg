@@ -16,6 +16,9 @@ def gene_condition(config, annotation):
 
 
 def get_dict_cpg_gene(config):
+    dna_region = config.dna_region
+    config.dna_region = DNARegion.genic
+
     fn_pkl = 'dict_cpg_gene.pkl'
     fn_pkl = get_data_path(config, fn_pkl)
 
@@ -57,9 +60,14 @@ def get_dict_cpg_gene(config):
         pickle.dump(dict_cpg_gene, f, pickle.HIGHEST_PROTOCOL)
         f.close()
 
+    config.dna_region = dna_region
+
     return dict_cpg_gene
 
 def get_dict_gene_chr(config):
+    dna_region = config.dna_region
+    config.dna_region = DNARegion.genic
+
     fn_pkl = 'dict_gene_chr.pkl'
     fn_pkl = get_data_path(config, fn_pkl)
 
@@ -106,10 +114,15 @@ def get_dict_gene_chr(config):
         pickle.dump(dict_gene_chr, f, pickle.HIGHEST_PROTOCOL)
         f.close()
 
+    config.dna_region = dna_region
+
     return dict_gene_chr
 
 
 def get_dict_gene_cpg(config):
+    dna_region = config.dna_region
+    config.dna_region = DNARegion.genic
+
     fn_pkl = 'dict_gene_cpg.pkl'
     fn_pkl = get_data_path(config, fn_pkl)
 
@@ -155,9 +168,14 @@ def get_dict_gene_cpg(config):
         pickle.dump(dict_gene_cpg, f, pickle.HIGHEST_PROTOCOL)
         f.close()
 
+    config.dna_region = dna_region
+
     return dict_gene_cpg
 
 def get_dict_cpg_map_info(config):
+    dna_region = config.dna_region
+    config.dna_region = DNARegion.genic
+
     fn_pkl = 'dict_cpg_map_info.pkl'
     fn_pkl = get_data_path(config, fn_pkl)
 
@@ -197,5 +215,7 @@ def get_dict_cpg_map_info(config):
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_cpg_map_info, f, pickle.HIGHEST_PROTOCOL)
         f.close()
+
+    config.dna_region = dna_region
 
     return dict_cpg_map_info

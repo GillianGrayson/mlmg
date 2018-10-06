@@ -4,7 +4,7 @@ age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-base = 'GSE40279';
+base = 'GSE87571';
 data_type = 'gene_data';
 
 chromosome_type = 'non_gender';

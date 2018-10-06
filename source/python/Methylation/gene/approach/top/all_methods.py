@@ -31,8 +31,17 @@ def top_proc(config):
         save_top_linreg_variance(config)
 
 
-data_base = DataBase.GSE40279
+data_base = DataBase.GSE87571
 data_type = DataType.gene
+
+chromosome_type = ChromosomeTypes.non_gender
+
+geo_types = [GeoType.islands_shores]
+gene_data_type = GeneDataType.mean
+
+disease = Disease.any
+genders = [Gender.F, Gender.M, Gender.any]
+
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
@@ -45,9 +54,6 @@ methods = [
     Method.anova,
     Method.enet
 ]
-gene_data_type = GeneDataType.mean
-genders = [Gender.F, Gender.M, Gender.any]
-geo_types = [GeoType.islands_shores]
 
 for method in methods:
     print(method.value)
@@ -59,9 +65,13 @@ for method in methods:
             config = Config(
                 data_base=data_base,
                 data_type=data_type,
+
+                chromosome_type=chromosome_type,
+
                 geo_type=geo_type,
                 gene_data_type=gene_data_type,
 
+                disease=disease,
                 gender=gender,
 
                 scenario=scenario,
