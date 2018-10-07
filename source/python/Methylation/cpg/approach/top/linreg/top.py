@@ -21,7 +21,7 @@ def save_top_linreg(config, is_clustering=False):
     intercepts = []
     for id in range(0, len(cpgs)):
         curr_vals = vals[id]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(curr_vals, attributes)
+        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, curr_vals)
         r_values.append(r_value)
         p_values.append(p_value)
         slopes.append(slope)

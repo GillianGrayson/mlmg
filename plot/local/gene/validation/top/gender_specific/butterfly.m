@@ -9,8 +9,8 @@ data_type = 'gene_data';
 
 chromosome_type = 'non_gender';
 
-geo_type = 'islands_shores';
-gene_data_type = 'mean';
+geo_type = 'from_cpg';
+gene_data_type = 'from_cpg';
 
 info_type = 'result';
 
@@ -53,6 +53,13 @@ f_top_data = importdata(f_fn);
 f_genes = f_top_data.textdata;
 f_metrics = f_top_data.data(:, metrics_id);
 
+if strcmp(method, 'linreg')
+    nothing_to_do = 0;
+elseif strcmp(method, 'manova')
+    f_metrics = -log10(f_metrics);
+end
+
+
 m_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
     up, ...
     base, ...
@@ -69,6 +76,12 @@ m_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
 m_top_data = importdata(m_fn);
 m_genes = m_top_data.textdata;
 m_metrics = m_top_data.data(:, metrics_id);
+
+if strcmp(method, 'linreg')
+    nothing_to_do = 0;
+elseif strcmp(method, 'manova')
+    m_metrics = -log10(m_metrics);
+end
 
 num_genes = size(f_genes, 1);
 
