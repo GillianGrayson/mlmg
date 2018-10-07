@@ -106,9 +106,8 @@ def get_dict_bop_genes(config, dict_bop_cpgs):
                 if curr_cpg in dict_cpg_gene:
                     curr_genes = dict_cpg_gene.get(curr_cpg)
                     genes += curr_genes
-            if len(genes) == 0:
-                genes = ['no_gene']
-            dict_bop_genes[bop] = list(set(genes))
+            if len(genes) > 0:
+                dict_bop_genes[bop] = list(set(genes))
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_bop_genes, f, pickle.HIGHEST_PROTOCOL)

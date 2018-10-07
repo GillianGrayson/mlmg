@@ -20,7 +20,9 @@ scenario = Scenario.approach
 approach = Approach.top
 method = Method.linreg
 
-method_metrics = get_method_metrics(method)
+is_clustering = False
+
+method_metrics = get_method_metrics(method, is_clustering)
 
 config_f = Config(
     read_only=True,

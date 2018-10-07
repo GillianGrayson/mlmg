@@ -19,13 +19,19 @@ scenario = 'approach';
 approach = 'top';
 method = 'linreg';
 
+is_clustering = 0;
+
 rare_part = 0.005;
 
 num_bins = 100;
 
 metrics_id = 1;
 if strcmp(method, 'linreg')
-    metrics_id = 3;
+    if is_clustering == 1
+        metrics_id = 3;
+    else
+        metrics_id = 1;
+    end
 end
 
 up = '../../../../../..';
