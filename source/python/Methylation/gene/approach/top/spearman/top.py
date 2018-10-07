@@ -9,7 +9,7 @@ from method.clustering.order import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 
 
-def save_top_spearman(config):
+def save_top_spearman(config, is_clustering=False):
     attributes = get_attributes(config)
     gene_names, gene_vals = load_gene_data(config)
 
@@ -27,18 +27,29 @@ def save_top_spearman(config):
     rhos_sorted = list(np.array(gene_rhos)[order])
     genes_sorted = list(np.array(gene_names)[order])
 
-    metrics_sorted_np = np.asarray(list(map(abs, rhos_sorted))).reshape(-1, 1)
-    bandwidth = estimate_bandwidth(metrics_sorted_np)
-    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
-    ms.fit(metrics_sorted_np)
-    labels_mean_shift = list(ms.labels_)
-    clusters_mean_shift = clustering_order(labels_mean_shift)
-    af = AffinityPropagation().fit(metrics_sorted_np)
-    labels_affinity_propagation = list(af.labels_)
-    clusters_affinity_prop = clustering_order(labels_affinity_propagation)
+    if is_clustering:
+        metrics_sorted_np = np.asarray(list(map(abs, rhos_sorted))).reshape(-1, 1)
+        bandwidth = estimate_bandwidth(metrics_sorted_np)
+        ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+        ms.fit(metrics_sorted_np)
+        labels_mean_shift = list(ms.labels_)
+        clusters_mean_shift = clustering_order(labels_mean_shift)
+        af = AffinityPropagation().fit(metrics_sorted_np)
+        labels_affinity_propagation = list(af.labels_)
+        clusters_affinity_prop = clustering_order(labels_affinity_propagation)
+        features = [
+            genes_sorted,
+            clusters_mean_shift,
+            clusters_affinity_prop,
+            rhos_sorted
+        ]
+        fn = 'top_with_clustering.txt'
+    else:
+        features = [
+            genes_sorted,
+            rhos_sorted
+        ]
+        fn = 'top.txt'
 
-    fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted,
-                       clusters_mean_shift,
-                       clusters_affinity_prop,
-                       rhos_sorted])
+    fn = get_result_path(config, fn)
+    save_features(fn, features)

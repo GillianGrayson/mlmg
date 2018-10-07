@@ -10,7 +10,7 @@ from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
 
 
-def save_top_enet(config, num_bootstrap_runs=100, num_top=500):
+def save_top_enet(config, num_bootstrap_runs=100, num_top=500, is_clustering=False):
 
     params_dict = load_params_dict(config)
     alpha = params_dict.get('alpha')
@@ -62,16 +62,28 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=500):
     genes_sorted = list(np.array(genes)[order])
     counts_sorted = list(np.array(counts)[order])
 
-    metrics_sorted_np = np.asarray(counts_sorted).reshape(-1,1)
-    bandwidth = estimate_bandwidth(metrics_sorted_np)
-    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
-    ms.fit(metrics_sorted_np)
-    labels_mean_shift = list(ms.labels_)
-    clusters_mean_shift = clustering_order(labels_mean_shift)
-    af = AffinityPropagation().fit(metrics_sorted_np)
-    labels_affinity_propagation = list(af.labels_)
-    clusters_affinity_prop = clustering_order(labels_affinity_propagation)
+    if is_clustering:
+        metrics_sorted_np = np.asarray(counts_sorted).reshape(-1,1)
+        bandwidth = estimate_bandwidth(metrics_sorted_np)
+        ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+        ms.fit(metrics_sorted_np)
+        labels_mean_shift = list(ms.labels_)
+        clusters_mean_shift = clustering_order(labels_mean_shift)
+        af = AffinityPropagation().fit(metrics_sorted_np)
+        labels_affinity_propagation = list(af.labels_)
+        clusters_affinity_prop = clustering_order(labels_affinity_propagation)
+        features = [
+            genes_sorted,
+            clusters_mean_shift,
+            clusters_affinity_prop,
+            counts_sorted
+        ]
+        fn = 'top_with_clustering.txt'
+    else:
+        features = [genes_sorted,
+                    counts_sorted]
+        fn = 'top.txt'
 
-    fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted, clusters_mean_shift, clusters_affinity_prop, counts_sorted])
+    fn = get_result_path(config, fn)
+    save_features(fn, features)
 

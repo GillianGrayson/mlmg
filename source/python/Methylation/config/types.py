@@ -63,6 +63,8 @@ class GeoType(Enum):
     islands = 'islands'
     islands_shores = 'islands_shores'
     any = 'any'
+    from_cpg = 'from_cpg'
+    from_bop = 'from_bop'
 
 
 class ClassType(Enum):

@@ -8,7 +8,7 @@ from method.clustering.order import *
 from scipy import stats
 
 
-def save_top_linreg_with_rejection(config, part=0.05):
+def save_top_linreg_with_rejection(config, part=0.05, is_clustering=False):
     attributes = get_attributes(config)
     genes, vals = load_gene_data(config)
     part_int = int(part * len(attributes))
@@ -51,21 +51,35 @@ def save_top_linreg_with_rejection(config, part=0.05):
     intercepts_sorted = list(np.array(intercepts)[order_mean])
     genes_sorted = list(np.array(genes)[order_mean])
 
-    metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
-    bandwidth = estimate_bandwidth(metrics_sorted_np)
-    ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
-    ms.fit(metrics_sorted_np)
-    labels_mean_shift = list(ms.labels_)
-    clusters_mean_shift = clustering_order(labels_mean_shift)
-    af = AffinityPropagation().fit(metrics_sorted_np)
-    labels_affinity_propagation = list(af.labels_)
-    clusters_affinity_prop = clustering_order(labels_affinity_propagation)
+    if is_clustering:
+        metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
+        bandwidth = estimate_bandwidth(metrics_sorted_np)
+        ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
+        ms.fit(metrics_sorted_np)
+        labels_mean_shift = list(ms.labels_)
+        clusters_mean_shift = clustering_order(labels_mean_shift)
+        af = AffinityPropagation().fit(metrics_sorted_np)
+        labels_affinity_propagation = list(af.labels_)
+        clusters_affinity_prop = clustering_order(labels_affinity_propagation)
+        features = [
+            genes_sorted,
+            clusters_mean_shift,
+            clusters_affinity_prop,
+            r_values_sorted,
+            p_values_sorted,
+            slopes_sorted,
+            intercepts_sorted
+        ]
+        fn = 'top_with_clustering.txt'
+    else:
+        features = [
+            genes_sorted,
+            r_values_sorted,
+            p_values_sorted,
+            slopes_sorted,
+            intercepts_sorted
+        ]
+        fn = 'top.txt'
 
-    fn = get_result_path(config, 'top.txt')
-    save_features(fn, [genes_sorted,
-                       clusters_mean_shift,
-                       clusters_affinity_prop,
-                       r_values_sorted,
-                       p_values_sorted,
-                       slopes_sorted,
-                       intercepts_sorted])
+    fn = get_result_path(config, fn)
+    save_features(fn, features)

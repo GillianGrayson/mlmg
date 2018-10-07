@@ -32,29 +32,39 @@ def get_top_fn(method, params_dict):
         fn += '.txt'
     return fn
 
-def get_method_metrics(method):
+def get_method_metrics(method, is_clustering=False):
     metrics = []
+    clustering_metrics = [
+        'cluster_mean_shift',
+        'cluster_affinity_prop'
+    ]
     if method is Method.linreg:
-        metrics = ['cluster_mean_shift',
-                   'cluster_affinity_prop',
-                   'r_value',
-                   'p_values',
-                   'slope',
-                   'intercept']
+        metrics = [
+            'r_value',
+            'p_values',
+            'slope',
+            'intercept'
+        ]
+        if is_clustering:
+            metrics = clustering_metrics + metrics
     elif method is Method.linreg_with_rejection:
-        metrics = ['cluster_mean_shift',
-                   'cluster_affinity_prop',
-                   'r_value',
-                   'p_values',
-                   'slope',
-                   'intercept']
+        metrics = [
+            'r_value',
+            'p_values',
+            'slope',
+            'intercept'
+        ]
+        if is_clustering:
+            metrics = clustering_metrics + metrics
     elif method is Method.linreg_with_rejection:
-        metrics = ['cluster_mean_shift',
-                   'cluster_affinity_prop',
-                   'r_value',
-                   'p_values',
-                   'slope',
-                   'intercept']
+        metrics = [
+            'r_value',
+            'p_values',
+            'slope',
+            'intercept'
+        ]
+        if is_clustering:
+            metrics = clustering_metrics + metrics
     elif method is Method.linreg_bend:
         metrics = ['angles',
                    'slope_left',
@@ -79,17 +89,33 @@ def get_method_metrics(method):
                    'p_value_right',
                    'std_err_right']
     elif method is Method.linreg_variance:
-        metrics = ['cluster_mean_shift',
-                   'cluster_affinity_prop',
-                   'r_value',
-                   'p_values',
-                   'slope',
-                   'intercept',
-                   'r_value_diff',
-                   'p_values_diff',
-                   'slope_diff',
-                   'intercept_diff']
+        metrics = [
+            'r_value',
+            'p_values',
+            'slope',
+            'intercept',
+            'r_value_diff',
+            'p_values_diff',
+            'slope_diff',
+            'intercept_diff'
+        ]
+        if is_clustering:
+            metrics = clustering_metrics + metrics
     elif method is Method.manova:
         metrics = ['pval']
 
     return metrics
+
+def get_method_main_metric(method):
+    metric = ''
+    if method is Method.linreg:
+        metric = 'r_value'
+    elif method is Method.manova:
+        metric = 'pval'
+    return metric
+
+def metric_processing(method, metric):
+    if method is Method.linreg:
+        return float(metric)
+    else:
+        return float(metric)

@@ -9,9 +9,9 @@ import pickle
 
 def bop_condition(config, annotation):
     match = False
-    if cpg_name_condition(config, annotation):
-        if dna_region_condition(config, annotation):
-            if chromosome_condition(config, annotation):
+    if chromosome_condition(config, annotation):
+        if cpg_name_condition(config, annotation):
+            if dna_region_condition(config, annotation):
                 if class_type_condition(config, annotation):
                     match = True
     return match
@@ -103,9 +103,11 @@ def get_dict_bop_genes(config, dict_bop_cpgs):
             cpgs = dict_bop_cpgs.get(bop)
             genes = []
             for curr_cpg in cpgs:
-                curr_genes = dict_cpg_gene.get(curr_cpg)
-                genes += curr_genes
-            dict_bop_genes[bop] = list(set(genes))
+                if curr_cpg in dict_cpg_gene:
+                    curr_genes = dict_cpg_gene.get(curr_cpg)
+                    genes += curr_genes
+            if len(genes) > 0:
+                dict_bop_genes[bop] = list(set(genes))
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_bop_genes, f, pickle.HIGHEST_PROTOCOL)
