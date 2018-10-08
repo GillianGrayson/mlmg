@@ -19,17 +19,18 @@ def save_inside_gene_linreg(config):
     cpg_id = 0
     for gene, cpgs in dict_gene_cpg.items():
         for cpg in cpgs:
-            cpg_data = dict_cpg_data.get(cpg)
-            slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, cpg_data)
-            genes_opt.append(gene)
-            cpgs_opt.append(cpg)
-            r_values_opt.append(r_value)
-            p_values_opt.append(p_value)
-            slopes_opt.append(slope)
-            intercepts_opt.append(intercept)
-            if cpg_id % config.print_rate == 0:
-                print('cpg_id: ' + str(cpg_id))
-            cpg_id += 1
+            if cpg in dict_cpg_data:
+                cpg_data = dict_cpg_data.get(cpg)
+                slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, cpg_data)
+                genes_opt.append(gene)
+                cpgs_opt.append(cpg)
+                r_values_opt.append(r_value)
+                p_values_opt.append(p_value)
+                slopes_opt.append(slope)
+                intercepts_opt.append(intercept)
+                if cpg_id % config.print_rate == 0:
+                    print('cpg_id: ' + str(cpg_id))
+                cpg_id += 1
 
     features = [
         genes_opt,
@@ -44,7 +45,7 @@ def save_inside_gene_linreg(config):
     save_features(fn, features)
 
 
-data_base = DataBase.GSE87571
+data_base = DataBase.GSE40279
 data_type = DataType.cpg
 
 chromosome_type = ChromosomeTypes.non_gender

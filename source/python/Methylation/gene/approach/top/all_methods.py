@@ -45,13 +45,7 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg,
-    Method.linreg_variance,
-    Method.linreg_bend,
-    Method.linreg_dispersion,
-    Method.linreg_with_rejection,
-    Method.spearman,
-    Method.anova,
+    Method.linreg
 ]
 
 is_clustering = False

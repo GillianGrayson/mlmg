@@ -5,32 +5,32 @@ gender_ann = 'gender';
 disease_ann = 'disease';
 
 base = 'GSE87571';
-data_type = 'gene_data';
+data_type = 'cpg_data';
 
 chromosome_type = 'non_gender';
 
-geo_type = 'islands_shores';
-gene_data_type = 'mean';
+dna_region = 'genic';
 
 info_type = 'result';
 
 disease = 'any';
-gender = 'F';
+gender = 'M';
 scenario = 'approach';
 approach = 'top';
 method = 'linreg';
 
-gene = 'YTHDC2';
+cpg_name = 'cg20926353';
+
+print_rate = 1000;
 
 up = '../../../../../..';
 
-fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
+fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
     up, ...
     base, ...
     data_type, ...
     chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
+    dna_region, ...
     info_type, ...
     disease, ...
     gender, ...
@@ -40,9 +40,9 @@ fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
 
 top_data = importdata(fn);
 
-genes = top_data.textdata;
-slopes = top_data.data(:, 5);
-intercepts = top_data.data(:, 6);
+cpgs = top_data.textdata;
+slopes = top_data.data(:, 3);
+intercepts = top_data.data(:, 4);
 
 fn = sprintf('%s/data/%s/attributes.txt', up, base);
 ann = importdata(fn);
@@ -118,44 +118,44 @@ for id = 1:size(indexes, 1)
     ages_passed(id) = ages(index);
 end
 
-fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/gene_data.txt', ...
-    up, ...
-    base, ...
-    data_type, ...
-    chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
-    'data');
+fn = sprintf('%s/data/%s/average_beta.txt', up, base);
+fid = fopen(fn);
+num_lines = 1;
+while ~feof(fid)
+    tline = strsplit(fgetl(fid), '\t');
+    curr_cpg = string(tline(1));
+    if strcmp(curr_cpg, cpg_name)
+        cpg_data = str2double(tline(2:end))';
+        break;
+    end
+    if mod(num_lines, print_rate) == 0
+        num_lines = num_lines
+    end
+    num_lines = num_lines + 1;
+end
+fclose(fid);
 
-data = importdata(fn);
-genes_names = data.textdata;
-genes_data = data.data;
-
-gene_name = string(gene);
-idx = find(genes_names==gene_name);
-gene_data = genes_data(idx, :)';
-
-gene_data_passed = size(indexes, 1);
+cpg_data_passed = size(indexes, 1);
 for id = 1:size(indexes, 1)
-    gene_data_passed(id) = gene_data(indexes(id));
+    cpg_data_passed(id) = cpg_data(indexes(id));
 end
 
-gene_id = find(genes==gene_name);
+cpg_id = find(string(cpgs)==string(cpg_name));
 
-slope = slopes(gene_id);
-intercept = intercepts(gene_id);
+slope = slopes(cpg_id);
+intercept = intercepts(cpg_id);
 x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
 figure
 hold all;
-h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
+h = plot(ages_passed, cpg_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 color = get(h, 'Color');
 
 hold all;
 h = plot(x_lin, y_lin, '-', 'LineWidth', 3);
-legend(h, sprintf('%s: %s', gene_name, gender));
+legend(h, sprintf('%s: %s', cpg_name, gender));
 set(h, 'Color', color)
 set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
