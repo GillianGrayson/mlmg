@@ -31,6 +31,13 @@ def save_top_linreg(config, is_clustering=False):
     slopes_sorted = list(np.array(slopes)[order_mean])
     intercepts_sorted = list(np.array(intercepts)[order_mean])
 
+    features = [
+        genes_sorted,
+        r_values_sorted,
+        p_values_sorted,
+        slopes_sorted,
+        intercepts_sorted
+    ]
     if is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
@@ -41,24 +48,13 @@ def save_top_linreg(config, is_clustering=False):
         af = AffinityPropagation().fit(metrics_sorted_np)
         labels_affinity_propagation = list(af.labels_)
         clusters_affinity_prop = clustering_order(labels_affinity_propagation)
-        features = [
-            genes_sorted,
+        features = features + [
             clusters_mean_shift,
-            clusters_affinity_prop,
-            r_values_sorted,
-            p_values_sorted,
-            slopes_sorted,
-            intercepts_sorted
+            clusters_affinity_prop
         ]
         fn = 'top_with_clustering.txt'
     else:
-        features = [
-            genes_sorted,
-            r_values_sorted,
-            p_values_sorted,
-            slopes_sorted,
-            intercepts_sorted
-        ]
+
         fn = 'top.txt'
 
     fn = get_result_path(config, fn)

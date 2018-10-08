@@ -1,6 +1,6 @@
 from config.config import *
 from annotations.bop import *
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_dict_cpg_data
 from statsmodels.multivariate.manova import MANOVA
 from statsmodels.stats.multitest import multipletests
 from infrastructure.save.features import save_features
@@ -11,8 +11,10 @@ import pandas as pd
 
 def save_top_manova(config, attributes_types, attribute_target, window=3, test=MANOVATest.pillai_bartlett, is_clustering=False):
     dict_bop_cpgs = get_dict_bop_cpgs(config)
-    dict_bop_genes = get_dict_bop_genes(config, dict_bop_cpgs)
-    cpgs, betas = load_cpg_data(config)
+    dict_bop_genes = get_dict_bop_genes(config)
+    dict_cpg_data = load_dict_cpg_data(config)
+    cpgs = list(dict_cpg_data.keys())
+    betas = list(dict_cpg_data.values())
 
     atr_table = []
     atr_cols = []
@@ -83,6 +85,10 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
 
     clusters_mean_shift = []
     clusters_affinity_prop = []
+    features = [
+        bops_sorted,
+        p_values_sorted
+    ]
     if is_clustering:
         metrics_sorted_np = np.asarray(list(map(np.log10, p_values_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
@@ -93,18 +99,12 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
         af = AffinityPropagation().fit(metrics_sorted_np)
         labels_affinity_propagation = list(af.labels_)
         clusters_affinity_prop = clustering_order(labels_affinity_propagation)
-        features = [
-            bops_sorted,
+        features = features + [
             clusters_mean_shift,
-            clusters_affinity_prop,
-            p_values_sorted
+            clusters_affinity_prop
         ]
         fn = 'top_with_clustering.txt'
     else:
-        features = [
-            bops_sorted,
-            p_values_sorted
-        ]
         fn = 'top.txt'
     fn = get_result_path(config, fn)
     save_features(fn, features)
@@ -138,20 +138,19 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
     config.gene_data_type = GeneDataType.from_bop
     config.geo_type = GeoType.from_bop
 
+    features = [
+        genes_sorted,
+        p_values_genes,
+    ]
     if is_clustering:
         fn = 'top_with_clustering.txt'
-        features = [
-            genes_sorted,
+        features = features + [
             clusters_mean_shift_genes,
-            clusters_affinity_prop_genes,
-            p_values_genes
+            clusters_affinity_prop_genes
         ]
     else:
         fn = 'top.txt'
-        features = [
-            genes_sorted,
-            p_values_genes,
-        ]
+
     fn = get_result_path(config, fn)
     save_features(fn, features)
 

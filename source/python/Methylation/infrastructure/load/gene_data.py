@@ -1,7 +1,7 @@
 import numpy as np
 from infrastructure.path.path import get_data_path
 from annotations.gene import get_dict_cpg_gene, get_dict_cpg_map_info
-from infrastructure.load.cpg_data import load_cpg_data, get_non_inc_cpgs
+from infrastructure.load.cpg_data import load_dict_cpg_data, get_non_inc_cpgs
 from infrastructure.load.attributes import get_attributes
 from config.types import *
 import os.path
@@ -33,7 +33,9 @@ def get_raw_dict(config):
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_map = get_dict_cpg_map_info(config)
     attributes = get_attributes(config)
-    cpgs, vals = load_cpg_data(config)
+    dict_cpg_data = load_dict_cpg_data(config)
+    cpgs = list(dict_cpg_data.keys())
+    vals = list(dict_cpg_data.values())
 
     cpg_non_inc = get_non_inc_cpgs(config)
 

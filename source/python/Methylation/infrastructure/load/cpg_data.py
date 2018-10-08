@@ -30,48 +30,60 @@ def get_non_inc_cpgs(config):
                 cpg_non_inc.append(curr_cpg)
     return cpg_non_inc
 
-def load_cpg_data(config):
+def load_dict_cpg_data(config):
     indexes = config.indexes
     dict_cpg_gene = get_dict_cpg_gene(config)
+
     fn_txt = get_path(config, 'average_beta.txt')
+    fn_pkl = get_path(config, 'dict_cpg_data.pkl')
 
-    f = open(fn_txt)
-    for skip_id in range(0, config.num_skip_lines):
-        skip_line = f.readline()
+    is_pkl = os.path.isfile(fn_pkl)
+    if is_pkl:
+        f = open(fn_pkl, 'rb')
+        dict_cpg_data = pickle.load(f)
+        f.close()
+    else:
+        dict_cpg_data = {}
 
-    cpg_non_inc = get_non_inc_cpgs(config)
+        f = open(fn_txt)
+        for skip_id in range(0, config.num_skip_lines):
+             f.readline()
 
-    cpgs_passed = []
-    vals_passed = []
-    num_lines = 0
-    for line in f:
+        cpg_non_inc = get_non_inc_cpgs(config)
 
-        col_vals = line_proc(config, line)
+        num_lines = 0
+        for line in f:
 
-        is_none = False
-        if config.miss_tag in col_vals:
-            is_none = True
+            col_vals = line_proc(config, line)
 
-        if not is_none:
-            cpg = col_vals[0]
-            vals = list(map(float, col_vals[1::]))
-            vals = list(np.array(vals)[indexes])
+            is_none = False
+            if config.miss_tag in col_vals:
+                is_none = True
 
-            if cpg not in cpg_non_inc:
-                if cpg in dict_cpg_gene:
-                    cpgs_passed.append(cpg)
-                    vals_passed.append(vals)
+            if not is_none:
+                cpg = col_vals[0]
+                vals = list(map(float, col_vals[1::]))
 
-        num_lines += 1
-        if num_lines % config.print_rate == 0:
-            print('num_lines: ' + str(num_lines))
-    f.close()
+                if cpg not in cpg_non_inc:
+                    if cpg in dict_cpg_gene:
+                        dict_cpg_data[cpg] = vals
 
-    return cpgs_passed, vals_passed
+            num_lines += 1
+            if num_lines % config.print_rate == 0:
+                print('num_lines: ' + str(num_lines))
+        f.close()
+
+        f = open(fn_pkl, 'wb')
+        pickle.dump(dict_cpg_data, f, pickle.HIGHEST_PROTOCOL)
+        f.close()
+
+    for cpg, data in dict_cpg_data.items():
+        dict_cpg_data[cpg] = list(np.array(data)[indexes])
+
+    return dict_cpg_data
 
 def load_cpg_data_raw(config):
     indexes = config.indexes
-    dict_cpg_gene = get_dict_cpg_gene(config)
 
     fn = 'average_beta.txt'
     full_path = get_path(config, fn)

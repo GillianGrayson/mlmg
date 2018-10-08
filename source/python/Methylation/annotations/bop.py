@@ -87,7 +87,9 @@ def get_dict_bop_cpgs(config):
     return dict_bop_cpgs
 
 
-def get_dict_bop_genes(config, dict_bop_cpgs):
+def get_dict_bop_genes(config):
+    dict_bop_cpgs = get_dict_bop_cpgs(config)
+
     fn_pkl = 'dict_bop_genes.pkl'
     fn_pkl = get_data_path(config, fn_pkl)
 

@@ -69,20 +69,23 @@ def save_top_linreg_with_dispersion(config, limit=65, pval=1e-7, is_clustering=F
     p_value_ms_opt = list(np.array(p_value_ms)[order])
     std_err_ms_opt = list(np.array(std_err_ms)[order])
 
+    features = [
+        genes_opt,
+
+        slope_ls_opt,
+        intercept_ls_opt,
+        r_value_ls_opt,
+        p_value_ls_opt,
+        std_err_ls_opt,
+
+        slope_ms_opt,
+        intercept_ms_opt,
+        r_value_ms_opt,
+        p_value_ms_opt,
+        std_err_ms_opt
+    ]
     fn = get_result_path(config, 'top_limit(' + str(format(limit, '0.4e')) +')_pval(' + str(format(pval, '0.4e')) + ')' + '.txt')
-    save_features(fn, [genes_opt,
-
-                       slope_ls_opt,
-                       intercept_ls_opt,
-                       r_value_ls_opt,
-                       p_value_ls_opt,
-                       std_err_ls_opt,
-
-                       slope_ms_opt,
-                       intercept_ms_opt,
-                       r_value_ms_opt,
-                       p_value_ms_opt,
-                       std_err_ms_opt])
+    save_features(fn, features)
 
     fn = get_result_path(config, 'params_last_run.txt')
     params_strs = ['limit' + ' ' + str(format(limit, '0.4e')),

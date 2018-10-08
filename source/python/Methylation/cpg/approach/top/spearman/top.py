@@ -1,6 +1,6 @@
 import numpy as np
 from infrastructure.load.attributes import get_attributes
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
@@ -11,7 +11,9 @@ from scipy import stats
 def save_top_spearman(config, num_top=500):
     attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
-    cpgs, vals = load_cpg_data(config)
+    dict_cpg_data = load_dict_cpg_data(config)
+    cpgs = list(dict_cpg_data.keys())
+    vals = list(dict_cpg_data.values())
 
     rhos = []
     for id in range(0, len(cpgs)):

@@ -1,4 +1,4 @@
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
 from scipy import stats
@@ -11,12 +11,16 @@ def save_bend_linreg(config, limit, pval, num_opt=1000):
     config_less = deepcopy(config)
     age_less(config_less, limit)
     atr_l = get_attributes(config_less)
-    cpg_names_l, cpg_vals_l = load_cpg_data(config_less)
+    dict_cpg_data = load_dict_cpg_data(config_less)
+    cpg_names_l = list(dict_cpg_data.keys())
+    cpg_vals_l = list(dict_cpg_data.values())
 
     config_more = deepcopy(config)
     age_more(config_more, limit)
     atr_m = get_attributes(config_more)
-    cpg_names_m, cpg_vals_m = load_cpg_data(config_more)
+    dict_cpg_data = load_dict_cpg_data(config_more)
+    cpg_names_m = list(dict_cpg_data.keys())
+    cpg_vals_m = list(dict_cpg_data.values())
 
     cpg_gene_dict = get_dict_cpg_gene(config)
 
@@ -125,7 +129,9 @@ def save_bend_linreg(config, limit, pval, num_opt=1000):
                         gender=Gender.any)
 
     cpg_str_list = []
-    cpg_name_raw, cpg_vals_raw = load_cpg_data(raw_config)
+    dict_cpg_data = load_dict_cpg_data(raw_config)
+    cpg_name_raw = list(dict_cpg_data.keys())
+    cpg_vals_raw = list(dict_cpg_data.values())
     for cpg in cpgs_opt:
         cpg_vals = cpg_vals_raw[cpg_name_raw.index(cpg)]
         curr_cpg_str = cpg

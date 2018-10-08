@@ -3,6 +3,7 @@ from infrastructure.path.path import *
 from annotations.conditions import *
 import os.path
 import pickle
+import numpy as np
 
 
 def gene_condition(config, annotation):
@@ -132,6 +133,8 @@ def get_dict_gene_cpg(config):
         dict_gene_cpg = pickle.load(f)
         f.close()
     else:
+        dict_cpg_map_info = get_dict_cpg_map_info(config)
+
         dict_gene_cpg = {}
 
         annotations = config.annotations
@@ -163,6 +166,15 @@ def get_dict_gene_cpg(config):
                         dict_gene_cpg[g].append(curr_cpg)
                     else:
                         dict_gene_cpg[g] = [curr_cpg]
+
+        for gene, cpgs in dict_gene_cpg.items():
+            map_infos = []
+            for cpg in cpgs:
+                mi = dict_cpg_map_info.get(cpg)
+                map_infos.append(mi)
+            order = np.argsort(map_infos)
+            cpg_sorted = list(np.array(cpgs)[order])
+            dict_gene_cpg[gene] = cpg_sorted
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_gene_cpg, f, pickle.HIGHEST_PROTOCOL)

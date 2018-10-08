@@ -27,6 +27,10 @@ def save_top_spearman(config, is_clustering=False):
     rhos_sorted = list(np.array(gene_rhos)[order])
     genes_sorted = list(np.array(gene_names)[order])
 
+    features = [
+        genes_sorted,
+        rhos_sorted
+    ]
     if is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, rhos_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
@@ -37,18 +41,12 @@ def save_top_spearman(config, is_clustering=False):
         af = AffinityPropagation().fit(metrics_sorted_np)
         labels_affinity_propagation = list(af.labels_)
         clusters_affinity_prop = clustering_order(labels_affinity_propagation)
-        features = [
-            genes_sorted,
+        features = features + [
             clusters_mean_shift,
-            clusters_affinity_prop,
-            rhos_sorted
+            clusters_affinity_prop
         ]
         fn = 'top_with_clustering.txt'
     else:
-        features = [
-            genes_sorted,
-            rhos_sorted
-        ]
         fn = 'top.txt'
 
     fn = get_result_path(config, fn)
