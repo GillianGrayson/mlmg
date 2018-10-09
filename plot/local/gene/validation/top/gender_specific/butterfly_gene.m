@@ -4,7 +4,7 @@ age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-base = 'GSE87571';
+base = 'GSE40279';
 data_type = 'gene_data';
 
 chromosome_type = 'non_gender';
@@ -21,7 +21,7 @@ method = 'linreg';
 
 is_clustering = 0;
 
-rare_part = 0.005;
+rare_part = 0.05;
 
 num_bins = 100;
 
@@ -129,7 +129,7 @@ h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 2, 'Color'
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 hold all
-h = plot(common_f_metrics, common_m_metrics, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
+h = plot(common_f_metrics, common_m_metrics, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'w');
 set(gca, 'FontSize', 30);
 xlabel('metrics F', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
@@ -137,7 +137,7 @@ ylabel('metrics M', 'Interpreter', 'latex');
 
 for gene_id = 1:size(rare_genes, 1)
     hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
+    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 6, 'LineWidth', 5, 'MarkerFaceColor', 'w');
     legend(h, string(rare_genes(gene_id)))
 end
 
@@ -186,7 +186,7 @@ set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 for gene_id = 1:size(rare_genes, 1)
     hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
+    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 6, 'LineWidth', 5, 'MarkerFaceColor', 'w');
     legend(h, string(rare_genes(gene_id)))
 end
 

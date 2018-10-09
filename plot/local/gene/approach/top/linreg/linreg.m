@@ -4,7 +4,7 @@ age_ann = 'age';
 gender_ann = 'gender';
 disease_ann = 'disease';
 
-base = 'GSE87571';
+base = 'GSE40279';
 data_type = 'gene_data';
 
 chromosome_type = 'non_gender';
@@ -15,12 +15,12 @@ gene_data_type = 'mean';
 info_type = 'result';
 
 disease = 'any';
-gender = 'F';
+gender = 'M';
 scenario = 'approach';
 approach = 'top';
 method = 'linreg';
 
-gene = 'YTHDC2';
+gene = 'TLE1';
 
 up = '../../../../../..';
 
@@ -41,8 +41,8 @@ fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
 top_data = importdata(fn);
 
 genes = top_data.textdata;
-slopes = top_data.data(:, 5);
-intercepts = top_data.data(:, 6);
+slopes = top_data.data(:, 3);
+intercepts = top_data.data(:, 4);
 
 fn = sprintf('%s/data/%s/attributes.txt', up, base);
 ann = importdata(fn);
