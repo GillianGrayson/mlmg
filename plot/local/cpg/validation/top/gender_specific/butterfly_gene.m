@@ -50,7 +50,8 @@ f_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
     approach, ...
     method);
 f_top_data = importdata(f_fn);
-f_genes = f_top_data.textdata;
+f_genes = f_top_data.textdata(:, 1);
+f_cpgs = f_top_data.textdata(:, 2);
 f_metrics = f_top_data.data(:, metrics_id);
 
 if strcmp(method, 'linreg')
@@ -58,7 +59,6 @@ if strcmp(method, 'linreg')
 elseif strcmp(method, 'manova')
     f_metrics = -log10(f_metrics);
 end
-
 
 m_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
     up, ...
@@ -74,7 +74,8 @@ m_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
     approach, ...
     method);
 m_top_data = importdata(m_fn);
-m_genes = m_top_data.textdata;
+m_genes = m_top_data.textdata(:, 1);
+m_cpgs = m_top_data.textdata(:, 2);
 m_metrics = m_top_data.data(:, metrics_id);
 
 if strcmp(method, 'linreg')
@@ -85,32 +86,23 @@ end
 
 num_genes = size(f_genes, 1);
 
-f_ids = linspace(1, num_genes, num_genes);
-m_ids = zeros(num_genes, 1);
-
 f_metrics_passed = f_metrics;
 m_metrics_passed = zeros(num_genes, 1);
-
 metrics_diff = zeros(num_genes, 1);
 
 for gene_id = 1:num_genes
     f_gene = f_genes(gene_id);
     m_id = find(m_genes==string(f_gene));
-    m_ids(gene_id) = m_id;
     m_metrics_passed(gene_id) = m_metrics(m_id);
     metrics_diff(gene_id) = f_metrics_passed(gene_id) - m_metrics_passed(gene_id);
 end
 
 [metrics_diff_srt, order] = sort(abs(metrics_diff), 'descend');
 genes_srt = f_genes;
-f_ids_srt = zeros(num_genes, 1);
-m_ids_srt = zeros(num_genes, 1);
 f_metrics_srt = zeros(num_genes, 1);
 m_metrics_srt = zeros(num_genes, 1);
 for gene_id = 1:num_genes
     genes_srt(gene_id) = f_genes(order(gene_id));
-    f_ids_srt(gene_id) = f_ids(order(gene_id));
-    m_ids_srt(gene_id) = m_ids(order(gene_id));
     f_metrics_srt(gene_id) = f_metrics_passed(order(gene_id));
     m_metrics_srt(gene_id) = m_metrics_passed(order(gene_id));
 end
@@ -145,8 +137,11 @@ ylabel('metrics M', 'Interpreter', 'latex');
 
 for gene_id = 1:size(rare_genes, 1)
     hold all;
+    tareget_gene = rare_genes(gene_id);
+    f_cpg = f_cpgs(find(f_genes==string(tareget_gene)));
+    m_cpg = m_cpgs(find(m_genes==string(tareget_gene)));
     h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
-    legend(h, string(rare_genes(gene_id)))
+    legend(h, sprintf('%s f:%s m:%s', string(tareget_gene), string(f_cpg), string(m_cpg)))
 end
 
 propertyeditor('on')
@@ -194,8 +189,11 @@ set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 for gene_id = 1:size(rare_genes, 1)
     hold all;
+    tareget_gene = rare_genes(gene_id);
+    f_cpg = f_cpgs(find(f_genes==string(tareget_gene)));
+    m_cpg = m_cpgs(find(m_genes==string(tareget_gene)));
     h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
-    legend(h, string(rare_genes(gene_id)))
+    legend(h, sprintf('%s f:%s m:%s', string(tareget_gene), string(f_cpg), string(m_cpg)))
 end
 
 propertyeditor('on')

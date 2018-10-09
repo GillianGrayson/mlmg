@@ -1,6 +1,6 @@
 import numpy as np
 from infrastructure.load.attributes import get_attributes
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
@@ -37,7 +37,9 @@ for disease in diseases:
                             cpg_condition=cpg_condition)
 
             attributes = get_attributes(config)
-            cpgs, vals = load_cpg_data(config)
+            dict_cpg_data = load_dict_cpg_data(config)
+            cpgs = list(dict_cpg_data.keys())
+            vals = list(dict_cpg_data.values())
 
             num_int = 200
             int_begin = 0

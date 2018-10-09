@@ -1,13 +1,15 @@
 import numpy as np
 from config.config import *
 from annotations.gene import *
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path import *
 
 
 def save_cpg_by_gene(config, fn):
     gene_cpg_dict = get_dict_gene_cpg(config)
-    cpgs, vals = load_cpg_data(config)
+    dict_cpg_data = load_dict_cpg_data(config)
+    cpgs = list(dict_cpg_data.keys())
+    vals = list(dict_cpg_data.values())
 
     f = open(fn + '.txt')
     target_genes = f.read().splitlines()

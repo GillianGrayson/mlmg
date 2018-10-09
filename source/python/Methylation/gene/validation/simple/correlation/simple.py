@@ -1,7 +1,7 @@
 from config.config import *
 from infrastructure.load.top import *
 from annotations.gene import get_dict_gene_cpg
-from infrastructure.load.cpg_data import load_cpg_data
+from infrastructure.load.cpg_data import load_dict_cpg_data
 from scipy import stats
 
 
@@ -33,7 +33,9 @@ gene_top = load_top_gene_names(config, num_top)[0:num_top]
 
 attributes = get_attributes(config)
 dict_gene_cpg = get_dict_gene_cpg(config)
-cpgs_names, cpg_vals = load_cpg_data(config)
+dict_cpg_data = load_dict_cpg_data(config)
+cpgs_names = list(dict_cpg_data.keys())
+cpg_vals = list(dict_cpg_data.values())
 
 for gene_id in range(0, num_genes):
 

@@ -62,6 +62,10 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=500, is_clustering=Fal
     genes_sorted = list(np.array(genes)[order])
     counts_sorted = list(np.array(counts)[order])
 
+    features = [
+        genes_sorted,
+        counts_sorted
+    ]
     if is_clustering:
         metrics_sorted_np = np.asarray(counts_sorted).reshape(-1,1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
@@ -72,16 +76,13 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=500, is_clustering=Fal
         af = AffinityPropagation().fit(metrics_sorted_np)
         labels_affinity_propagation = list(af.labels_)
         clusters_affinity_prop = clustering_order(labels_affinity_propagation)
-        features = [
-            genes_sorted,
+        features = features + [
             clusters_mean_shift,
-            clusters_affinity_prop,
-            counts_sorted
+            clusters_affinity_prop
         ]
         fn = 'top_with_clustering.txt'
     else:
-        features = [genes_sorted,
-                    counts_sorted]
+
         fn = 'top.txt'
 
     fn = get_result_path(config, fn)
