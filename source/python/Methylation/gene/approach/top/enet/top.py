@@ -10,7 +10,7 @@ from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
 
 
-def save_top_enet(config, num_bootstrap_runs=100, num_top=500, is_clustering=False):
+def save_top_enet(config, num_bootstrap_runs=100, num_top=500):
 
     params_dict = load_params_dict(config)
     alpha = params_dict.get('alpha')
@@ -66,7 +66,7 @@ def save_top_enet(config, num_bootstrap_runs=100, num_top=500, is_clustering=Fal
         genes_sorted,
         counts_sorted
     ]
-    if is_clustering:
+    if config.is_clustering:
         metrics_sorted_np = np.asarray(counts_sorted).reshape(-1,1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)

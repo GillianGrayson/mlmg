@@ -9,7 +9,7 @@ from method.clustering.order import *
 import pandas as pd
 
 
-def save_top_manova(config, attributes_types, attribute_target, window=3, test=MANOVATest.pillai_bartlett, is_clustering=False):
+def save_top_manova(config, attributes_types, attribute_target, window=3, test=MANOVATest.pillai_bartlett):
     dict_bop_cpgs = get_dict_bop_cpgs(config)
     dict_bop_genes = get_dict_bop_genes(config)
     dict_cpg_data = load_dict_cpg_data(config)
@@ -89,7 +89,7 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
         bops_sorted,
         p_values_sorted
     ]
-    if is_clustering:
+    if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(np.log10, p_values_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
@@ -116,7 +116,7 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
     for id in range(0, len(bops_sorted)):
         bop = bops_sorted[id]
         p_value = p_values_sorted[id]
-        if is_clustering:
+        if config.is_clustering:
             cluster_mean_shift = clusters_mean_shift[id]
             cluster_affinity_prop = clusters_affinity_prop[id]
         else:
@@ -128,7 +128,7 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
                 if gene not in genes_sorted:
                     genes_sorted.append(gene)
                     p_values_genes.append(p_value)
-                    if is_clustering:
+                    if config.is_clustering:
                         clusters_mean_shift_genes.append(cluster_mean_shift)
                         clusters_affinity_prop_genes.append(cluster_affinity_prop)
 
@@ -142,7 +142,7 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
         genes_sorted,
         p_values_genes,
     ]
-    if is_clustering:
+    if config.is_clustering:
         fn = 'top_with_clustering.txt'
         features = features + [
             clusters_mean_shift_genes,

@@ -12,6 +12,7 @@ class Config:
 
     def __init__(self,
                  read_only=False,
+
                  data_base=DataBase.GSE40279,
                  data_type=DataType.gene,
 
@@ -29,6 +30,8 @@ class Config:
                  scenario=Scenario.approach,
                  approach=Approach.top,
                  method=Method.match,
+
+                 is_clustering=False
                  ):
         # Global
         self.read_only = read_only
@@ -54,6 +57,9 @@ class Config:
         self.scenario = scenario
         self.approach = approach
         self.method = method
+
+        # Clustering flag for methods
+        self.is_clustering = is_clustering
 
         # Checking for GENE
         if self.data_type is DataType.gene:

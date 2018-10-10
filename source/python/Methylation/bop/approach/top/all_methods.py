@@ -22,6 +22,8 @@ scenario = Scenario.approach
 approach = Approach.top
 methods = [Method.manova]
 
+is_clustering = False
+
 attributes_types = [Attribute.age,
                     CellPop.plasma_blast,
                     CellPop.cd8_p,
@@ -55,7 +57,9 @@ for method in methods:
 
                 scenario=scenario,
                 approach=approach,
-                method=method
+                method=method,
+
+                is_clustering=is_clustering
             )
 
             top_proc(config, attributes_types, attribute_target)

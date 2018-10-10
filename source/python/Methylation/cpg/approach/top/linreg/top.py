@@ -10,7 +10,7 @@ from method.clustering.order import *
 from scipy import stats
 
 
-def save_top_linreg(config, is_clustering=False):
+def save_top_linreg(config):
     attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
@@ -47,7 +47,7 @@ def save_top_linreg(config, is_clustering=False):
         slopes_sorted,
         intercepts_sorted
     ]
-    if is_clustering:
+    if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
@@ -78,7 +78,7 @@ def save_top_linreg(config, is_clustering=False):
     intercepts_genes = []
     for id in range(0, len(cpgs_sorted)):
         cpg = cpgs_sorted[id]
-        if is_clustering:
+        if config.is_clustering:
             cluster_mean_shift = clusters_mean_shift[id]
             cluster_affinity_prop = clusters_affinity_prop[id]
         else:
@@ -94,7 +94,7 @@ def save_top_linreg(config, is_clustering=False):
                 if gene not in genes_sorted:
                     genes_sorted.append(gene)
                     cpgs_genes.append(cpg)
-                    if is_clustering:
+                    if config.is_clustering:
                         clusters_mean_shift_genes.append(cluster_mean_shift)
                         clusters_affinity_prop_genes.append(cluster_affinity_prop)
                     r_values_genes.append(r_value)
@@ -117,7 +117,7 @@ def save_top_linreg(config, is_clustering=False):
         intercepts_genes
     ]
 
-    if is_clustering:
+    if config.is_clustering:
         fn = 'top_with_clustering.txt'
         features = features + [
             clusters_mean_shift_genes,
