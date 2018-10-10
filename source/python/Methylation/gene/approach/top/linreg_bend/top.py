@@ -6,7 +6,7 @@ from config.config import *
 from copy import deepcopy
 
 
-def save_top_linreg_bend(config, limit=65, pval=0.001, is_clustering=False):
+def save_top_linreg_bend(config, limit=65, pval=0.001):
     config_less = deepcopy(config)
     age_less(config_less, limit)
     atr_l = get_attributes(config_less)

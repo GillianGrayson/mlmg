@@ -11,24 +11,24 @@ from gene.approach.top.linreg_dispersion.top import save_top_linreg_with_dispers
 from gene.approach.top.linreg_variance.top import save_top_linreg_variance
 
 
-def top_proc(config, is_clustering=False):
+def top_proc(config):
     if config.method is Method.enet:
         save_params_enet(config)
-        save_top_enet(config, is_clustering=is_clustering)
+        save_top_enet(config, )
     elif config.method is Method.linreg:
-        save_top_linreg(config, is_clustering=is_clustering)
+        save_top_linreg(config)
     elif config.method is Method.anova:
-        save_top_anova(config, is_clustering=is_clustering)
+        save_top_anova(config)
     elif config.method is Method.spearman:
-        save_top_spearman(config, is_clustering=is_clustering)
+        save_top_spearman(config)
     elif config.method is Method.linreg_with_rejection:
-        save_top_linreg_with_rejection(config, is_clustering=is_clustering)
+        save_top_linreg_with_rejection(config)
     elif config.method is Method.linreg_bend:
-        save_top_linreg_bend(config, is_clustering=is_clustering)
+        save_top_linreg_bend(config)
     elif config.method is Method.linreg_dispersion:
-        save_top_linreg_with_dispersion(config, is_clustering=is_clustering)
+        save_top_linreg_with_dispersion(config)
     elif config.method is Method.linreg_variance:
-        save_top_linreg_variance(config, is_clustering=is_clustering)
+        save_top_linreg_variance(config)
 
 
 data_base = DataBase.GSE87571
@@ -71,8 +71,10 @@ for method in methods:
 
                 scenario=scenario,
                 approach=approach,
-                method=method
+                method=method,
+
+                is_clustering=is_clustering
             )
 
-            top_proc(config, is_clustering=is_clustering)
+            top_proc(config)
 

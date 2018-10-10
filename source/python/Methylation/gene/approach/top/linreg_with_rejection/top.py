@@ -8,7 +8,7 @@ from method.clustering.order import *
 from scipy import stats
 
 
-def save_top_linreg_with_rejection(config, part=0.05, is_clustering=False):
+def save_top_linreg_with_rejection(config, part=0.05):
     attributes = get_attributes(config)
     genes, vals = load_gene_data(config)
     part_int = int(part * len(attributes))
@@ -58,7 +58,7 @@ def save_top_linreg_with_rejection(config, part=0.05, is_clustering=False):
         slopes_sorted,
         intercepts_sorted
     ]
-    if is_clustering:
+    if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)

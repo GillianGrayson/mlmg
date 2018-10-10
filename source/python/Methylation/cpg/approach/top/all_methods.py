@@ -33,6 +33,8 @@ methods = [
     Method.linreg,
 ]
 
+is_clustering = False
+
 for method in methods:
     print(method.value)
     for gender in genders:
@@ -51,7 +53,9 @@ for method in methods:
 
             scenario=scenario,
             approach=approach,
-            method=method
+            method=method,
+
+            is_clustering=is_clustering
         )
 
         top_proc(config)

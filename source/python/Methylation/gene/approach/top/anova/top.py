@@ -8,7 +8,7 @@ from method.clustering.order import *
 from scipy import stats
 
 
-def save_top_anova(config, is_clustering=False):
+def save_top_anova(config):
     gene_names, gene_vals = load_gene_data(config)
     attributes_dict = get_attributes_dict(config)
 
@@ -32,7 +32,7 @@ def save_top_anova(config, is_clustering=False):
         genes_sorted,
         pvals_sorted
     ]
-    if is_clustering:
+    if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(np.log10, pvals_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)

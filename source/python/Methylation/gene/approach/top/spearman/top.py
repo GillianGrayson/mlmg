@@ -9,7 +9,7 @@ from method.clustering.order import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 
 
-def save_top_spearman(config, is_clustering=False):
+def save_top_spearman(config):
     attributes = get_attributes(config)
     gene_names, gene_vals = load_gene_data(config)
 
@@ -31,7 +31,7 @@ def save_top_spearman(config, is_clustering=False):
         genes_sorted,
         rhos_sorted
     ]
-    if is_clustering:
+    if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, rhos_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
