@@ -223,6 +223,7 @@ hold all;
 h = plot([diff_bins(limit_id) diff_bins(end)], [0 0], 'LineWidth', 4, 'Color', 'k');
 hold all;
 h = plot([diff_bins(limit_id) diff_bins(limit_id)], [0 diff_pdf(limit_id)], 'LineWidth', 4, 'Color', 'k');
+
 propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
