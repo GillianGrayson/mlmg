@@ -1,125 +1,83 @@
 clear all;
 
-age_ann = 'age';
-gender_ann = 'gender';
-disease_ann = 'disease';
-
-base = 'data_base_versus';
-data_type = 'gene_data';
-
-chromosome_type = 'non_gender';
-
-geo_type = 'islands_shores';
-gene_data_type = 'mean';
-
-info_type = 'result';
-
-disease = 'any';
-scenario = 'validation';
-approach = 'top';
-method = 'gender_specific';
-
+% ======== params ========
 target_data_bases = 'GSE40279_GSE87571';
 target_method = 'linreg';
 target_part = 0.05;
 
-up = '../../../../../..';
+% ======== config ========
+config.data_base = 'data_base_versus';
+config.data_type = 'gene_data';
 
-fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/intersection_genes_data_bases(%s)_method(%s)_part(%0.2f).txt', ...
-    up, ...
-    base, ...
-    data_type, ...
-    chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
-    info_type, ...
-    disease, ...
-    'F', ...
-    scenario, ...
-    approach, ...
-    method, ...
+config.chromosome_type = 'non_gender';
+
+config.geo_type = 'islands_shores';
+config.gene_data_type = 'mean';
+
+config.info_type = 'result';
+
+config.scenario = 'validation';
+config.approach = 'top';
+config.method = 'gender_specific';
+
+config.disease = 'any';
+config.gender = 'any';
+
+config.up = '../../../../../..';
+config.is_clustering = 0;
+
+% ======== target_config ========
+target_config.data_base = 'GSE40279';
+target_config.data_type = config.data_type;
+
+target_config.chromosome_type = config.chromosome_type;
+
+target_config.geo_type = config.geo_type;
+target_config.gene_data_type = config.gene_data_type;
+
+target_config.info_type = config.info_type;
+
+target_config.scenario = 'approach';
+target_config.approach = 'top';
+target_config.method = 'linreg';
+
+target_config.disease = config.disease;
+target_config.gender = config.gender;
+
+target_config.up = config.up;
+target_config.is_clustering = config.is_clustering;
+
+% ======== processing ========
+suffix = sprintf('data_bases(%s)_method(%s)_part(%0.2f)', ...
     target_data_bases, ...
     target_method, ...
     target_part);
+
+fn = sprintf('%s/data/%s/intersection_genes_data_%s.txt', ...
+    config.up, ...
+    get_result_path(config), ...
+    suffix);
 target_genes = importdata(fn);
 
-base = 'GSE40279';
-data_type = 'gene_data';
+metrics_id = get_metrics_id(config);
 
-chromosome_type = 'non_gender';
-
-geo_type = 'islands_shores';
-gene_data_type = 'mean';
-
-info_type = 'result';
-
-disease = 'any';
-scenario = 'approach';
-approach = 'top';
-method = 'linreg';
-
-is_clustering = 0;
-
-rare_part = 0.005;
-
-num_bins = 100;
-
-metrics_id = 1;
-if strcmp(method, 'linreg')
-    if is_clustering == 1
-        metrics_id = 3;
-    else
-        metrics_id = 1;
-    end
-end
-
-up = '../../../../../..';
-
-f_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
-    up, ...
-    base, ...
-    data_type, ...
-    chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
-    info_type, ...
-    disease, ...
-    'F', ...
-    scenario, ...
-    approach, ...
-    method);
+target_config.gender = 'F';
+f_fn = sprintf('%s/data/%s/top.txt', ...
+    target_config.up, ...
+    get_result_path(target_config));
 f_top_data = importdata(f_fn);
-f_genes = f_top_data.textdata(:, 1);
+f_genes = f_top_data.textdata;
 f_metrics = f_top_data.data(:, metrics_id);
+f_metrics = process_metrics(f_metrics, target_config);
 
-if strcmp(method, 'linreg')
-    nothing_to_do = 0;
-elseif strcmp(method, 'manova')
-    f_metrics = -log10(f_metrics);
-end
-
-m_fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
-    up, ...
-    base, ...
-    data_type, ...
-    chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
-    info_type, ...
-    disease, ...
-    'M', ...
-    scenario, ...
-    approach, ...
-    method);
+target_config.gender = 'M';
+m_fn = sprintf('%s/data/%s/top.txt', ...
+    target_config.up, ...
+    get_result_path(target_config));
 m_top_data = importdata(m_fn);
-m_genes = m_top_data.textdata(:, 1);
+m_genes = m_top_data.textdata;
 m_metrics = m_top_data.data(:, metrics_id);
-
-if strcmp(method, 'linreg')
-    nothing_to_do = 0;
-elseif strcmp(method, 'manova')
-    m_metrics = -log10(m_metrics);
-end
+m_metrics = process_metrics(m_metrics, target_config);
 
 num_genes = size(target_genes, 1);
 
