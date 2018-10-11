@@ -13,19 +13,19 @@ def data_bases_versus(config, data_bases, part):
     for data_base in data_bases:
         config = Config(
             read_only=True,
+
             data_base=data_base,
             data_type=config.data_type,
 
             chromosome_type=config.chromosome_type,
 
-            geo_type=config.geo_type,
-            gene_data_type=config.gene_data_type,
-
-            disease=config.disease,
+            dna_region=config.dna_region,
 
             scenario=config.scenario,
             approach=config.approach,
             method=config.method,
+
+            disease=config.disease,
 
             is_clustering = config.is_clustering
         )
