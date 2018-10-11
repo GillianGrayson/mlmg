@@ -17,7 +17,7 @@ def top_proc(config):
         save_top_spearman(config)
 
 
-data_base = DataBase.GSE40279
+data_base = DataBase.GSE87571
 data_type = DataType.cpg
 
 chromosome_type = ChromosomeTypes.non_gender
@@ -48,12 +48,12 @@ for method in methods:
 
             dna_region=dna_region,
 
-            disease=disease,
-            gender=gender,
-
             scenario=scenario,
             approach=approach,
             method=method,
+
+            disease=disease,
+            gender=gender,
 
             is_clustering=is_clustering
         )

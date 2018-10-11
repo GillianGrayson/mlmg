@@ -82,97 +82,24 @@ def get_butterfly_dict(config):
 
     fn = 'butterfly_genes_' + 'method(' + config.method.value + ').xlsx'
 
-    config_f.scenario = Scenario.validation
-    config_f.method = Method.gender_specific
-    fn_f = get_result_path(config_f, fn)
-    writer = pd.ExcelWriter(fn_f, engine='xlsxwriter')
-    butterfly_df.to_excel(writer, index=False, sheet_name='butterfly')
-    writer.save()
+    config_save = config_f
+    # Solution
+    config_save.scenario = Scenario.validation
+    config_save.approach = config_f.approach
+    config_save.method = Method.gender_specific
+    # Attributes
+    config_save.disease = config_f.disease
+    config_save.gender = Gender.versus
 
-    config_m.scenario = Scenario.validation
-    config_m.method = Method.gender_specific
-    fn_m = get_result_path(config_m, fn)
-    writer = pd.ExcelWriter(fn_m, engine='xlsxwriter')
+    fn = get_result_path(config_save, fn)
+    writer = pd.ExcelWriter(fn, engine='xlsxwriter')
     butterfly_df.to_excel(writer, index=False, sheet_name='butterfly')
     writer.save()
 
     return butterfly_dict
 
 
-def data_bases_intersection(config, data_bases, part):
-    butterfly_dicts = []
-    for data_base in data_bases:
-        config = Config(
-            read_only=True,
-            data_base=data_base,
-            data_type=config.data_type,
-
-            chromosome_type=config.chromosome_type,
-
-            geo_type=config.geo_type,
-            gene_data_type=config.gene_data_type,
-
-            disease=config.disease,
-
-            scenario=config.scenario,
-            approach=config.approach,
-            method=config.method,
-
-            is_clustering = config.is_clustering
-        )
-
-        butterfly_dicts.append(get_butterfly_dict(config))
-
-    intersection_genes = butterfly_dicts[0]['gene']
-    num_genes = int(len(intersection_genes) * part)
-    for butterfly_dict in butterfly_dicts:
-        genes = butterfly_dict['gene'][0:num_genes]
-        intersection_genes = list(set(intersection_genes).intersection(genes))
-
-    for gene in intersection_genes:
-        print(gene)
-    print(len(intersection_genes))
-
-    data_bases_str = [x.value for x in data_bases]
-    data_bases_str.sort()
-    data_bases_str = '_'.join(data_bases_str)
-
-    fn = 'intersection_genes_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
-    config_dump = Config(
-        read_only=True,
-        data_base=DataBase.data_base_versus,
-        data_type=config.data_type,
-
-        chromosome_type=config.chromosome_type,
-
-        geo_type=config.geo_type,
-        gene_data_type=config.gene_data_type,
-
-        disease=config.disease,
-        gender=Gender.F,
-
-        scenario=Scenario.validation,
-        approach=Approach.top,
-        method=Method.gender_specific,
-
-        is_clustering = config.is_clustering
-    )
-
-    features = [
-        intersection_genes
-    ]
-
-    fn_f = get_result_path(config_dump, fn)
-    save_features(fn_f, features)
-
-    config_dump.gender = Gender.M
-    fn_m = get_result_path(config_dump, fn)
-    save_features(fn_m, features)
-
-
-part = 0.05
-
-data_bases = [DataBase.GSE87571, DataBase.GSE40279]
+data_base = DataBase.GSE87571
 data_type = DataType.gene
 
 chromosome_type = ChromosomeTypes.non_gender
@@ -207,4 +134,4 @@ config = Config(
     is_clustering=is_clustering
 )
 
-data_bases_intersection(config, data_bases, part)
+get_butterfly_dict(config)

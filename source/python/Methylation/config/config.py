@@ -25,38 +25,44 @@ class Config:
 
                  dna_region=DNARegion.any,
 
-                 disease=Disease.any,
-                 gender=Gender.any,
                  scenario=Scenario.approach,
                  approach=Approach.top,
                  method=Method.match,
 
+                 disease=Disease.any,
+                 gender=Gender.any,
+
                  is_clustering=False
                  ):
-        # Global
-        self.read_only = read_only
+
+
+        # Level 0: data_base
         self.data_base = data_base
+
+        # Level 1: data_type
         self.data_type = data_type
 
-        # Common
+        # Level 2: Annotations
         self.chromosome_type = chromosome_type
-
         # BOP
         self.class_type = class_type
-
         # GENE
         self.geo_type = geo_type
         self.gene_data_type = gene_data_type
-
         # CPG
         self.dna_region = dna_region
 
-        # Experiment
-        self.disease = disease
-        self.gender = gender
+        # Level 3: Solution
         self.scenario = scenario
         self.approach = approach
         self.method = method
+
+        # Level 4: Attributes
+        self.disease = disease
+        self.gender = gender
+
+        # Aux
+        self.read_only = read_only
 
         # Clustering flag for methods
         self.is_clustering = is_clustering

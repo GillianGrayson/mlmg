@@ -1,42 +1,63 @@
 clear all;
 
-age_ann = 'age';
-gender_ann = 'gender';
-disease_ann = 'disease';
-
-base = 'GSE40279';
-data_type = 'gene_data';
-
-chromosome_type = 'non_gender';
-
-geo_type = 'islands_shores';
-gene_data_type = 'mean';
-
-info_type = 'result';
-
-disease = 'any';
-gender = 'M';
-scenario = 'approach';
-approach = 'top';
-method = 'linreg';
-
+% ======== params ========
 gene = 'TLE1';
 
-up = '../../../../../..';
+% ======== config ========
+config.data_base = 'GSE87571';
+config.data_type = 'gene_data';
 
-fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/%s/top.txt', ...
-    up, ...
-    base, ...
-    data_type, ...
-    chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
-    info_type, ...
-    disease, ...
-    gender, ...
-    scenario, ...
-    approach, ...
-    method);
+config.chromosome_type = 'non_gender';
+
+config.geo_type = 'islands_shores';
+config.gene_data_type = 'mean';
+
+config.info_type = 'result';
+
+config.scenario = 'approach';
+config.approach = 'top';
+config.method = 'linreg';
+
+config.disease = 'any';
+config.gender = 'versus';
+
+config.is_clustering = 0;
+config.up = '../../../../../..';
+
+% ======== processing ========
+f = figure;
+if strcmp(config.gender, 'versus')
+    config.gender = 'F';
+    plot_linreg(config, gene)
+    config.gender = 'M';
+    plot_linreg(config, gene)
+    config.gender = 'versus';
+else
+    plot_linreg(config, gene)
+end
+
+suffix = sprintf('gene(%s)_gender(%s)', gene, config.gender);
+
+
+up_save = 'C:/Users/user/Google Drive/mlmg/figures';
+
+save_path = sprintf('%s/%s', ...
+    up_save, ...
+    get_result_path(config));
+mkdir(save_path);
+
+box on;
+b = gca; legend(b,'off');
+
+savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
+saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
+
+
+function plot_linreg(config, gene)
+
+fn = sprintf('%s/data/%s/top.txt', ...
+    config.up, ...
+    get_result_path(config));
 
 top_data = importdata(fn);
 
@@ -44,73 +65,8 @@ genes = top_data.textdata;
 slopes = top_data.data(:, 3);
 intercepts = top_data.data(:, 4);
 
-fn = sprintf('%s/data/%s/attributes.txt', up, base);
-ann = importdata(fn);
-
-keys = strsplit(string(ann{1}), ' ')';
-age_id = 0;
-gender_id = 0;
-disease_id = 0;
-for key_id = 1:size(keys, 1)
-    if string(keys{key_id}) == string(age_ann)
-        age_id = key_id;
-    end
-    if string(keys{key_id}) == string(gender_ann)
-        gender_id = key_id;
-    end
-    if string(keys{key_id}) == string(disease_ann)
-        disease_id = key_id;
-    end
-end
-
-indexes = [1:size(ann, 1)-1]';
-
-if gender_id > 0  
-    genders = [];
-    for id = 2:size(ann, 1)
-        vals = strsplit(string(ann{id}), ' ')';
-        curr_ann = string(vals{gender_id});
-        genders = vertcat(genders, curr_ann);
-    end
-    
-    if ~strcmp(string(gender), 'any')
-        curr_indexes = [];
-        for id = 1:size(genders, 1)
-            if strcmp(genders(id), gender)
-                curr_indexes = vertcat(curr_indexes, id);
-            end
-        end
-        tmp_indexes = intersect(indexes, curr_indexes);
-        indexes = tmp_indexes;
-    end
-end
-
-if disease_id > 0
-    diseases = [];
-    for id = 2:size(ann, 1)
-        vals = strsplit(string(ann{id}), ' ')';
-        curr_ann = string(vals{disease_id});
-        diseases = vertcat(diseases, curr_ann);
-    end
-    
-    if ~strcmp(string(disease_type), 'any')
-        curr_indexes = [];
-        for id = 1:size(diseases, 1)
-            if strcmp(diseases(id), disease_type)
-                curr_indexes = vertcat(curr_indexes, id);
-            end
-        end
-        tmp_indexes = intersect(indexes, curr_indexes);
-        indexes = tmp_indexes;
-    end
-end
-
-ages = zeros(size(ann, 1)-1, 1);
-for id = 2:size(ann, 1)
-    vals = strsplit(string(ann{id}), ' ')';
-    curr_ann = str2double(string(vals{age_id}));
-    ages(id-1) = curr_ann;
-end
+indexes = get_attributes_indexes(config);
+ages = get_ages(config);
 
 ages_passed = zeros(size(indexes, 1), 1);
 for id = 1:size(indexes, 1)
@@ -118,14 +74,9 @@ for id = 1:size(indexes, 1)
     ages_passed(id) = ages(index);
 end
 
-fn = sprintf('%s/data/%s/%s/%s/%s/%s/%s/gene_data.txt', ...
-    up, ...
-    base, ...
-    data_type, ...
-    chromosome_type, ...
-    geo_type, ...
-    gene_data_type, ...
-    'data');
+fn = sprintf('%s/data/%s/gene_data.txt', ...
+    config.up, ...
+    get_gene_data_path(config));
 
 data = importdata(fn);
 genes_names = data.textdata;
@@ -147,7 +98,6 @@ intercept = intercepts(gene_id);
 x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
-figure
 hold all;
 h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
@@ -155,14 +105,18 @@ color = get(h, 'Color');
 
 hold all;
 h = plot(x_lin, y_lin, '-', 'LineWidth', 3);
-legend(h, sprintf('%s: %s', gene_name, gender));
+legend(h, sprintf('%s: %s', gene_name, config.gender));
 set(h, 'Color', color)
 set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
 ylabel('$\beta$', 'Interpreter', 'latex');
+xlim([min(ages) - (max(ages) - min(ages)) * 0.1, max(ages) + (max(ages) - min(ages)) * 0.1])
 
 box on;
+end
+
+
 
 
 
