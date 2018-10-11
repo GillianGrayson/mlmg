@@ -32,9 +32,9 @@ def data_bases_versus(config, data_bases, part):
         butterfly_dicts.append(get_butterfly_dict(config))
 
     intersection_bops = butterfly_dicts[0]['bop']
-    num_genes = int(len(intersection_bops) * part)
+    num_bops = int(len(intersection_bops) * part)
     for butterfly_dict in butterfly_dicts:
-        bops = butterfly_dict['bop'][0:num_genes]
+        bops = butterfly_dict['bop'][0:num_bops]
         intersection_bops = list(set(intersection_bops).intersection(bops))
 
     dict_bop_gene = get_dict_bop_genes(config)
@@ -56,7 +56,6 @@ def data_bases_versus(config, data_bases, part):
     data_bases_str = [x.value for x in data_bases]
     data_bases_str.sort()
     data_bases_str = '_'.join(data_bases_str)
-
 
     config_dump = Config(
         read_only=True,

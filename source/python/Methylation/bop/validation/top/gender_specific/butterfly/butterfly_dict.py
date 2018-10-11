@@ -17,14 +17,14 @@ def get_butterfly_dict(config):
 
         chromosome_type=config.chromosome_type,
 
-        geo_type=config.geo_type,
-        gene_data_type=config.gene_data_type,
+        class_type=config.class_type,
 
-        disease=config.disease,
-        gender=Gender.F,
         scenario=config.scenario,
         approach=config.approach,
         method=config.method,
+
+        disease=config.disease,
+        gender=Gender.F,
 
         is_clustering=config.is_clustering
     )
@@ -36,14 +36,14 @@ def get_butterfly_dict(config):
 
         chromosome_type=config.chromosome_type,
 
-        geo_type=config.geo_type,
-        gene_data_type=config.gene_data_type,
+        class_type=config.class_type,
 
-        disease=config.disease,
-        gender=Gender.M,
         scenario=config.scenario,
         approach=config.approach,
         method=config.method,
+
+        disease=config.disease,
+        gender=Gender.M,
 
         is_clustering=config.is_clustering
     )
@@ -53,31 +53,31 @@ def get_butterfly_dict(config):
     f_all_dict = load_top_dict(config_f, keys)
     m_all_dict = load_top_dict(config_m, keys)
 
-    f_genes = f_all_dict['bop']
-    m_genes = m_all_dict['bop']
+    f_bops = f_all_dict['bop']
+    m_bops = m_all_dict['bop']
 
-    num_genes = len(f_genes)
+    num_bops = len(f_bops)
 
     f_metrics = f_all_dict[get_method_main_metric(config.method)]
     m_metrics = m_all_dict[get_method_main_metric(config.method)]
-    for gene_id in range(0, num_genes):
-        f_metrics[gene_id] = metric_processing(config.method, f_metrics[gene_id])
-        m_metrics[gene_id] = metric_processing(config.method, m_metrics[gene_id])
+    for bop_id in range(0, num_bops):
+        f_metrics[bop_id] = metric_processing(config.method, f_metrics[bop_id])
+        m_metrics[bop_id] = metric_processing(config.method, m_metrics[bop_id])
 
     f_metrics_passed = f_metrics
-    m_metrics_passed = np.zeros(num_genes)
-    metrics_diff = np.zeros(num_genes)
-    for gene_id in range(0, num_genes):
-        gene = f_genes[gene_id]
-        m_id = m_genes.index(gene)
-        m_metrics_passed[gene_id] = m_metrics[m_id]
-        metrics_diff[gene_id] = f_metrics_passed[gene_id] - m_metrics_passed[gene_id]
+    m_metrics_passed = np.zeros(num_bops)
+    metrics_diff = np.zeros(num_bops)
+    for bop_id in range(0, num_bops):
+        bop = f_bops[bop_id]
+        m_id = m_bops.index(bop)
+        m_metrics_passed[bop_id] = m_metrics[m_id]
+        metrics_diff[bop_id] = f_metrics_passed[bop_id] - m_metrics_passed[bop_id]
 
     order = np.argsort(list(map(abs, metrics_diff)))[::-1]
     diff_srt = list(np.array(metrics_diff)[order])
-    genes_srt = list(np.array(f_genes)[order])
+    bops_srt = list(np.array(f_bops)[order])
 
-    butterfly_dict = {'bop':genes_srt, 'diff': diff_srt}
+    butterfly_dict = {'bop':bops_srt, 'diff': diff_srt}
     butterfly_df = pd.DataFrame(butterfly_dict)
 
     fn = 'butterfly_bops_' + 'method(' + config.method.value + ').xlsx'
@@ -118,7 +118,6 @@ config = Config(
     read_only=True,
 
     data_base=data_base,
-
     data_type=data_type,
 
     chromosome_type=chromosome_type,
