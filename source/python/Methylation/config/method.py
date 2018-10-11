@@ -1,4 +1,5 @@
 from enum import Enum
+import math
 
 
 class Method(Enum):
@@ -17,6 +18,7 @@ class Method(Enum):
     linreg_mult = 'linreg_mult'
     match = 'match'
     gender_specific = 'gender_specific'
+    moment = 'moment'
 
 def get_top_fn(method, params_dict):
     fn = 'top.txt'
@@ -121,5 +123,7 @@ def get_method_main_metric(method):
 def metric_processing(method, metric):
     if method is Method.linreg:
         return float(metric)
+    elif method is Method.manova:
+        return -math.log10(float(metric))
     else:
         return float(metric)
