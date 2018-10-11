@@ -2,8 +2,8 @@ clear all;
 
 % ======== params ========
 gene = 'TLE1';
-% ======== config ========
 
+% ======== config ========
 config.data_base = 'GSE87571';
 config.data_type = 'gene_data';
 
@@ -25,7 +25,6 @@ config.is_clustering = 0;
 config.up = '../../../../../..';
 
 % ======== processing ========
-
 f = figure;
 if strcmp(config.gender, 'versus')
     config.gender = 'F';
