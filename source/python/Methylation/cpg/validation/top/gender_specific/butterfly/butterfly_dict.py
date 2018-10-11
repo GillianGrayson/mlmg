@@ -77,9 +77,9 @@ def get_butterfly_dict(config):
 
     order = np.argsort(list(map(abs, metrics_diff)))[::-1]
     diff_srt = list(np.array(metrics_diff)[order])
-    genes_srt = list(np.array(f_cpgs)[order])
+    cpgs_srt = list(np.array(f_cpgs)[order])
 
-    butterfly_dict = {'cpg':genes_srt, 'diff': diff_srt}
+    butterfly_dict = {'cpg':cpgs_srt, 'diff': diff_srt}
     butterfly_df = pd.DataFrame(butterfly_dict)
 
     fn = 'butterfly_cpgs_' + 'method(' + config.method.value + ').xlsx'
@@ -119,6 +119,7 @@ is_clustering = False
 config = Config(
     read_only=True,
 
+    data_base=data_base,
     data_type=data_type,
 
     chromosome_type=chromosome_type,

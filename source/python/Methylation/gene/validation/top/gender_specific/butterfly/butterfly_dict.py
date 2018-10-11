@@ -118,6 +118,7 @@ is_clustering = False
 config = Config(
     read_only=True,
 
+    data_base=data_base,
     data_type=data_type,
 
     chromosome_type=chromosome_type,

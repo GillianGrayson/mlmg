@@ -1,60 +1,60 @@
 from infrastructure.save.features import save_features
-from annotations.gene import get_dict_gene_cpg
+from annotations.bop import get_dict_bop_cpgs
 from infrastructure.load.cpg_data import load_dict_cpg_data
 from config.config import *
 from scipy import stats
 
 
-def save_inside_gene_linreg(config):
-    attributes = get_attributes(config)
-    dict_gene_cpg = get_dict_gene_cpg(config)
+def save_inside_bop_moment(config):
+    dict_bop_cpg = get_dict_bop_cpgs(config)
     dict_cpg_data = load_dict_cpg_data(config)
 
-    genes_opt = []
+    bops_opt = []
     cpgs_opt = []
-    r_values_opt = []
-    p_values_opt = []
-    slopes_opt = []
-    intercepts_opt = []
+    means_opt = []
+    stds_opt = []
+    mins_opt = []
+    maxs_opt = []
     cpg_id = 0
-    for gene, cpgs in dict_gene_cpg.items():
+    for bop, cpgs in dict_bop_cpg.items():
         for cpg in cpgs:
             if cpg in dict_cpg_data:
                 cpg_data = dict_cpg_data.get(cpg)
-                slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, cpg_data)
-                genes_opt.append(gene)
+
+                bops_opt.append(bop)
                 cpgs_opt.append(cpg)
-                r_values_opt.append(r_value)
-                p_values_opt.append(p_value)
-                slopes_opt.append(slope)
-                intercepts_opt.append(intercept)
+                means_opt.append(np.mean(cpg_data))
+                stds_opt.append(np.std(cpg_data))
+                mins_opt.append(np.min(cpg_data))
+                maxs_opt.append(np.max(cpg_data))
+
                 if cpg_id % config.print_rate == 0:
                     print('cpg_id: ' + str(cpg_id))
                 cpg_id += 1
 
     features = [
-        genes_opt,
+        bops_opt,
         cpgs_opt,
-        r_values_opt,
-        p_values_opt,
-        slopes_opt,
-        intercepts_opt
+        means_opt,
+        stds_opt,
+        mins_opt,
+        maxs_opt
     ]
-    fn = 'inside_gene.txt'
+    fn = 'inside_bop.txt'
     fn = get_result_path(config, fn)
     save_features(fn, features)
 
 
 data_base = DataBase.GSE87571
-data_type = DataType.cpg
+data_type = DataType.bop
 
 chromosome_type = ChromosomeTypes.non_gender
 
-dna_region = DNARegion.genic
+class_type = ClassType.class_ab
 
 scenario = Scenario.approach
-approach = Approach.inside_gene
-method = Method.linreg
+approach = Approach.inside_bop
+method = Method.moment
 
 disease = Disease.any
 genders = [Gender.F, Gender.M, Gender.any]
@@ -68,7 +68,7 @@ for gender in genders:
 
         chromosome_type=chromosome_type,
 
-        dna_region=dna_region,
+        class_type=class_type,
 
         disease=disease,
         gender=gender,
@@ -78,4 +78,4 @@ for gender in genders:
         method=method
     )
 
-    save_inside_gene_linreg(config)
+    save_inside_bop_moment(config)

@@ -32,6 +32,7 @@ class Approach(Enum):
     clustering = 'clustering'
     statistics = 'statistics'
     inside_gene = 'inside_gene'
+    inside_bop = 'inside_bop'
 
 class Scenario(Enum):
     approach = 'approach'
