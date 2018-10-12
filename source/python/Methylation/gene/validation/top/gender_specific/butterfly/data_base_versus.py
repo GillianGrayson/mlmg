@@ -45,7 +45,7 @@ def data_bases_versus(config, data_bases, part):
     data_bases_str.sort()
     data_bases_str = '_'.join(data_bases_str)
 
-    fn = 'intersection_genes_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
+    fn = 'intersection_butterfly_genes_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
     config_dump = Config(
         read_only=True,
         data_base=DataBase.data_base_versus,

@@ -2,52 +2,53 @@ from config.config import *
 from infrastructure.load.top import *
 from config.method import *
 import pandas as pd
-from annotations.bop import get_dict_bop_genes
+from annotations.gene import get_dict_cpg_gene
 from infrastructure.save.features import save_features
-from bop.validation.top.gender_specific.butterfly.butterfly_dict import get_butterfly_dict
+from cpg.validation.top.gender_specific.butterfly.butterfly_dict import get_butterfly_dict
 import math
 
 
-def data_bases_versus(config, data_bases, part):
+def data_types_genes_intersection(config, part):
     butterfly_dicts = []
     for data_base in data_bases:
         config = Config(
             read_only=True,
+
             data_base=data_base,
             data_type=config.data_type,
 
             chromosome_type=config.chromosome_type,
 
-            class_type=config.class_type,
-
-            disease=config.disease,
+            dna_region=config.dna_region,
 
             scenario=config.scenario,
             approach=config.approach,
             method=config.method,
+
+            disease=config.disease,
 
             is_clustering = config.is_clustering
         )
 
         butterfly_dicts.append(get_butterfly_dict(config))
 
-    intersection_bops = butterfly_dicts[0]['bop']
-    num_bops = int(len(intersection_bops) * part)
+    intersection_cpgs = butterfly_dicts[0]['cpg']
+    num_genes = int(len(intersection_cpgs) * part)
     for butterfly_dict in butterfly_dicts:
-        bops = butterfly_dict['bop'][0:num_bops]
-        intersection_bops = list(set(intersection_bops).intersection(bops))
+        cpgs = butterfly_dict['cpg'][0:num_genes]
+        intersection_cpgs = list(set(intersection_cpgs).intersection(cpgs))
 
-    dict_bop_gene = get_dict_bop_genes(config)
+    dict_cpg_gene = get_dict_cpg_gene(config)
 
     intersection_genes = []
-    for bop in intersection_bops:
-        print(bop)
-        if bop in dict_bop_gene:
-            genes = dict_bop_gene.get(bop)
+    for cpg in intersection_cpgs:
+        print(cpg)
+        if cpg in dict_cpg_gene:
+            genes = dict_cpg_gene.get(cpg)
             for gene in genes:
                 if gene not in intersection_genes:
                     intersection_genes.append(gene)
-    print(len(intersection_bops))
+    print(len(intersection_cpgs))
 
     for gene in intersection_genes:
         print(gene)
@@ -56,6 +57,7 @@ def data_bases_versus(config, data_bases, part):
     data_bases_str = [x.value for x in data_bases]
     data_bases_str.sort()
     data_bases_str = '_'.join(data_bases_str)
+
 
     config_dump = Config(
         read_only=True,
@@ -77,9 +79,9 @@ def data_bases_versus(config, data_bases, part):
     )
 
     features = [
-        intersection_bops
+        intersection_cpgs
     ]
-    fn = 'intersection_butterfly_bops_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
+    fn = 'intersection_butterfly_cpgs_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
     fn = get_result_path(config_dump, fn)
     save_features(fn, features)
 
@@ -93,35 +95,48 @@ def data_bases_versus(config, data_bases, part):
 
 part = 0.05
 
-data_bases = [DataBase.GSE87571, DataBase.GSE40279]
-data_type = DataType.bop
+data_base = DataBase.data_base_versus
+data_types = [DataType.gene, DataType.bop]
 
 chromosome_type = ChromosomeTypes.non_gender
 
+# bop
 class_type = ClassType.class_ab
+# cpg
+dna_region = DNARegion.genic
+# gene
+geo_type = GeoType.islands_shores
+gene_data_type = GeneDataType.mean
+
+scenario = Scenario.validation
+approach = Approach.top
+method = Method.linreg
 
 disease = Disease.any
-
-scenario = Scenario.approach
-approach = Approach.top
-method = Method.manova
+gender = Gender.versus
 
 is_clustering = False
 
 config = Config(
     read_only=True,
 
-    data_type=data_type,
+    data_base=data_base,
 
     chromosome_type=chromosome_type,
 
     class_type=class_type,
+
+    dna_region=dna_region,
+
+    geo_type=geo_type,
+    gene_data_type=gene_data_type,
 
     scenario=scenario,
     approach=approach,
     method=method,
 
     disease=disease,
+    gender=gender,
 
     is_clustering=is_clustering
 )
