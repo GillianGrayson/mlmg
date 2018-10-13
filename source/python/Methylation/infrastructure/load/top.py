@@ -39,8 +39,7 @@ def load_top_data(config, num_top, index):
     gene_names = gene_names[0:num_top]
     return gene_names
 
-def load_top_dict(config, keys, num_top=1000000):
-    fn = 'top.txt'
+def load_top_dict(config, keys, fn='top.txt', num_top=1000000):
     params_last_run_dict = load_top_params_last_run_dict(config)
     if params_last_run_dict:
         fn = get_top_fn(config.approach_method, params_last_run_dict)
@@ -49,6 +48,7 @@ def load_top_dict(config, keys, num_top=1000000):
     top_dict = {}
     num_lines = 0
     for line in f:
+        line = line.rstrip()
         cols = line.split(' ')
         for key_id in range(0, len(keys)):
             key = keys[key_id]
@@ -58,6 +58,7 @@ def load_top_dict(config, keys, num_top=1000000):
                 top_dict[key].append(cols[key_id])
         num_lines += 1
         if num_lines >= num_top:
+            print('Top contains more than ' + str(num_top))
             break
     return top_dict
 
