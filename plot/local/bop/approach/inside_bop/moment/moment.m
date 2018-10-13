@@ -61,11 +61,13 @@ fn = sprintf('%s/data/%s/inside_bop.txt', ...
 
 inside_bop_data = importdata(fn, ' ');
 bops = inside_bop_data.textdata(:, 1);
-cpgs = inside_bop_data.textdata(:, 2);
+genes = inside_bop_data.textdata(:, 2);
+cpgs = inside_bop_data.textdata(:, 3);
 means = inside_bop_data.data(:, 1);
 stds = inside_bop_data.data(:, 2);
 
 ids = find(string(bops) == string(bop));
+gene = string(genes(ids(1)));
 num_targets = size(ids, 1);
 target_cpgs = {};
 target_x = zeros(num_targets, 1);
@@ -81,7 +83,7 @@ end
 hold all;
 
 h = errorbar(target_x, target_y, target_errors, 'Marker', 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w', 'LineWidth', 2, 'CapSize', 15);
-legend(h, sprintf('%s: %s', bop, config.gender));
+legend(h, sprintf('%s (%s): %s', bop, gene, config.gender));
 xticks(target_x);
 xticklabels(target_cpgs);
 xtickangle(45);

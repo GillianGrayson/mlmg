@@ -48,6 +48,7 @@ save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
 metrics_id = get_metrics_id(config);
+metrics_label = get_metrics_label(config);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...
@@ -122,15 +123,15 @@ h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 2, 'Color'
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 hold all
-h = plot(common_f_metrics, common_m_metrics, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'w');
+h = plot(common_f_metrics, common_m_metrics, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
 set(gca, 'FontSize', 30);
-xlabel('metrics F', 'Interpreter', 'latex');
+xlabel(sprintf('%s F', metrics_label), 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
-ylabel('metrics M', 'Interpreter', 'latex');
+ylabel(sprintf('%s M', metrics_label), 'Interpreter', 'latex');
 
 for gene_id = 1:size(rare_genes, 1)
     hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 6, 'LineWidth', 5, 'MarkerFaceColor', 'w');
+    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
     legend(h, string(rare_genes(gene_id)))
 end
 
@@ -164,9 +165,9 @@ norm = sum(sum(metrics_pdf)) * f_metrics_step * m_metrics_step
 f2 = figure;
 h = imagesc(f_metrics_bins, m_metrics_bins, metrics_pdf');
 set(gca, 'FontSize', 30);
-xlabel('metrics F', 'Interpreter', 'latex');
+xlabel(sprintf('%s F', metrics_label), 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
-ylabel('metrics M', 'Interpreter', 'latex');
+ylabel(sprintf('%s M', metrics_label), 'Interpreter', 'latex');
 colormap hot;
 cb = colorbar;
 set(gca, 'FontSize', 30);
@@ -183,7 +184,7 @@ set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 for gene_id = 1:size(rare_genes, 1)
     hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 6, 'LineWidth', 5, 'MarkerFaceColor', 'w');
+    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
     legend(h, string(rare_genes(gene_id)))
 end
 

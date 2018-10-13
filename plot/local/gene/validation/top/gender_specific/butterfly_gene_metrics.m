@@ -86,6 +86,7 @@ m_metrics_passed = zeros(num_genes, 1);
 m_add_metrics_passed = zeros(num_genes, 1);
 metrics_diff = zeros(num_genes, 1);
 add_metrics_diff = zeros(num_genes, 1);
+versus_metrics_diff
 
 for gene_id = 1:num_genes
     f_gene = f_genes(gene_id);
@@ -106,7 +107,7 @@ h = plot([0 0], [min(add_metrics_diff) max(add_metrics_diff)], 'LineWidth', 2, '
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 hold all
-h = plot(metrics_diff, add_metrics_diff, 'o', 'MarkerSize', 6, 'MarkerFaceColor', 'w');
+h = plot(metrics_diff, add_metrics_diff, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
 set(gca, 'FontSize', 30);
 xlabel('$\Delta$ metrics 1', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
