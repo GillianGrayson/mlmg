@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-bop = 'chr20:44657463-44659243*Island';
+bop = 'chr9:84302139-84305001*Island';
 
 % ======== config ========
 config.data_base = 'GSE87571';

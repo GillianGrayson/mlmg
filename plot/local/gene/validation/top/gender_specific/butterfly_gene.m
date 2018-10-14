@@ -17,7 +17,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg';
+config.method = 'linreg_variance';
 
 config.disease = 'any';
 config.gender = 'any';

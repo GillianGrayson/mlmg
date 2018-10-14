@@ -31,7 +31,7 @@ def top_proc(config):
         save_top_linreg_variance(config)
 
 
-data_base = DataBase.GSE40279
+data_base = DataBase.GSE87571
 data_type = DataType.gene
 
 chromosome_type = ChromosomeTypes.non_gender
@@ -45,7 +45,7 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg
+    Method.linreg_variance
 ]
 
 is_clustering = False
