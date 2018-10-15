@@ -81,14 +81,14 @@ def data_bases_versus(config, data_bases, part):
     features = [
         intersection_cpgs
     ]
-    fn = 'intersection_cpgs_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
+    fn = 'intersection_butterfly_cpgs_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
     fn = get_result_path(config_dump, fn)
     save_features(fn, features)
 
     features = [
         intersection_genes
     ]
-    fn = 'intersection_genes_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
+    fn = 'intersection_butterfly_genes_data_bases(' + data_bases_str + ')_method(' + config.method.value + ')_part(' + str(part) + ').txt'
     fn = get_result_path(config_dump, fn)
     save_features(fn, features)
 

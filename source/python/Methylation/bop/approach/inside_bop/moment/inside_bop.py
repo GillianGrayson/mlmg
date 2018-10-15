@@ -1,5 +1,5 @@
 from infrastructure.save.features import save_features
-from annotations.bop import get_dict_bop_cpgs
+from annotations.bop import get_dict_bop_cpgs, get_dict_bop_genes
 from infrastructure.load.cpg_data import load_dict_cpg_data
 from config.config import *
 from scipy import stats
@@ -7,9 +7,11 @@ from scipy import stats
 
 def save_inside_bop_moment(config):
     dict_bop_cpg = get_dict_bop_cpgs(config)
+    dict_bop_gene = get_dict_bop_genes(config)
     dict_cpg_data = load_dict_cpg_data(config)
 
     bops_opt = []
+    genes_opt = []
     cpgs_opt = []
     means_opt = []
     stds_opt = []
@@ -17,11 +19,16 @@ def save_inside_bop_moment(config):
     maxs_opt = []
     cpg_id = 0
     for bop, cpgs in dict_bop_cpg.items():
+        if bop in dict_bop_gene:
+            gene = ';'.join(dict_bop_gene.get(bop))
+        else:
+            gene = 'no_gene'
         for cpg in cpgs:
             if cpg in dict_cpg_data:
                 cpg_data = dict_cpg_data.get(cpg)
 
                 bops_opt.append(bop)
+                genes_opt.append(gene)
                 cpgs_opt.append(cpg)
                 means_opt.append(np.mean(cpg_data))
                 stds_opt.append(np.std(cpg_data))
@@ -34,6 +41,7 @@ def save_inside_bop_moment(config):
 
     features = [
         bops_opt,
+        genes_opt,
         cpgs_opt,
         means_opt,
         stds_opt,

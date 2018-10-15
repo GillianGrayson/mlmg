@@ -18,13 +18,14 @@ class DataBase(Enum):
     GSE63347 = 'GSE63347'
     GSE52588_TEST = 'GSE52588_TEST'
     GSE87571 = 'GSE87571'
-    data_base_versus = 'data_base_versus'
+    data_base_versus = 'versus'
 
 
 class DataType(Enum):
     cpg = 'cpg'
     gene = 'gene'
     bop = 'bop'
+    versus = 'versus'
 
 
 class Approach(Enum):
@@ -33,6 +34,7 @@ class Approach(Enum):
     statistics = 'statistics'
     inside_gene = 'inside_gene'
     inside_bop = 'inside_bop'
+
 
 class Scenario(Enum):
     approach = 'approach'
