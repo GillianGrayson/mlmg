@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-gene = 'PM20D1';
+gene = 'CD320';
 
 % ======== config ========
 config.data_base = 'GSE87571';
