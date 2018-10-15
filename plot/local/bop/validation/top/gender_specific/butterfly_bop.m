@@ -3,6 +3,7 @@ clear all;
 % ======== params ========
 part = 0.005;
 num_bins = 200;
+rank = 1;
 print_rate = 1000;
 
 % ======== config ========
@@ -46,8 +47,8 @@ save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
-metrics_id = get_metrics_id(config);
-metrics_label = get_metrics_label(config);
+metrics_id = get_metrics_id(config, rank);
+metrics_label = get_metrics_label(config, rank);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...

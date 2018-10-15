@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-gene = 'SOST';
+gene = 'TLE1';
 
 % ======== config ========
 config.data_base = 'GSE87571';
