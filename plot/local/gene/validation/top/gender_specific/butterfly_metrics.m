@@ -3,6 +3,7 @@ clear all;
 % ======== params ========
 part = 0.05;
 num_bins = 100;
+diff_type = 2;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -22,8 +23,13 @@ config.method = 'linreg_variance';
 config.disease = 'any';
 config.gender = 'any';
 
-config.up = '../../../../../..';
 config.is_clustering = 0;
+
+if strcmp(getenv('computername'), 'MSI')
+    config.up = 'D:/YandexDisk/Work/mlmg';
+else
+    config.up = 'E:/YandexDisk/Work/mlmg';
+end
 
 % ======== save_config ========
 save_config.data_base = config.data_base;
@@ -54,8 +60,9 @@ save_path = sprintf('%s/%s', ...
     save_config.up, ...
     get_result_path(save_config));
 mkdir(save_path);
-suffix = sprintf('method(%s)', ...
-    config.method);
+suffix = sprintf('method(%s)_part(%0.4f)', ...
+    config.method, ...
+    part);
 
 config.gender = 'F';
 f_fn = sprintf('%s/data/%s/top.txt', ...
@@ -96,14 +103,14 @@ for gene_id = 1:num_genes
     m_metrics_2_passed(gene_id) = m_metrics_2(m_id);
     metrics_1_diff(gene_id) = f_metrics_1_passed(gene_id) - m_metrics_1_passed(gene_id);
     metrics_2_diff(gene_id) = f_metrics_2_passed(gene_id) - m_metrics_2_passed(gene_id);
-    versus_metrics_diff(gene_id) = sqrt(metrics_1_diff(gene_id)^2 + metrics_2_diff(gene_id)^2);
+    versus_metrics_diff(gene_id) = process_diff(metrics_1_diff(gene_id), metrics_2_diff(gene_id), diff_type);
 end
 
 metrics_1_diff = normalize_metrics(metrics_1_diff, config);
 metrics_2_diff = normalize_metrics(metrics_2_diff, config);
 
 for gene_id = 1:num_genes
-    versus_metrics_diff(gene_id) = sqrt(metrics_1_diff(gene_id)^2 + metrics_2_diff(gene_id)^2);
+    versus_metrics_diff(gene_id) = process_diff(metrics_1_diff(gene_id), metrics_2_diff(gene_id), diff_type);
 end
 
 [versus_metrics_diff_srt, order] = sort(abs(versus_metrics_diff), 'descend');
@@ -152,8 +159,8 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f1, sprintf('%s/versus_metrics_scatter_%s.fig', save_path, suffix))
-saveas(f1, sprintf('%s/versus_metrics_scatter_%s.png', save_path, suffix))
+savefig(f1, sprintf('%s/butterfly_metrics_scatter_%s.fig', save_path, suffix))
+saveas(f1, sprintf('%s/butterfly_metrics_scatter_%s.png', save_path, suffix))
 
 metrics_1_diff_begin = min(metrics_1_diff_srt);
 metrics_1_diff_end = max(metrics_1_diff_srt);
@@ -205,8 +212,8 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f2, sprintf('%s/versus_metrics_pdf_%s.fig', save_path, suffix))
-saveas(f2, sprintf('%s/versus_metrics_pdf_%s.png', save_path, suffix))
+savefig(f2, sprintf('%s/butterfly_metrics_pdf_%s.fig', save_path, suffix))
+saveas(f2, sprintf('%s/butterfly_metrics_pdf_%s.png', save_path, suffix))
 
 abs_diff = abs(versus_metrics_diff_srt);
 diff_begin = min(abs_diff);
@@ -242,5 +249,5 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f3, sprintf('%s/versus_delta_metrics_pdf_%s.fig', save_path, suffix))
-saveas(f3, sprintf('%s/versus_delta_metrics_pdf_%s.png', save_path, suffix))
+savefig(f3, sprintf('%s/butterfly_metrics_delta_%s.fig', save_path, suffix))
+saveas(f3, sprintf('%s/butterfly_metrics_delta_%s.png', save_path, suffix))

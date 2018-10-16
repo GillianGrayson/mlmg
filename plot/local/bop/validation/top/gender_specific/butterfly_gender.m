@@ -1,30 +1,35 @@
 clear all;
 
 % ======== params ========
-part = 0.05;
-num_bins = 100;
+part = 0.005;
+num_bins = 200;
 rank = 1;
+print_rate = 1000;
 
 % ======== config ========
 config.data_base = 'GSE87571';
-config.data_type = 'gene_data';
+config.data_type = 'bop_data';
 
 config.chromosome_type = 'non_gender';
 
-config.geo_type = 'islands_shores';
-config.gene_data_type = 'mean';
+config.class_type = 'ClassAB';
 
 config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_variance';
+config.method = 'manova';
 
 config.disease = 'any';
-config.gender = 'any';
+config.gender = '';
 
-config.up = '../../../../../..';
 config.is_clustering = 0;
+
+if strcmp(getenv('computername'), 'MSI')
+    config.up = 'D:/YandexDisk/Work/mlmg';
+else
+    config.up = 'E:/YandexDisk/Work/mlmg';
+end
 
 % ======== save_config ========
 save_config.data_base = config.data_base;
@@ -32,8 +37,7 @@ save_config.data_type = config.data_type;
 
 save_config.chromosome_type = config.chromosome_type;
 
-save_config.geo_type = config.geo_type;
-save_config.gene_data_type = config.gene_data_type;
+save_config.class_type = config.class_type;
 
 save_config.info_type = 'result';
 
@@ -63,8 +67,8 @@ config.gender = 'F';
 f_fn = sprintf('%s/data/%s/top.txt', ...
     config.up, ...
     get_result_path(config));
-f_top_data = importdata(f_fn);
-f_genes = f_top_data.textdata;
+f_top_data = importdata(f_fn, ' ');
+f_bops = f_top_data.textdata(:, 1);
 f_metrics = f_top_data.data(:, metrics_id);
 f_metrics = process_metrics(f_metrics, config);
 
@@ -72,44 +76,45 @@ config.gender = 'M';
 m_fn = sprintf('%s/data/%s/top.txt', ...
     config.up, ...
     get_result_path(config));
-m_top_data = importdata(m_fn);
-m_genes = m_top_data.textdata;
+m_top_data = importdata(m_fn, ' ');
+m_bops = m_top_data.textdata(:, 1);
 m_metrics = m_top_data.data(:, metrics_id);
 m_metrics = process_metrics(m_metrics, config);
 
-num_genes = size(f_genes, 1);
+num_bops = size(f_bops, 1);
 
 f_metrics_passed = f_metrics;
-m_metrics_passed = zeros(num_genes, 1);
-metrics_diff = zeros(num_genes, 1);
+m_metrics_passed = zeros(num_bops, 1);
+metrics_diff = zeros(num_bops, 1);
 
-for gene_id = 1:num_genes
-    f_gene = f_genes(gene_id);
-    m_id = find(m_genes==string(f_gene));
-    m_metrics_passed(gene_id) = m_metrics(m_id);
-    metrics_diff(gene_id) = f_metrics_passed(gene_id) - m_metrics_passed(gene_id);
+for bop_id = 1:num_bops
+    f_bop = f_bops(bop_id);
+    m_id = find(m_bops==string(f_bop));
+    m_metrics_passed(bop_id) = m_metrics(m_id);
+    metrics_diff(bop_id) = f_metrics_passed(bop_id) - m_metrics_passed(bop_id);
+    if mod(bop_id, print_rate) == 0
+        bop_id = bop_id
+    end
 end
 
 [metrics_diff_srt, order] = sort(abs(metrics_diff), 'descend');
-genes_srt = f_genes;
-f_ids_srt = zeros(num_genes, 1);
-m_ids_srt = zeros(num_genes, 1);
-f_metrics_srt = zeros(num_genes, 1);
-m_metrics_srt = zeros(num_genes, 1);
-for gene_id = 1:num_genes
-    genes_srt(gene_id) = f_genes(order(gene_id));
-    f_metrics_srt(gene_id) = f_metrics_passed(order(gene_id));
-    m_metrics_srt(gene_id) = m_metrics_passed(order(gene_id));
+bops_srt = f_bops;
+f_metrics_srt = zeros(num_bops, 1);
+m_metrics_srt = zeros(num_bops, 1);
+for bop_id = 1:num_bops
+    bops_srt(bop_id) = f_bops(order(bop_id));
+    f_metrics_srt(bop_id) = f_metrics_passed(order(bop_id));
+    m_metrics_srt(bop_id) = m_metrics_passed(order(bop_id));
 end
 
-num_rare = floor(part * num_genes);
+num_rare = floor(part * num_bops);
 
-common_genes = genes_srt(num_rare + 1:end);
+common_bops = bops_srt(num_rare + 1:end);
 common_f_metrics = f_metrics_srt(num_rare + 1:end);
 common_m_metrics = m_metrics_srt(num_rare + 1:end);
 common_diff = metrics_diff_srt(num_rare + 1:end);
 
-rare_genes = genes_srt(1:num_rare);
+rare_bops = bops_srt(1:num_rare);
 rare_f_metrics = f_metrics_srt(1:num_rare);
 rare_m_metrics = m_metrics_srt(1:num_rare);
 rare_diff = metrics_diff_srt(1:num_rare);
@@ -130,18 +135,20 @@ xlabel(sprintf('%s F', metrics_label), 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
 ylabel(sprintf('%s M', metrics_label), 'Interpreter', 'latex');
 
-for gene_id = 1:size(rare_genes, 1)
+for bop_id = 1:size(rare_bops, 1)
+    bop_id = bop_id
     hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
-    legend(h, string(rare_genes(gene_id)))
+    tareget_bop = rare_bops(bop_id);
+    h = plot(rare_f_metrics(bop_id), rare_m_metrics(bop_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
+    legend(h, sprintf('%s', string(tareget_bop)))
 end
 
 propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f1, sprintf('%s/butterfly_scatter_%s.fig', save_path, suffix))
-saveas(f1, sprintf('%s/butterfly_scatter_%s.png', save_path, suffix))
+savefig(f1, sprintf('%s/butterfly_gender_scatter_%s.fig', save_path, suffix))
+saveas(f1, sprintf('%s/butterfly_gender_scatter_%s.png', save_path, suffix))
 
 f_metrics_begin = min(f_metrics_srt);
 f_metrics_end = max(f_metrics_srt);
@@ -154,14 +161,16 @@ m_metrics_step = (m_metrics_end - m_metrics_begin) / num_bins;
 m_metrics_bins = linspace(m_metrics_begin +  0.5 * m_metrics_step, m_metrics_end - 0.5 * m_metrics_step, num_bins);
 
 metrics_pdf = zeros(num_bins);
-for gene_id = 1:num_genes
-    id = floor((f_metrics_srt(gene_id) - f_metrics_begin) * num_bins / (f_metrics_end - f_metrics_begin + 1e-8)) + 1;
-    y_id = floor((m_metrics_srt(gene_id) - m_metrics_begin) * num_bins / (m_metrics_end - m_metrics_begin + 1e-8)) + 1;
+for bop_id = 1:num_bops
+    id = floor((f_metrics_srt(bop_id) - f_metrics_begin) * num_bins / (f_metrics_end - f_metrics_begin + 1e-8)) + 1;
+    y_id = floor((m_metrics_srt(bop_id) - m_metrics_begin) * num_bins / (m_metrics_end - m_metrics_begin + 1e-8)) + 1;
     metrics_pdf(id, y_id) = metrics_pdf(id, y_id) + 1;
 end
 
 metrics_pdf = metrics_pdf / (sum(sum(metrics_pdf)) * f_metrics_step * m_metrics_step);
 norm = sum(sum(metrics_pdf)) * f_metrics_step * m_metrics_step
+
+metrics_pdf = process_metrics_pdf(metrics_pdf, config);
 
 f2 = figure;
 h = imagesc(f_metrics_bins, m_metrics_bins, metrics_pdf');
@@ -183,18 +192,20 @@ hold all;
 h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 2, 'Color', 'g');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
-for gene_id = 1:size(rare_genes, 1)
+for bop_id = 1:size(rare_bops, 1)
+    bop_id = bop_id
     hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
-    legend(h, string(rare_genes(gene_id)))
+    tareget_bop = rare_bops(bop_id);
+    h = plot(rare_f_metrics(bop_id), rare_m_metrics(bop_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
+    legend(h, sprintf('%s', string(tareget_bop)))
 end
 
 propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f2, sprintf('%s/butterfly_pdf_%s.fig', save_path, suffix))
-saveas(f2, sprintf('%s/butterfly_pdf_%s.png', save_path, suffix))
+savefig(f2, sprintf('%s/butterfly_gender_pdf_%s.fig', save_path, suffix))
+saveas(f2, sprintf('%s/butterfly_gender_pdf_%s.png', save_path, suffix))
 
 abs_diff = abs(metrics_diff_srt);
 diff_begin = min(abs_diff);
@@ -203,8 +214,8 @@ diff_step = (diff_end - diff_begin) / num_bins;
 diff_bins = linspace(diff_begin +  0.5 * diff_step, diff_end - 0.5 * diff_step, num_bins);
 
 diff_pdf = zeros(num_bins, 1);
-for gene_id = 1:num_genes
-    id = floor((abs_diff(gene_id) - diff_begin) * num_bins / (diff_end - diff_begin + 1e-8)) + 1;
+for bop_id = 1:num_bops
+    id = floor((abs_diff(bop_id) - diff_begin) * num_bins / (diff_end - diff_begin + 1e-8)) + 1;
     diff_pdf(id) = diff_pdf(id) + 1;
 end
 diff_pdf = diff_pdf / (sum(diff_pdf) * diff_step);
@@ -230,5 +241,6 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f3, sprintf('%s/delta_pdf_%s.fig', save_path, suffix))
-saveas(f3, sprintf('%s/delta_pdf_%s.png', save_path, suffix))
+savefig(f3, sprintf('%s/butterfly_gender_delta_%s.fig', save_path, suffix))
+saveas(f3, sprintf('%s/butterfly_gender_delta_%s.png', save_path, suffix))
+
