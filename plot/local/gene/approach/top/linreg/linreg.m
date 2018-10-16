@@ -22,7 +22,12 @@ config.disease = 'any';
 config.gender = 'versus';
 
 config.is_clustering = 0;
-config.up = '../../../../../..';
+
+if strcmp(getenv('computername'), 'MSI')
+    config.up = 'D:/YandexDisk/Work/mlmg';
+else
+    config.up = 'E:/YandexDisk/Work/mlmg';
+end
 
 % ======== processing ========
 f = figure;

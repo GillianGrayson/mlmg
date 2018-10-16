@@ -3,6 +3,7 @@ clear all;
 % ======== params ========
 part = 0.05;
 num_bins = 100;
+rank = 1;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -22,8 +23,13 @@ config.method = 'linreg_variance';
 config.disease = 'any';
 config.gender = 'any';
 
-config.up = '../../../../../..';
 config.is_clustering = 0;
+
+if strcmp(getenv('computername'), 'MSI')
+    config.up = 'D:/YandexDisk/Work/mlmg';
+else
+    config.up = 'E:/YandexDisk/Work/mlmg';
+end
 
 % ======== save_config ========
 save_config.data_base = config.data_base;
@@ -47,8 +53,8 @@ save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
-metrics_id = get_metrics_id(config);
-metrics_label = get_metrics_label(config);
+metrics_id = get_metrics_id(config, rank);
+metrics_label = get_metrics_label(config, rank);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...
@@ -139,8 +145,8 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f1, sprintf('%s/butterfly_scatter_%s.fig', save_path, suffix))
-saveas(f1, sprintf('%s/butterfly_scatter_%s.png', save_path, suffix))
+savefig(f1, sprintf('%s/butterfly_gender_scatter_%s.fig', save_path, suffix))
+saveas(f1, sprintf('%s/butterfly_gender_scatter_%s.png', save_path, suffix))
 
 f_metrics_begin = min(f_metrics_srt);
 f_metrics_end = max(f_metrics_srt);
@@ -192,8 +198,8 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f2, sprintf('%s/butterfly_pdf_%s.fig', save_path, suffix))
-saveas(f2, sprintf('%s/butterfly_pdf_%s.png', save_path, suffix))
+savefig(f2, sprintf('%s/butterfly_gender_pdf_%s.fig', save_path, suffix))
+saveas(f2, sprintf('%s/butterfly_gender_pdf_%s.png', save_path, suffix))
 
 abs_diff = abs(metrics_diff_srt);
 diff_begin = min(abs_diff);
@@ -229,5 +235,5 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f3, sprintf('%s/delta_pdf_%s.fig', save_path, suffix))
-saveas(f3, sprintf('%s/delta_pdf_%s.png', save_path, suffix))
+savefig(f3, sprintf('%s/butterfly_gender_delta_%s.fig', save_path, suffix))
+saveas(f3, sprintf('%s/butterfly_gender_delta_%s.png', save_path, suffix))
