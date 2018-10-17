@@ -4,10 +4,11 @@ clear all;
 part = 0.005;
 num_bins = 200;
 rank = 1;
+config.plot_method = 2;
 print_rate = 1000;
 
 % ======== config ========
-config.data_base = 'GSE87571';
+config.data_base = 'GSE40279';
 config.data_type = 'bop_data';
 
 config.chromosome_type = 'non_gender';
@@ -59,8 +60,9 @@ save_path = sprintf('%s/%s', ...
     save_config.up, ...
     get_result_path(save_config));
 mkdir(save_path);
-suffix = sprintf('method(%s)_part(%0.4f)', ...
+suffix = sprintf('method(%s)_plot_method(%d)_part(%0.4f)', ...
     config.method, ...
+    config.plot_method, ...
     part);
 
 config.gender = 'F';
@@ -91,10 +93,13 @@ for bop_id = 1:num_bops
     f_bop = f_bops(bop_id);
     m_id = find(m_bops==string(f_bop));
     m_metrics_passed(bop_id) = m_metrics(m_id);
+end
+
+[f_metrics_passed, m_metrics_passed] = process_metrics_plane(f_metrics_passed, m_metrics_passed, config);
+num_bops = size(f_metrics_passed, 1);
+
+for bop_id = 1:num_bops
     metrics_diff(bop_id) = f_metrics_passed(bop_id) - m_metrics_passed(bop_id);
-    if mod(bop_id, print_rate) == 0
-        bop_id = bop_id
-    end
 end
 
 [metrics_diff_srt, order] = sort(abs(metrics_diff), 'descend');
