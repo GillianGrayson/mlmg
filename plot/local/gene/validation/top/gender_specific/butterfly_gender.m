@@ -3,7 +3,8 @@ clear all;
 % ======== params ========
 part = 0.05;
 num_bins = 100;
-rank = 1;
+config.metrics_rank = 2;
+config.plot_method = 2;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -53,8 +54,8 @@ save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
-metrics_id = get_metrics_id(config, rank);
-metrics_label = get_metrics_label(config, rank);
+metrics_id = get_metrics_id(config, metrics_rank);
+metrics_label = get_metrics_label(config, metrics_rank);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...
@@ -86,12 +87,22 @@ num_genes = size(f_genes, 1);
 
 f_metrics_passed = f_metrics;
 m_metrics_passed = zeros(num_genes, 1);
-metrics_diff = zeros(num_genes, 1);
 
 for gene_id = 1:num_genes
     f_gene = f_genes(gene_id);
     m_id = find(m_genes==string(f_gene));
     m_metrics_passed(gene_id) = m_metrics(m_id);
+end
+
+[f_metrics_passed, m_metrics_passed] = process_metrics_plane(f_metrics_passed, m_metrics_passed, config);
+num_bops = size(f_metrics_passed, 1);
+
+
+
+
+metrics_diff = zeros(num_genes, 1);
+
+for gene_id = 1:num_genes
     metrics_diff(gene_id) = f_metrics_passed(gene_id) - m_metrics_passed(gene_id);
 end
 
