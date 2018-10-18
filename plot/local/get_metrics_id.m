@@ -1,10 +1,12 @@
-function metrics_id = get_metrics_id(config, rank)
+function metrics_id = get_metrics_id(config)
 metrics_id = 1;
 
 if strcmp(config.method, 'linreg')
-    if rank == 1
+    if config.metrics_rank == 1
         metrics_id = 1;
-    elseif rank == 2
+    elseif config.metrics_rank == 2
+        metrics_id = 2;
+     elseif config.metrics_rank == 3
         metrics_id = 3;
     end
     
@@ -12,9 +14,9 @@ elseif strcmp(config.method, 'manova')
     metrics_id = 1;
     
 elseif strcmp(config.method, 'linreg_variance')
-    if rank == 1
+    if config.metrics_rank == 1
         metrics_id = 5;
-    elseif rank == 2
+    elseif config.metrics_rank == 2
         metrics_id = 1;
     end
     

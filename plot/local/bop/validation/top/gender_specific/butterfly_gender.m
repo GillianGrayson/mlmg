@@ -5,7 +5,6 @@ part = 0.005;
 num_bins = 200;
 rank = 1;
 config.plot_method = 2;
-print_rate = 1000;
 
 % ======== config ========
 config.data_base = 'GSE40279';
@@ -87,7 +86,6 @@ num_bops = size(f_bops, 1);
 
 f_metrics_passed = f_metrics;
 m_metrics_passed = zeros(num_bops, 1);
-metrics_diff = zeros(num_bops, 1);
 
 for bop_id = 1:num_bops
     f_bop = f_bops(bop_id);
@@ -98,6 +96,7 @@ end
 [f_metrics_passed, m_metrics_passed] = process_metrics_plane(f_metrics_passed, m_metrics_passed, config);
 num_bops = size(f_metrics_passed, 1);
 
+metrics_diff = zeros(num_bops, 1);
 for bop_id = 1:num_bops
     metrics_diff(bop_id) = f_metrics_passed(bop_id) - m_metrics_passed(bop_id);
 end
