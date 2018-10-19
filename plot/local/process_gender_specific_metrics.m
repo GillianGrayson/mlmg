@@ -1,7 +1,6 @@
 function [names, metrics_1, metrics_2] = process_gender_specific_metrics(config)
-names = [];
-metrics_1 = [];
-metrics_2 = [];
+
+metrics_id = get_metrics_id(config);
 
 config.gender = 'F';
 f_fn = sprintf('%s/data/%s/top.txt', ...
@@ -34,22 +33,30 @@ for id = 1:num_names
     m_order(id) = m_id;
 end
 
-if strcmp(config.data_type,'gene_data')
+names = all_names;
+metrics_1 = f_metrics_passed;
+metrics_2 = m_metrics_passed;
+
+if strcmp(config.data_type, 'gene_data')
     if strcmp(config.method, 'linreg')
         if config.plot_method == 2
+            
+            names = [];
+            metrics_1 = [];
+            metrics_2 = [];
             
             p_value_lim = 1e-8;
             p_value_lim_log = -log10(p_value_lim);
             
             config_1 = config;
             config_1.metrics_rank = 2;
+            
             metrics_id_1 = 2;
             f_metrics_1 = f_top_data.data(:, metrics_id_1);
             m_metrics_1 = m_top_data.data(:, metrics_id_1);
             m_metrics_1 = m_metrics_1(m_order);
             f_metrics_1 = process_metrics(f_metrics_1, config_1);
             m_metrics_1 = process_metrics(m_metrics_1, config_1);
-            
             for id = 1:size(f_metrics_passed, 1)
                 if(f_metrics_1(id) > p_value_lim_log) || (m_metrics_1(id) > p_value_lim_log)
                     names = vertcat(names, all_names(id));
@@ -57,11 +64,32 @@ if strcmp(config.data_type,'gene_data')
                     metrics_2 = vertcat(metrics_2, m_metrics_passed(id));
                 end
             end
+            
         end
     end
-else
-    names = vertcat(names, all_names(id));
-    metrics_1 = vertcat(metrics_1, target_metrics_1(id));
-    metrics_2 = vertcat(metrics_2, target_metrics_2(id));
 end
+
+if strcmp(config.data_type, 'bop_data')
+    if strcmp(config.method, 'manova')
+        if config.plot_method == 2
+            
+            names = [];
+            metrics_1 = [];
+            metrics_2 = [];
+            
+            p_value_lim = 1e-8;
+            p_value_lim_log = -log10(p_value_lim);
+            
+            for id = 1:size(target_metrics_1, 1)
+                if(target_metrics_1(id) < p_value_lim_log) || (target_metrics_2(id) < p_value_lim_log)
+                    names = vertcat(names, all_names(id));
+                    metrics_1 = vertcat(metrics_1, f_metrics_passed(id));
+                    metrics_2 = vertcat(metrics_2, m_metrics_passed(id));
+                end
+            end
+            
+        end
+    end 
+end
+
 end
