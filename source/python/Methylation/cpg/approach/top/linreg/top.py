@@ -21,13 +21,15 @@ def save_top_linreg(config):
     p_values = []
     slopes = []
     intercepts = []
+    std_errors = []
     for id in range(0, len(cpgs)):
         curr_vals = vals[id]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, curr_vals)
+        slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, curr_vals)
         r_values.append(r_value)
         p_values.append(p_value)
         slopes.append(slope)
         intercepts.append(intercept)
+        std_errors.append(std_error)
         if id % config.print_rate == 0:
             print('cpg_id: ' + str(id))
 
@@ -37,6 +39,7 @@ def save_top_linreg(config):
     p_values_sorted = list(np.array(p_values)[order])
     slopes_sorted = list(np.array(slopes)[order])
     intercepts_sorted = list(np.array(intercepts)[order])
+    std_errors_sorted = list(np.array(std_errors)[order])
 
     clusters_mean_shift = []
     clusters_affinity_prop = []
@@ -45,7 +48,8 @@ def save_top_linreg(config):
         r_values_sorted,
         p_values_sorted,
         slopes_sorted,
-        intercepts_sorted
+        intercepts_sorted,
+        std_errors_sorted
     ]
     if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
@@ -76,6 +80,7 @@ def save_top_linreg(config):
     p_values_genes = []
     slopes_genes = []
     intercepts_genes = []
+    std_errors_genes = []
     for id in range(0, len(cpgs_sorted)):
         cpg = cpgs_sorted[id]
         if config.is_clustering:
@@ -88,6 +93,7 @@ def save_top_linreg(config):
         p_value = p_values_sorted[id]
         slope = slopes_sorted[id]
         intercept = intercepts_sorted[id]
+        std_error = std_errors_sorted[id]
         if cpg in dict_cpg_gene:
             genes = dict_cpg_gene.get(cpg)
             for gene in genes:
@@ -101,6 +107,7 @@ def save_top_linreg(config):
                     p_values_genes.append(p_value)
                     slopes_genes.append(slope)
                     intercepts_genes.append(intercept)
+                    std_errors_genes.append(std_error)
 
     config.data_type = DataType.gene
     gene_data_type = config.gene_data_type
@@ -114,7 +121,8 @@ def save_top_linreg(config):
         r_values_genes,
         p_values_genes,
         slopes_genes,
-        intercepts_genes
+        intercepts_genes,
+        std_errors_genes
     ]
 
     if config.is_clustering:

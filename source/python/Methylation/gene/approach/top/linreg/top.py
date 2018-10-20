@@ -16,13 +16,15 @@ def save_top_linreg(config):
     r_values = []
     slopes = []
     intercepts = []
+    std_errors = []
     for id in range(0, len(genes)):
         val = vals[id]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, val)
+        slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, val)
         r_values.append(r_value)
         p_values.append(p_value)
         slopes.append(slope)
         intercepts.append(intercept)
+        std_errors.append(std_error)
 
     order_mean = np.argsort(list(map(abs, r_values)))[::-1]
     genes_sorted = list(np.array(genes)[order_mean])
@@ -30,13 +32,15 @@ def save_top_linreg(config):
     p_values_sorted = list(np.array(p_values)[order_mean])
     slopes_sorted = list(np.array(slopes)[order_mean])
     intercepts_sorted = list(np.array(intercepts)[order_mean])
+    std_errors_sorted = list(np.array(std_errors)[order_mean])
 
     features = [
         genes_sorted,
         r_values_sorted,
         p_values_sorted,
         slopes_sorted,
-        intercepts_sorted
+        intercepts_sorted,
+        std_errors_sorted
     ]
     if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)

@@ -1,10 +1,11 @@
 clear all;
 
 % ======== params ========
+config.metrics_rank = 1;
+config.plot_method = 1;
 part = 0.05;
+
 num_bins = 100;
-config.metrics_rank = 2;
-config.plot_method = 2;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -19,7 +20,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_variance';
+config.method = 'moment';
 
 config.disease = 'any';
 config.gender = 'any';
@@ -53,69 +54,36 @@ save_config.gender = 'versus';
 save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
-% ======== processing ========
-metrics_id = get_metrics_id(config, metrics_rank);
-metrics_label = get_metrics_label(config, metrics_rank);
+% ======== processing =======
+metrics_label = get_metrics_label(config);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...
     get_result_path(save_config));
 mkdir(save_path);
-suffix = sprintf('method(%s)_part(%0.4f)', ...
+
+suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     config.method, ...
+    config.metrics_rank, ...
+    config.plot_method, ...
     part);
 
-config.gender = 'F';
-f_fn = sprintf('%s/data/%s/top.txt', ...
-    config.up, ...
-    get_result_path(config));
-f_top_data = importdata(f_fn);
-f_genes = f_top_data.textdata;
-f_metrics = f_top_data.data(:, metrics_id);
-f_metrics = process_metrics(f_metrics, config);
+[names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
+num_genes = size(names, 1);
 
-config.gender = 'M';
-m_fn = sprintf('%s/data/%s/top.txt', ...
-    config.up, ...
-    get_result_path(config));
-m_top_data = importdata(m_fn);
-m_genes = m_top_data.textdata;
-m_metrics = m_top_data.data(:, metrics_id);
-m_metrics = process_metrics(m_metrics, config);
-
-num_genes = size(f_genes, 1);
-
-f_metrics_passed = f_metrics;
-m_metrics_passed = zeros(num_genes, 1);
-
+diff_metrics = zeros(num_genes, 1);
 for gene_id = 1:num_genes
-    f_gene = f_genes(gene_id);
-    m_id = find(m_genes==string(f_gene));
-    m_metrics_passed(gene_id) = m_metrics(m_id);
+    diff_metrics(gene_id) = f_metrics(gene_id) - m_metrics(gene_id);
 end
 
-[f_metrics_passed, m_metrics_passed] = process_metrics_plane(f_metrics_passed, m_metrics_passed, config);
-num_bops = size(f_metrics_passed, 1);
-
-
-
-
-metrics_diff = zeros(num_genes, 1);
-
-for gene_id = 1:num_genes
-    metrics_diff(gene_id) = f_metrics_passed(gene_id) - m_metrics_passed(gene_id);
-end
-
-[metrics_diff_srt, order] = sort(abs(metrics_diff), 'descend');
-genes_srt = f_genes;
-f_ids_srt = zeros(num_genes, 1);
-m_ids_srt = zeros(num_genes, 1);
+[metrics_diff_srt, order] = sort(abs(diff_metrics), 'descend');
+genes_srt = names;
 f_metrics_srt = zeros(num_genes, 1);
 m_metrics_srt = zeros(num_genes, 1);
 for gene_id = 1:num_genes
-    genes_srt(gene_id) = f_genes(order(gene_id));
-    f_metrics_srt(gene_id) = f_metrics_passed(order(gene_id));
-    m_metrics_srt(gene_id) = m_metrics_passed(order(gene_id));
+    genes_srt(gene_id) = names(order(gene_id));
+    f_metrics_srt(gene_id) = f_metrics(order(gene_id));
+    m_metrics_srt(gene_id) = m_metrics(order(gene_id));
 end
 
 num_rare = floor(part * num_genes);

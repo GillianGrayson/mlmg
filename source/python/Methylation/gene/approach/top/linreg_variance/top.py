@@ -16,17 +16,20 @@ def save_top_linreg_variance(config):
     r_values = []
     slopes = []
     intercepts = []
+    std_errors = []
     p_values_diff = []
     r_values_diff = []
     slopes_diff = []
     intercepts_diff = []
+    std_errors_diff = []
     for id in range(0, len(genes)):
         val = vals[id]
-        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, val)
+        slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, val)
         r_values.append(r_value)
         p_values.append(p_value)
         slopes.append(slope)
         intercepts.append(intercept)
+        std_errors.append(std_error)
 
         diffs = []
         for p_id in range(0, len(attributes)):
@@ -35,11 +38,12 @@ def save_top_linreg_variance(config):
             pred_y = slope * curr_x + intercept
             diffs.append(abs(pred_y - curr_y))
 
-        slope, intercept, r_value, p_value, std_err = stats.linregress(attributes, diffs)
+        slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, diffs)
         r_values_diff.append(r_value)
         p_values_diff.append(p_value)
         slopes_diff.append(slope)
         intercepts_diff.append(intercept)
+        std_errors_diff.append(std_error)
 
     order_mean = np.argsort(list(map(abs, r_values_diff)))[::-1]
     genes_sorted = list(np.array(genes)[order_mean])
@@ -47,10 +51,12 @@ def save_top_linreg_variance(config):
     r_values_sorted = list(np.array(r_values)[order_mean])
     slopes_sorted = list(np.array(slopes)[order_mean])
     intercepts_sorted = list(np.array(intercepts)[order_mean])
+    std_errors_sorted = list(np.array(std_errors)[order_mean])
     p_values_diff_sorted = list(np.array(p_values_diff)[order_mean])
     r_values_diff_sorted = list(np.array(r_values_diff)[order_mean])
     slopes_diff_sorted = list(np.array(slopes_diff)[order_mean])
     intercepts_diff_sorted = list(np.array(intercepts_diff)[order_mean])
+    std_errors_diff_sorted = list(np.array(std_errors_diff)[order_mean])
 
     features = [
         genes_sorted,
@@ -58,10 +64,12 @@ def save_top_linreg_variance(config):
         p_values_sorted,
         slopes_sorted,
         intercepts_sorted,
+        std_errors_sorted,
         r_values_diff_sorted,
         p_values_diff_sorted,
         slopes_diff_sorted,
-        intercepts_diff_sorted
+        intercepts_diff_sorted,
+        std_errors_diff_sorted
     ]
     if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(abs, r_values_diff_sorted))).reshape(-1, 1)
