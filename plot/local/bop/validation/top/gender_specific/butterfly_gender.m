@@ -1,9 +1,9 @@
 clear all;
 
 % ======== params ========
-part = 0.005;
 config.metrics_rank = 1;
 config.plot_method = 2;
+part = 0.005;
 
 num_bins = 200;
 

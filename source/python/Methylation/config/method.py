@@ -9,6 +9,7 @@ class Method(Enum):
     linreg_bend = 'linreg_bend'
     linreg_dispersion = 'linreg_dispersion'
     linreg_variance = 'linreg_variance'
+    linreg_ols = 'linreg_ols'
     anova = 'anova'
     spearman = 'spearman'
     manova = 'manova'

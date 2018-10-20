@@ -17,6 +17,14 @@ elseif strcmp(config.method, 'linreg_variance')
     elseif config.metrics_rank == 2
         metrics_label = 'r';
     end
+
+elseif strcmp(config.method, 'moment')
+    if config.metrics_rank == 1
+        metrics_label = 'mean';
+    elseif config.metrics_rank == 2
+        metrics_label = 'std';
+    end
+    
     
 end
 end

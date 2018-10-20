@@ -20,5 +20,12 @@ elseif strcmp(config.method, 'linreg_variance')
         metrics_id = 1;
     end
     
+elseif strcmp(config.method, 'moment')
+    if config.metrics_rank == 1
+        metrics_id = 1;
+    elseif config.metrics_rank == 2
+        metrics_id = 2;
+    end    
+
 end
 end

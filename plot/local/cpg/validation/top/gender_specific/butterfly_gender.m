@@ -3,7 +3,7 @@ clear all;
 % ======== params ========
 config.metrics_rank = 1;
 config.plot_method = 1;
-part = 0.05;
+part = 0.0005;
 
 num_bins = 100;
 

@@ -1,8 +1,8 @@
 clear all;
 
 % ======== params ========
-config.metrics_rank = 3;
-config.plot_method = 2;
+config.metrics_rank = 1;
+config.plot_method = 1;
 part = 0.05;
 
 num_bins = 100;
@@ -20,7 +20,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg';
+config.method = 'moment';
 
 config.disease = 'any';
 config.gender = 'any';

@@ -9,6 +9,8 @@ from gene.approach.top.spearman.top import save_top_spearman
 from gene.approach.top.linreg_bend.top import save_top_linreg_bend
 from gene.approach.top.linreg_dispersion.top import save_top_linreg_with_dispersion
 from gene.approach.top.linreg_variance.top import save_top_linreg_variance
+from gene.approach.top.moment.top import save_top_moment
+from gene.approach.top.linreg_ols.top import save_top_linreg_ols
 
 
 def top_proc(config):
@@ -29,7 +31,10 @@ def top_proc(config):
         save_top_linreg_with_dispersion(config)
     elif config.method is Method.linreg_variance:
         save_top_linreg_variance(config)
-
+    elif config.method is Method.moment:
+        save_top_moment(config)
+    elif config.method is Method.linreg_ols:
+        save_top_linreg_ols(config)
 
 data_base = DataBase.GSE87571
 data_type = DataType.gene
@@ -45,8 +50,7 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg,
-    Method.linreg_variance
+    Method.linreg_ols,
 ]
 
 is_clustering = False
