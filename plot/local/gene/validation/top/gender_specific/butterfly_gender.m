@@ -1,10 +1,11 @@
 clear all;
 
 % ======== params ========
+config.metrics_rank = 3;
+config.plot_method = 2;
 part = 0.05;
+
 num_bins = 100;
-config.metrics_rank = 1;
-config.plot_method = 1;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -60,8 +61,11 @@ save_path = sprintf('%s/%s', ...
     save_config.up, ...
     get_result_path(save_config));
 mkdir(save_path);
-suffix = sprintf('method(%s)_part(%0.4f)', ...
+
+suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     config.method, ...
+    config.metrics_rank, ...
+    config.plot_method, ...
     part);
 
 [names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
@@ -74,8 +78,6 @@ end
 
 [metrics_diff_srt, order] = sort(abs(diff_metrics), 'descend');
 genes_srt = names;
-f_ids_srt = zeros(num_genes, 1);
-m_ids_srt = zeros(num_genes, 1);
 f_metrics_srt = zeros(num_genes, 1);
 m_metrics_srt = zeros(num_genes, 1);
 for gene_id = 1:num_genes

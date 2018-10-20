@@ -1,9 +1,11 @@
 clear all;
 
 % ======== params ========
-part = 0.0005;
-num_bins = 500;
-print_rate = 1000;
+config.metrics_rank = 1;
+config.plot_method = 1;
+part = 0.05;
+
+num_bins = 100;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -23,7 +25,12 @@ config.disease = 'any';
 config.gender = '';
 
 config.is_clustering = 0;
-config.up = '../../../../../..';
+
+if strcmp(getenv('computername'), 'MSI')
+    config.up = 'D:/YandexDisk/Work/mlmg';
+else
+    config.up = 'E:/YandexDisk/Work/mlmg';
+end
 
 % ======== save_config ========
 save_config.data_base = config.data_base;
@@ -46,58 +53,35 @@ save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
-metrics_id = get_metrics_id(config);
+metrics_label = get_metrics_label(config);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...
     get_result_path(save_config));
 mkdir(save_path);
-suffix = sprintf('method(%s)_part(%0.4f)', ...
+
+suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     config.method, ...
+    config.metrics_rank, ...
+    config.plot_method, ...
     part);
 
-config.gender = 'F';
-f_fn = sprintf('%s/data/%s/top.txt', ...
-    config.up, ...
-    get_result_path(config));
-f_top_data = importdata(f_fn);
-f_cpgs = f_top_data.textdata(:, 1);
-f_metrics = f_top_data.data(:, metrics_id);
-f_metrics = process_metrics(f_metrics, config);
+[names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
+num_cpgs = size(names, 1);
 
-config.gender = 'M';
-m_fn = sprintf('%s/data/%s/top.txt', ...
-    config.up, ...
-    get_result_path(config));
-m_top_data = importdata(m_fn);
-m_cpgs = m_top_data.textdata(:, 1);
-m_metrics = m_top_data.data(:, metrics_id);
-m_metrics = process_metrics(m_metrics, config);
-
-num_cpgs = size(f_cpgs, 1);
-
-f_metrics_passed = f_metrics;
-m_metrics_passed = zeros(num_cpgs, 1);
-metrics_diff = zeros(num_cpgs, 1);
-
+diff_metrics = zeros(num_cpgs, 1);
 for cpg_id = 1:num_cpgs
-    f_cpg = f_cpgs(cpg_id);
-    m_id = find(m_cpgs==string(f_cpg));
-    m_metrics_passed(cpg_id) = m_metrics(m_id);
-    metrics_diff(cpg_id) = f_metrics_passed(cpg_id) - m_metrics_passed(cpg_id);
-    if mod(cpg_id, print_rate) == 0
-        cpg_id = cpg_id
-    end
+    diff_metrics(cpg_id) = f_metrics(cpg_id) - m_metrics(cpg_id);
 end
 
-[metrics_diff_srt, order] = sort(abs(metrics_diff), 'descend');
-cpgs_srt = f_cpgs;
+[metrics_diff_srt, order] = sort(abs(diff_metrics), 'descend');
+cpgs_srt = names;
 f_metrics_srt = zeros(num_cpgs, 1);
 m_metrics_srt = zeros(num_cpgs, 1);
 for cpg_id = 1:num_cpgs
-    cpgs_srt(cpg_id) = f_cpgs(order(cpg_id));
-    f_metrics_srt(cpg_id) = f_metrics_passed(order(cpg_id));
-    m_metrics_srt(cpg_id) = m_metrics_passed(order(cpg_id));
+    cpgs_srt(cpg_id) = names(order(cpg_id));
+    f_metrics_srt(cpg_id) = f_metrics(order(cpg_id));
+    m_metrics_srt(cpg_id) = m_metrics(order(cpg_id));
 end
 
 num_rare = floor(part * num_cpgs);
@@ -140,8 +124,8 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f1, sprintf('%s/butterfly_scatter_%s.fig', save_path, suffix))
-saveas(f1, sprintf('%s/butterfly_scatter_%s.png', save_path, suffix))
+savefig(f1, sprintf('%s/butterfly_gender_scatter_%s.fig', save_path, suffix))
+saveas(f1, sprintf('%s/butterfly_gender_scatter_%s.png', save_path, suffix))
 
 f_metrics_begin = min(f_metrics_srt);
 f_metrics_end = max(f_metrics_srt);
@@ -195,8 +179,8 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f2, sprintf('%s/butterfly_pdf_%s.fig', save_path, suffix))
-saveas(f2, sprintf('%s/butterfly_pdf_%s.png', save_path, suffix))
+savefig(f2, sprintf('%s/butterfly_gender_pdf_%s.fig', save_path, suffix))
+saveas(f2, sprintf('%s/butterfly_gender_pdf_%s.png', save_path, suffix))
 
 abs_diff = abs(metrics_diff_srt);
 diff_begin = min(abs_diff);
@@ -232,6 +216,6 @@ propertyeditor('on')
 box on;
 b = gca; legend(b,'off');
 
-savefig(f3, sprintf('%s/delta_pdf_%s.fig', save_path, suffix))
-saveas(f3, sprintf('%s/delta_pdf_%s.png', save_path, suffix))
+savefig(f3, sprintf('%s/butterfly_gender_delta_%s.fig', save_path, suffix))
+saveas(f3, sprintf('%s/butterfly_gender_delta_%s.png', save_path, suffix))
 

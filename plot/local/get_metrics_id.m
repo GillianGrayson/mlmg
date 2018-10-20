@@ -15,7 +15,7 @@ elseif strcmp(config.method, 'manova')
     
 elseif strcmp(config.method, 'linreg_variance')
     if config.metrics_rank == 1
-        metrics_id = 5;
+        metrics_id = 6;
     elseif config.metrics_rank == 2
         metrics_id = 1;
     end

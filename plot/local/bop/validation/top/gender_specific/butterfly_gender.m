@@ -2,12 +2,13 @@ clear all;
 
 % ======== params ========
 part = 0.005;
-num_bins = 200;
-rank = 1;
+config.metrics_rank = 1;
 config.plot_method = 2;
 
+num_bins = 200;
+
 % ======== config ========
-config.data_base = 'GSE40279';
+config.data_base = 'GSE87571';
 config.data_type = 'bop_data';
 
 config.chromosome_type = 'non_gender';
@@ -52,63 +53,35 @@ save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
-metrics_id = get_metrics_id(config, rank);
-metrics_label = get_metrics_label(config, rank);
+metrics_label = get_metrics_label(config);
 
 save_path = sprintf('%s/%s', ...
     save_config.up, ...
     get_result_path(save_config));
 mkdir(save_path);
-suffix = sprintf('method(%s)_plot_method(%d)_part(%0.4f)', ...
+
+suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     config.method, ...
+    config.metrics_rank, ...
     config.plot_method, ...
     part);
 
-config.gender = 'F';
-f_fn = sprintf('%s/data/%s/top.txt', ...
-    config.up, ...
-    get_result_path(config));
-f_top_data = importdata(f_fn, ' ');
-f_bops = f_top_data.textdata(:, 1);
-f_metrics = f_top_data.data(:, metrics_id);
-f_metrics = process_metrics(f_metrics, config);
-
-config.gender = 'M';
-m_fn = sprintf('%s/data/%s/top.txt', ...
-    config.up, ...
-    get_result_path(config));
-m_top_data = importdata(m_fn, ' ');
-m_bops = m_top_data.textdata(:, 1);
-m_metrics = m_top_data.data(:, metrics_id);
-m_metrics = process_metrics(m_metrics, config);
-
-num_bops = size(f_bops, 1);
-
-f_metrics_passed = f_metrics;
-m_metrics_passed = zeros(num_bops, 1);
-
-for bop_id = 1:num_bops
-    f_bop = f_bops(bop_id);
-    m_id = find(m_bops==string(f_bop));
-    m_metrics_passed(bop_id) = m_metrics(m_id);
-end
-
-[f_metrics_passed, m_metrics_passed] = process_metrics_plane(f_metrics_passed, m_metrics_passed, config);
-num_bops = size(f_metrics_passed, 1);
+[names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
+num_bops = size(f_metrics, 1);
 
 metrics_diff = zeros(num_bops, 1);
 for bop_id = 1:num_bops
-    metrics_diff(bop_id) = f_metrics_passed(bop_id) - m_metrics_passed(bop_id);
+    metrics_diff(bop_id) = f_metrics(bop_id) - m_metrics(bop_id);
 end
 
 [metrics_diff_srt, order] = sort(abs(metrics_diff), 'descend');
-bops_srt = f_bops;
+bops_srt = names;
 f_metrics_srt = zeros(num_bops, 1);
 m_metrics_srt = zeros(num_bops, 1);
 for bop_id = 1:num_bops
-    bops_srt(bop_id) = f_bops(order(bop_id));
-    f_metrics_srt(bop_id) = f_metrics_passed(order(bop_id));
-    m_metrics_srt(bop_id) = m_metrics_passed(order(bop_id));
+    bops_srt(bop_id) = names(order(bop_id));
+    f_metrics_srt(bop_id) = f_metrics(order(bop_id));
+    m_metrics_srt(bop_id) = m_metrics(order(bop_id));
 end
 
 num_rare = floor(part * num_bops);
