@@ -67,6 +67,10 @@ suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     part);
 
 [names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
+config.names = names;
+config.f_metrics = f_metrics;
+config.m_metrics = m_metrics;
+
 num_cpgs = size(names, 1);
 
 diff_metrics = zeros(num_cpgs, 1);

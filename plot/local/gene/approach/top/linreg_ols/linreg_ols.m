@@ -16,7 +16,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_variance';
+config.method = 'linreg_ols';
 
 config.disease = 'any';
 config.gender = 'versus';
@@ -33,12 +33,12 @@ end
 f = figure;
 if strcmp(config.gender, 'versus')
     config.gender = 'F';
-    plot_linreg_variance(config, gene)
+    plot_linreg_ols(config, gene)
     config.gender = 'M';
-    plot_linreg_variance(config, gene)
+    plot_linreg_ols(config, gene)
     config.gender = 'versus';
 else
-    plot_linreg_variance(config, gene)
+    plot_linreg_ols(config, gene)
 end
 
 suffix = sprintf('gene(%s)_gender(%s)', gene, config.gender);
@@ -54,11 +54,11 @@ mkdir(save_path);
 box on;
 b = gca; legend(b,'off');
 
-savefig(f, sprintf('%s/linreg_variance_%s.fig', save_path, suffix))
-saveas(f, sprintf('%s/linreg_variance_%s.png', save_path, suffix))
+savefig(f, sprintf('%s/linreg_ols_%s.fig', save_path, suffix))
+saveas(f, sprintf('%s/linreg_ols_%s.png', save_path, suffix))
 
 
-function plot_linreg_variance(config, gene)
+function plot_linreg_ols(config, gene)
 
 fn = sprintf('%s/data/%s/top.txt', ...
     config.up, ...
@@ -67,10 +67,10 @@ fn = sprintf('%s/data/%s/top.txt', ...
 top_data = importdata(fn);
 
 genes = top_data.textdata;
+intercepts = top_data.data(:, 2);
 slopes = top_data.data(:, 3);
-intercepts = top_data.data(:, 4);
-slopes_variance = top_data.data(:, 8);
-intercepts_variance = top_data.data(:, 9);
+intercepts_std = top_data.data(:, 4);
+slopes_std = top_data.data(:, 5);
 
 indexes = get_attributes_indexes(config);
 ages = get_ages(config);
@@ -102,31 +102,16 @@ gene_id = find(genes==gene_name);
 
 slope = slopes(gene_id);
 intercept = intercepts(gene_id);
-slope_variance = slopes_variance(gene_id);
-intercept_variance = intercepts_variance(gene_id);
+intercept_std = intercepts_std(gene_id);
+slope_std = slopes_std(gene_id);
+intercept_down = intercept - 3 * intercept_std;
+slope_down = slope - 3 * slope_std;
+intercept_up = intercept + 3 * intercept_std;
+slope_up = slope + 3 * slope_std;
 x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
-
-errors = zeros(size(ages_passed, 1), 1);
-for i = 1:size(ages_passed, 1)
-    errors(i) = abs(gene_data_passed(i) - (ages_passed(i) * slope + intercept));
-end
-errors_lin_pos = [slope_variance * x_lin(1) + intercept_variance, slope_variance * x_lin(2) + intercept_variance];
-errors_lin_neg = [-slope_variance * x_lin(1) - intercept_variance, -slope_variance * x_lin(2) - intercept_variance];
-
-pos_p1 = [x_lin(1), errors_lin_pos(1) + intercept]';
-pos_p2 = [x_lin(2), errors_lin_pos(2) + intercept]';
-angle_pos = atan(slope);
-rotate_mtx_pos = [cos(angle_pos) -sin(angle_pos); sin(angle_pos) cos(angle_pos)];
-
-neg_p1 = [x_lin(1), errors_lin_neg(1) + intercept]';
-neg_p2 = [x_lin(2), errors_lin_neg(2) + intercept]';
-
-var_pos_p1 = rotate_mtx_pos * pos_p1;
-var_pos_p2 = rotate_mtx_pos * pos_p2;
-
-var_neg_p1 = rotate_mtx_pos * neg_p1;
-var_neg_p2 = rotate_mtx_pos * neg_p2;
+y_down = [slope_down * x_lin(1) + intercept_down, slope_down * x_lin(2) + intercept_down];
+y_up = [slope_up * x_lin(1) + intercept_up, slope_up * x_lin(2) + intercept_up];
 
 hold all;
 h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
@@ -137,19 +122,25 @@ hold all;
 h = plot(x_lin, y_lin, '-', 'LineWidth', 3);
 legend(h, sprintf('%s: %s', gene_name, config.gender));
 set(h, 'Color', color)
-
-hold all;
-h = plot([var_pos_p1(1),  var_pos_p2(1)], [var_pos_p1(2),  var_pos_p2(2)], '-', 'LineWidth', 1, 'Color', color);
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-hold all;
-h = plot([var_neg_p1(1),  var_neg_p2(1)], [var_neg_p1(2),  var_neg_p2(2)], '-', 'LineWidth', 1, 'Color', color);
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
 set(gca, 'FontSize', 30);
 xlabel('age', 'Interpreter', 'latex');
 set(gca, 'FontSize', 30);
 ylabel('$\beta$', 'Interpreter', 'latex');
 xlim([min(ages) - (max(ages) - min(ages)) * 0.1, max(ages) + (max(ages) - min(ages)) * 0.1])
+
+hold all;
+h = plot(x_lin, y_down, '-.', 'LineWidth', 1, 'Color', 'k');
+set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+
+hold all;
+h = plot(x_lin, y_up, '-.', 'LineWidth', 1, 'Color', 'k');
+set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
+
 box on;
 end
+
+
+
+
+
+
