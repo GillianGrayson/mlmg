@@ -10,6 +10,8 @@ config.metrics_2 = metrics_2;
 diff_metrics = get_gender_specific_diff_metrics(config);
 config.diff_metrics = diff_metrics;
 
+num_names = size(config.names, 1)
+
 order = get_gender_specific_order(config);
 
 diff_metrics_srt = diff_metrics(order);
