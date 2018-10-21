@@ -66,27 +66,21 @@ suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     config.plot_method, ...
     part);
 
-[names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
+[names, f_metrics, m_metrics] = get_gender_specific_metrics(config);
 config.names = names;
 config.f_metrics = f_metrics;
 config.m_metrics = m_metrics;
+diff_metrics = get_gender_specific_diff_metrics(config);
+config.diff_metrics = diff_metrics;
+
+order = get_gender_specific_order(config);
+
+diff_metrics_srt = diff_metrics(order);
+genes_srt = names(order);
+f_metrics_srt = f_metrics(order);
+m_metrics_srt = m_metrics(order);
 
 num_cpgs = size(names, 1);
-
-diff_metrics = zeros(num_cpgs, 1);
-for cpg_id = 1:num_cpgs
-    diff_metrics(cpg_id) = f_metrics(cpg_id) - m_metrics(cpg_id);
-end
-
-[metrics_diff_srt, order] = sort(abs(diff_metrics), 'descend');
-cpgs_srt = names;
-f_metrics_srt = zeros(num_cpgs, 1);
-m_metrics_srt = zeros(num_cpgs, 1);
-for cpg_id = 1:num_cpgs
-    cpgs_srt(cpg_id) = names(order(cpg_id));
-    f_metrics_srt(cpg_id) = f_metrics(order(cpg_id));
-    m_metrics_srt(cpg_id) = m_metrics(order(cpg_id));
-end
 
 num_rare = floor(part * num_cpgs);
 

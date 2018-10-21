@@ -68,35 +68,33 @@ suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
     config.plot_method, ...
     part);
 
-[names, f_metrics, m_metrics] = process_gender_specific_metrics(config);
+[names, f_metrics, m_metrics] = get_gender_specific_metrics(config);
+config.names = names;
+config.f_metrics = f_metrics;
+config.m_metrics = m_metrics;
+diff_metrics = get_gender_specific_diff_metrics(config);
+config.diff_metrics = diff_metrics;
+
+order = get_gender_specific_order(config);
+
+diff_metrics_srt = diff_metrics(order);
+genes_srt = names(order);
+f_metrics_srt = f_metrics(order);
+m_metrics_srt = m_metrics(order);
+
 num_genes = size(names, 1);
-
-diff_metrics = zeros(num_genes, 1);
-for gene_id = 1:num_genes
-    diff_metrics(gene_id) = f_metrics(gene_id) - m_metrics(gene_id);
-end
-
-[metrics_diff_srt, order] = sort(abs(diff_metrics), 'descend');
-genes_srt = names;
-f_metrics_srt = zeros(num_genes, 1);
-m_metrics_srt = zeros(num_genes, 1);
-for gene_id = 1:num_genes
-    genes_srt(gene_id) = names(order(gene_id));
-    f_metrics_srt(gene_id) = f_metrics(order(gene_id));
-    m_metrics_srt(gene_id) = m_metrics(order(gene_id));
-end
 
 num_rare = floor(part * num_genes);
 
 common_genes = genes_srt(num_rare + 1:end);
 common_f_metrics = f_metrics_srt(num_rare + 1:end);
 common_m_metrics = m_metrics_srt(num_rare + 1:end);
-common_diff = metrics_diff_srt(num_rare + 1:end);
+common_diff = diff_metrics_srt(num_rare + 1:end);
 
 rare_genes = genes_srt(1:num_rare);
 rare_f_metrics = f_metrics_srt(1:num_rare);
 rare_m_metrics = m_metrics_srt(1:num_rare);
-rare_diff = metrics_diff_srt(1:num_rare);
+rare_diff = diff_metrics_srt(1:num_rare);
 
 f1 = figure;
 hold all;
@@ -180,7 +178,7 @@ b = gca; legend(b,'off');
 savefig(f2, sprintf('%s/butterfly_gender_pdf_%s.fig', save_path, suffix))
 saveas(f2, sprintf('%s/butterfly_gender_pdf_%s.png', save_path, suffix))
 
-abs_diff = abs(metrics_diff_srt);
+abs_diff = abs(diff_metrics_srt);
 diff_begin = min(abs_diff);
 diff_end = max(abs_diff);
 diff_step = (diff_end - diff_begin) / num_bins;
