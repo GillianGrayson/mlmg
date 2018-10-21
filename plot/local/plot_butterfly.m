@@ -91,11 +91,11 @@ title(cb, 'PDF');
 set(gca,'YDir','normal');
 
 hold all;
-h = plot([min(plot_data.metrics_1) max(plot_data.metrics_1)], [0 0], 'LineWidth', 2, 'Color', 'g');
+h = plot(xlim, [0 0], 'LineWidth', 2, 'Color', 'g');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 hold all;
-h = plot([0 0], [min(plot_data.metrics_2) max(plot_data.metrics_2)], 'LineWidth', 2, 'Color', 'g');
+h = plot([0 0], ylim, 'LineWidth', 2, 'Color', 'g');
 set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
 
 for id = 1:size(rare_names, 1)

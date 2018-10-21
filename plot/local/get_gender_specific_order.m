@@ -1,13 +1,6 @@
 function order = get_gender_specific_order(config)
 if strcmp(config.method, 'linreg_ols')
     
-    config.names;
-    config.f_metrics;
-    config.m_metrics;
-    config.diff_metrics;
-    config.data_1;
-    config.data_2;
-    
     ages = get_ages(config);
     
     names = config.names;
@@ -45,16 +38,20 @@ if strcmp(config.method, 'linreg_ols')
             slope_up_2 * x(4) + intercept_up_2];
         
         pgon_1 = polyshape(x, y1);
+        area_pgon_1 = polyarea(x, y1);
         pgon_2 = polyshape(x, y2);
+        area_pgon_2 = polyarea(x, y2);
         
         pgon_intersect = intersect(pgon_1, pgon_2);
         
-        
+        areas(id) = polyarea(pgon_intersect.Vertices(:, 1), pgon_intersect.Vertices(:, 2));      
     end
     
+    [tmp, order] = sort(areas, 'ascend');
     
-    
-    [tmp, order] = sort(abs(config.diff_metrics), 'descend');
+    names = names(order);
+    num_rare = floor(config.part * size(names, 1));
+    rare_names = names(1:num_rare)
     
 else
     
