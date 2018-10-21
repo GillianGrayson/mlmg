@@ -23,6 +23,8 @@ config.gender = 'versus';
 
 config.is_clustering = 0;
 
+config.color = '';
+
 if strcmp(getenv('computername'), 'MSI')
     config.up = 'D:/YandexDisk/Work/mlmg';
 else
@@ -33,15 +35,17 @@ end
 f = figure;
 if strcmp(config.gender, 'versus')
     config.gender = 'F';
-    plot_linreg_ols(config, gene)
+    config.color = 'r';
+    plot_linreg_ols_gene(config, gene)
     config.gender = 'M';
-    plot_linreg_ols(config, gene)
+    config.color = 'b';
+    plot_linreg_ols_gene(config, gene)
     config.gender = 'versus';
 else
-    plot_linreg_ols(config, gene)
+    plot_linreg_ols_gene(config, gene)
 end
 
-suffix = sprintf('gene(%s)_gender(%s)', gene, config.gender);
+suffix = sprintf('gene(%s)', gene);
 
 
 up_save = 'C:/Users/user/Google Drive/mlmg/figures';
@@ -58,7 +62,7 @@ savefig(f, sprintf('%s/linreg_ols_%s.fig', save_path, suffix))
 saveas(f, sprintf('%s/linreg_ols_%s.png', save_path, suffix))
 
 
-function plot_linreg_ols(config, gene)
+function plot_linreg_ols_gene(config, gene)
 
 fn = sprintf('%s/data/%s/top.txt', ...
     config.up, ...
@@ -113,30 +117,17 @@ y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 y_down = [slope_down * x_lin(1) + intercept_down, slope_down * x_lin(2) + intercept_down];
 y_up = [slope_up * x_lin(1) + intercept_up, slope_up * x_lin(2) + intercept_up];
 
-hold all;
-h = plot(ages_passed, gene_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-color = get(h, 'Color');
+plot_data.scatter_x = ages_passed;
+plot_data.scatter_y = gene_data_passed;
+plot_data.line_x = x_lin;
+plot_data.line_y = y_lin;
+plot_data.line_y_down = y_down;
+plot_data.line_y_up = y_up;
+plot_data.line_name = sprintf('%s: %s', gene, config.gender);
+plot_data.color = config.color;
 
-hold all;
-h = plot(x_lin, y_lin, '-', 'LineWidth', 3);
-legend(h, sprintf('%s: %s', gene_name, config.gender));
-set(h, 'Color', color)
-set(gca, 'FontSize', 30);
-xlabel('age', 'Interpreter', 'latex');
-set(gca, 'FontSize', 30);
-ylabel('$\beta$', 'Interpreter', 'latex');
-xlim([min(ages) - (max(ages) - min(ages)) * 0.1, max(ages) + (max(ages) - min(ages)) * 0.1])
+plot_linreg_ols(plot_data)
 
-hold all;
-h = plot(x_lin, y_down, '-.', 'LineWidth', 1, 'Color', 'k');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-hold all;
-h = plot(x_lin, y_up, '-.', 'LineWidth', 1, 'Color', 'k');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-box on;
 end
 
 

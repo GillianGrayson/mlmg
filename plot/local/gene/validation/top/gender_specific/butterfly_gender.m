@@ -1,11 +1,11 @@
 clear all;
 
 % ======== params ========
-config.metrics_rank = 1;
-config.plot_method = 1;
-part = 0.05;
+config.metrics_rank = 3;
+config.plot_method = 2;
+config.part = 0.05;
 
-num_bins = 100;
+plot_data.num_bins = 100;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -20,7 +20,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'moment';
+config.method = 'linreg';
 
 config.disease = 'any';
 config.gender = 'any';
@@ -55,23 +55,13 @@ save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing =======
-metrics_label = get_metrics_label(config);
-
-save_path = sprintf('%s/%s', ...
-    save_config.up, ...
-    get_result_path(save_config));
-mkdir(save_path);
-
-suffix = sprintf('method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
-    config.method, ...
-    config.metrics_rank, ...
-    config.plot_method, ...
-    part);
-
-[names, f_metrics, m_metrics] = get_gender_specific_metrics(config);
+[names, data_1, data_2] = get_gender_specific_data(config);
 config.names = names;
-config.f_metrics = f_metrics;
-config.m_metrics = m_metrics;
+config.data_1 = data_1;
+config.data_2 = data_2;
+[metrics_1, metrics_2] = get_gender_specific_metrics(config);
+config.metrics_1 = metrics_1;
+config.metrics_2 = metrics_2;
 diff_metrics = get_gender_specific_diff_metrics(config);
 config.diff_metrics = diff_metrics;
 
@@ -79,138 +69,26 @@ order = get_gender_specific_order(config);
 
 diff_metrics_srt = diff_metrics(order);
 genes_srt = names(order);
-f_metrics_srt = f_metrics(order);
-m_metrics_srt = m_metrics(order);
+metrics_1_srt = metrics_1(order);
+metrics_2_srt = metrics_2(order);
 
-num_genes = size(names, 1);
+plot_data.num_rare = floor(config.part * size(genes_srt, 1));
+plot_data.names = genes_srt;
+plot_data.metrics_1 = metrics_1_srt;
+plot_data.metrics_2 = metrics_2_srt;
+plot_data.metrics_diff = diff_metrics_srt;
+plot_data.metrics_1_label = sprintf('%s F', get_metrics_label(config));
+plot_data.metrics_2_label = sprintf('%s M', get_metrics_label(config));
+plot_data.save_path = sprintf('%s/%s', ...
+    save_config.up, ...
+    get_result_path(save_config));
+plot_data.fig_name = 'gender';
+plot_data.suffix = sprintf('gender_method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ...
+    config.method, ...
+    config.metrics_rank, ...
+    config.plot_method, ...
+    config.part);
 
-num_rare = floor(part * num_genes);
+mkdir(plot_data.save_path);
 
-common_genes = genes_srt(num_rare + 1:end);
-common_f_metrics = f_metrics_srt(num_rare + 1:end);
-common_m_metrics = m_metrics_srt(num_rare + 1:end);
-common_diff = diff_metrics_srt(num_rare + 1:end);
-
-rare_genes = genes_srt(1:num_rare);
-rare_f_metrics = f_metrics_srt(1:num_rare);
-rare_m_metrics = m_metrics_srt(1:num_rare);
-rare_diff = diff_metrics_srt(1:num_rare);
-
-f1 = figure;
-hold all;
-h = plot([min(f_metrics_srt) max(f_metrics_srt)], [0 0], 'LineWidth', 2, 'Color', 'k');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-hold all;
-h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 2, 'Color', 'k');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-hold all
-h = plot(common_f_metrics, common_m_metrics, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
-set(gca, 'FontSize', 30);
-xlabel(sprintf('%s F', metrics_label), 'Interpreter', 'latex');
-set(gca, 'FontSize', 30);
-ylabel(sprintf('%s M', metrics_label), 'Interpreter', 'latex');
-
-for gene_id = 1:size(rare_genes, 1)
-    hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
-    legend(h, string(rare_genes(gene_id)))
-end
-
-propertyeditor('on')
-box on;
-b = gca; legend(b,'off');
-
-savefig(f1, sprintf('%s/butterfly_gender_scatter_%s.fig', save_path, suffix))
-saveas(f1, sprintf('%s/butterfly_gender_scatter_%s.png', save_path, suffix))
-
-f_metrics_begin = min(f_metrics_srt);
-f_metrics_end = max(f_metrics_srt);
-f_metrics_step = (f_metrics_end - f_metrics_begin) / num_bins;
-f_metrics_bins = linspace(f_metrics_begin +  0.5 * f_metrics_step, f_metrics_end - 0.5 * f_metrics_step, num_bins);
-
-m_metrics_begin = min(m_metrics_srt);
-m_metrics_end = max(m_metrics_srt);
-m_metrics_step = (m_metrics_end - m_metrics_begin) / num_bins;
-m_metrics_bins = linspace(m_metrics_begin +  0.5 * m_metrics_step, m_metrics_end - 0.5 * m_metrics_step, num_bins);
-
-metrics_pdf = zeros(num_bins);
-for gene_id = 1:num_genes
-    id = floor((f_metrics_srt(gene_id) - f_metrics_begin) * num_bins / (f_metrics_end - f_metrics_begin + 1e-8)) + 1;
-    y_id = floor((m_metrics_srt(gene_id) - m_metrics_begin) * num_bins / (m_metrics_end - m_metrics_begin + 1e-8)) + 1;
-    metrics_pdf(id, y_id) = metrics_pdf(id, y_id) + 1;
-end
-
-metrics_pdf = metrics_pdf / (sum(sum(metrics_pdf)) * f_metrics_step * m_metrics_step);
-norm = sum(sum(metrics_pdf)) * f_metrics_step * m_metrics_step
-
-f2 = figure;
-h = imagesc(f_metrics_bins, m_metrics_bins, metrics_pdf');
-set(gca, 'FontSize', 30);
-xlabel(sprintf('%s F', metrics_label), 'Interpreter', 'latex');
-set(gca, 'FontSize', 30);
-ylabel(sprintf('%s M', metrics_label), 'Interpreter', 'latex');
-colormap hot;
-cb = colorbar;
-set(gca, 'FontSize', 30);
-title(cb, 'PDF');
-set(gca,'YDir','normal');
-
-hold all;
-h = plot([min(f_metrics_srt) max(f_metrics_srt)], [0 0], 'LineWidth', 2, 'Color', 'g');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-hold all;
-h = plot([0 0], [min(m_metrics_srt) max(m_metrics_srt)], 'LineWidth', 2, 'Color', 'g');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-
-for gene_id = 1:size(rare_genes, 1)
-    hold all;
-    h = plot(rare_f_metrics(gene_id), rare_m_metrics(gene_id), 'o', 'MarkerSize', 10, 'LineWidth', 5, 'MarkerFaceColor', 'w');
-    legend(h, string(rare_genes(gene_id)))
-end
-
-propertyeditor('on')
-box on;
-b = gca; legend(b,'off');
-
-savefig(f2, sprintf('%s/butterfly_gender_pdf_%s.fig', save_path, suffix))
-saveas(f2, sprintf('%s/butterfly_gender_pdf_%s.png', save_path, suffix))
-
-abs_diff = abs(diff_metrics_srt);
-diff_begin = min(abs_diff);
-diff_end = max(abs_diff);
-diff_step = (diff_end - diff_begin) / num_bins;
-diff_bins = linspace(diff_begin +  0.5 * diff_step, diff_end - 0.5 * diff_step, num_bins);
-
-diff_pdf = zeros(num_bins, 1);
-for gene_id = 1:num_genes
-    id = floor((abs_diff(gene_id) - diff_begin) * num_bins / (diff_end - diff_begin + 1e-8)) + 1;
-    diff_pdf(id) = diff_pdf(id) + 1;
-end
-diff_pdf = diff_pdf / (sum(diff_pdf) * diff_step);
-norm = sum(diff_pdf) * diff_step
-
-f3 = figure;
-hold all
-h = plot(diff_bins, diff_pdf, 'LineWidth', 2, 'Color', 'r');
-set(gca, 'FontSize', 30);
-xlabel('$|\Delta|$', 'Interpreter', 'latex');
-set(gca, 'FontSize', 30);
-ylabel('PDF', 'Interpreter', 'latex');
-
-limit_id = floor((abs_diff(num_rare) - diff_begin) * num_bins / (diff_end - diff_begin + 1e-8)) + 1;
-hold all;
-h = plot(diff_bins(limit_id:end), diff_pdf(limit_id:end), 'LineWidth', 4, 'Color', 'k');
-hold all;
-h = plot([diff_bins(limit_id) diff_bins(end)], [0 0], 'LineWidth', 4, 'Color', 'k');
-hold all;
-h = plot([diff_bins(limit_id) diff_bins(limit_id)], [0 diff_pdf(limit_id)], 'LineWidth', 4, 'Color', 'k');
-
-propertyeditor('on')
-box on;
-b = gca; legend(b,'off');
-
-savefig(f3, sprintf('%s/butterfly_gender_delta_%s.fig', save_path, suffix))
-saveas(f3, sprintf('%s/butterfly_gender_delta_%s.png', save_path, suffix))
+plot_butterfly(plot_data);

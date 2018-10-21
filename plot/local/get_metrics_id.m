@@ -27,5 +27,8 @@ elseif strcmp(config.method, 'moment')
         metrics_id = 2;
     end    
 
+elseif strcmp(config.method, 'linreg_ols')
+    metrics_id = 1;
+
 end
 end

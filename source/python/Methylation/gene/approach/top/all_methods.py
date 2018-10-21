@@ -36,7 +36,7 @@ def top_proc(config):
     elif config.method is Method.linreg_ols:
         save_top_linreg_ols(config)
 
-data_base = DataBase.GSE87571
+data_base = DataBase.GSE40279
 data_type = DataType.gene
 
 chromosome_type = ChromosomeTypes.non_gender
@@ -50,7 +50,7 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_ols,
+    Method.moment,
 ]
 
 is_clustering = False
