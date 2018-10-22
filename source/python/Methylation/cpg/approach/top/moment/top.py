@@ -1,5 +1,4 @@
 import numpy as np
-from infrastructure.load.attributes import get_attributes
 from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
@@ -7,52 +6,39 @@ from annotations.gene import get_dict_cpg_gene
 from config.types import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
-from scipy import stats
 
 
-def save_top_linreg(config):
-    attributes = get_attributes(config)
+def save_top_moment(config):
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
 
-    r_values = []
-    p_values = []
-    slopes = []
-    intercepts = []
-    std_errors = []
+    means = []
+    stds = []
     for id in range(0, len(cpg_names)):
         values = cpg_values[id]
-        slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, values)
-        r_values.append(r_value)
-        p_values.append(p_value)
-        slopes.append(slope)
-        intercepts.append(intercept)
-        std_errors.append(std_error)
+        means.append(np.mean(values))
+        stds.append(np.std(values))
+
         if id % config.print_rate == 0:
             print('cpg_id: ' + str(id))
 
-    order = np.argsort(list(map(abs, r_values)))[::-1]
+    order = np.argsort(list(map(abs, means)))[::-1]
     cpgs_sorted = list(np.array(cpg_names)[order])
-    r_values_sorted = list(np.array(r_values)[order])
-    p_values_sorted = list(np.array(p_values)[order])
-    slopes_sorted = list(np.array(slopes)[order])
-    intercepts_sorted = list(np.array(intercepts)[order])
-    std_errors_sorted = list(np.array(std_errors)[order])
+    means_sorted = list(np.array(means)[order])
+    stds_sorted = list(np.array(stds)[order])
+
+    features = [
+        cpgs_sorted,
+        means_sorted,
+        stds_sorted
+    ]
 
     clusters_mean_shift = []
     clusters_affinity_prop = []
-    features = [
-        cpgs_sorted,
-        r_values_sorted,
-        p_values_sorted,
-        slopes_sorted,
-        intercepts_sorted,
-        std_errors_sorted
-    ]
     if config.is_clustering:
-        metrics_sorted_np = np.asarray(list(map(abs, r_values_sorted))).reshape(-1, 1)
+        metrics_sorted_np = np.asarray(list(map(abs, means_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
         ms.fit(metrics_sorted_np)
@@ -74,20 +60,14 @@ def save_top_linreg(config):
 
     genes_sorted = []
     cpgs_genes = []
-    r_values_genes = []
-    p_values_genes = []
-    slopes_genes = []
-    intercepts_genes = []
-    std_errors_genes = []
+    means_genes = []
+    stds_genes = []
     clusters_mean_shift_genes = []
     clusters_affinity_prop_genes = []
     for id in range(0, len(cpgs_sorted)):
         cpg = cpgs_sorted[id]
-        r_value = r_values_sorted[id]
-        p_value = p_values_sorted[id]
-        slope = slopes_sorted[id]
-        intercept = intercepts_sorted[id]
-        std_error = std_errors_sorted[id]
+        mean = means_sorted[id]
+        std = stds_sorted[id]
         if config.is_clustering:
             cluster_mean_shift = clusters_mean_shift[id]
             cluster_affinity_prop = clusters_affinity_prop[id]
@@ -100,11 +80,8 @@ def save_top_linreg(config):
                 if gene not in genes_sorted:
                     genes_sorted.append(gene)
                     cpgs_genes.append(cpg)
-                    r_values_genes.append(r_value)
-                    p_values_genes.append(p_value)
-                    slopes_genes.append(slope)
-                    intercepts_genes.append(intercept)
-                    std_errors_genes.append(std_error)
+                    means_genes.append(mean)
+                    stds_genes.append(std)
                     if config.is_clustering:
                         clusters_mean_shift_genes.append(cluster_mean_shift)
                         clusters_affinity_prop_genes.append(cluster_affinity_prop)
@@ -118,11 +95,8 @@ def save_top_linreg(config):
     features = [
         genes_sorted,
         cpgs_genes,
-        r_values_genes,
-        p_values_genes,
-        slopes_genes,
-        intercepts_genes,
-        std_errors_genes
+        means_genes,
+        stds_genes
     ]
 
     if config.is_clustering:
