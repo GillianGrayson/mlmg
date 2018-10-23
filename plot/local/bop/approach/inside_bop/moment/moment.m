@@ -22,11 +22,13 @@ config.gender = 'versus';
 
 config.is_clustering = 0;
 
-if strcmp(getenv('computername'), 'MSI')
-    config.up = 'D:/YandexDisk/Work/mlmg';
-else
-    config.up = 'E:/YandexDisk/Work/mlmg';
-end
+if strcmp(getenv('computername'), 'MSI') 
+    config.up = 'D:/YandexDisk/Work/mlmg'; 
+elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS') 
+    config.up = 'D:/Aaron/Bio/mlmg'; 
+else 
+    config.up = 'E:/YandexDisk/Work/mlmg'; 
+end 
 
 % ======== processing ========
 f = figure;
@@ -47,7 +49,13 @@ suffix = sprintf('bop(%s)_gender(%s)', bop_name, config.gender);
 
 legend('-DynamicLegend');
 
-up_save = 'C:/Users/user/Google Drive/mlmg/figures';
+if strcmp(getenv('computername'), 'MSI') 
+    up_save = 'C:/Users/user/Google Drive/mlmg/figures'; 
+elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS') 
+    up_save = 'D:/Aaron/Bio/mlmg/figures'; 
+else 
+    up_save = 'C:/Users/user/Google Drive/mlmg/figures'; 
+end 
 
 save_path = sprintf('%s/%s', ...
     up_save, ...
