@@ -1,10 +1,10 @@
 clear all;
 
 % ======== params ========
-cpg = 'cg18481230';
+cpg = 'cg08967938';
 
 % ======== config ========
-config.data_base = 'GSE40279';
+config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
 config.chromosome_type = 'non_gender';
@@ -21,22 +21,30 @@ config.disease = 'any';
 config.gender = 'versus';
 
 config.is_clustering = 0;
-config.up = '../../../../../..';
+
+config.color = '';
+
+if strcmp(getenv('computername'), 'MSI')
+    config.up = 'D:/YandexDisk/Work/mlmg';
+else
+    config.up = 'E:/YandexDisk/Work/mlmg';
+end
 
 % ======== processing ========
 f = figure;
 if strcmp(config.gender, 'versus')
     config.gender = 'F';
-    plot_linreg(config, cpg)
+    config.color = 'r';
+    plot_linreg_cpg(config, cpg)
     config.gender = 'M';
-    plot_linreg(config, cpg)
+    config.color = 'b';
+    plot_linreg_cpg(config, cpg)
     config.gender = 'versus';
 else
-    plot_linreg(config, cpg)
+    plot_linreg_gene(config, cpg)
 end
 
 suffix = sprintf('cpg(%s)_gender(%s)', cpg, config.gender);
-
 
 up_save = 'C:/Users/user/Google Drive/mlmg/figures';
 
@@ -52,14 +60,15 @@ savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
 saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
 
 
-function plot_linreg(config, cpg)
-print_rate = 1000;
+function plot_linreg_cpg(config, cpg)
+
 fn = sprintf('%s/data/%s/top.txt', ...
     config.up, ...
     get_result_path(config));
 
 top_data = importdata(fn);
-cpgs = top_data.textdata;
+
+cpgs = string(top_data.textdata);
 slopes = top_data.data(:, 3);
 intercepts = top_data.data(:, 4);
 
@@ -82,7 +91,7 @@ while ~feof(fid)
         cpg_data = str2double(tline(2:end))';
         break;
     end
-    if mod(num_lines, print_rate) == 0
+    if mod(num_lines, 1000) == 0
         num_lines = num_lines
     end
     num_lines = num_lines + 1;
@@ -94,27 +103,21 @@ for id = 1:size(indexes, 1)
     cpg_data_passed(id) = cpg_data(indexes(id));
 end
 
-cpg_id = find(string(cpgs)==string(cpg));
+cpg_id = find(cpgs==cpg);
 
 slope = slopes(cpg_id);
 intercept = intercepts(cpg_id);
 x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
-hold all;
-h = plot(ages_passed, cpg_data_passed, 'o', 'MarkerSize', 10, 'MarkerFaceColor', 'w');
-set(get(get(h, 'Annotation'), 'LegendInformation'), 'IconDisplayStyle', 'off');
-color = get(h, 'Color');
+plot_data.scatter_x = ages_passed;
+plot_data.scatter_y = cpg_data_passed;
+plot_data.line_x = x_lin;
+plot_data.line_y = y_lin;
+plot_data.line_name = sprintf('%s: %s', cpg, config.gender);
+plot_data.color = config.color;
 
-hold all;
-h = plot(x_lin, y_lin, '-', 'LineWidth', 3);
-legend(h, sprintf('%s: %s', cpg, config.gender));
-set(h, 'Color', color)
-set(gca, 'FontSize', 30);
-xlabel('age', 'Interpreter', 'latex');
-set(gca, 'FontSize', 30);
-ylabel('$\beta$', 'Interpreter', 'latex');
+plot_linreg(plot_data)
 
-box on;
 end
 

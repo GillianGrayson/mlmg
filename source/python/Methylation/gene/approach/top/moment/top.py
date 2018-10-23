@@ -27,7 +27,7 @@ def save_top_moment(config):
         stds_sorted
     ]
     if config.is_clustering:
-        metrics_sorted_np = np.asarray(list(map(abs, means))).reshape(-1, 1)
+        metrics_sorted_np = np.asarray(list(map(abs, means_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
         ms = MeanShift(bandwidth=bandwidth, bin_seeding=True)
         ms.fit(metrics_sorted_np)

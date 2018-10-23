@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-gene = 'NCRNA00181';
+gene = 'TLE1';
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -69,8 +69,8 @@ top_data = importdata(fn);
 genes = top_data.textdata;
 slopes = top_data.data(:, 3);
 intercepts = top_data.data(:, 4);
-slopes_variance = top_data.data(:, 7);
-intercepts_variance = top_data.data(:, 8);
+slopes_variance = top_data.data(:, 8);
+intercepts_variance = top_data.data(:, 9);
 
 indexes = get_attributes_indexes(config);
 ages = get_ages(config);

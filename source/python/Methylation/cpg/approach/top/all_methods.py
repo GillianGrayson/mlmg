@@ -2,8 +2,10 @@ from config.config import *
 from infrastructure.load.top import *
 from cpg.approach.top.enet.top import save_top_enet
 from cpg.approach.top.linreg.top import save_top_linreg
+from cpg.approach.top.linreg_ols.top import save_top_linreg_ols
 from cpg.approach.top.anova.top import save_top_anova
 from cpg.approach.top.spearman.top import save_top_spearman
+from cpg.approach.top.moment.top import save_top_moment
 
 
 def top_proc(config):
@@ -15,7 +17,10 @@ def top_proc(config):
         save_top_anova(config)
     elif config.method is Method.spearman:
         save_top_spearman(config)
-
+    elif config.method is Method.moment:
+        save_top_moment(config)
+    elif config.method is Method.linreg_ols:
+        save_top_linreg_ols(config)
 
 data_base = DataBase.GSE87571
 data_type = DataType.cpg
@@ -30,7 +35,7 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg,
+    Method.linreg_ols,
 ]
 
 is_clustering = False

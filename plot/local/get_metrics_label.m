@@ -5,6 +5,8 @@ if strcmp(config.method, 'linreg')
     if config.metrics_rank == 1
         metrics_label = 'r';
     elseif config.metrics_rank == 2
+        metrics_label = '$-\log_{10}p\_value$';
+    elseif config.metrics_rank == 3
         metrics_label = 'slope';
     end
     
@@ -24,7 +26,9 @@ elseif strcmp(config.method, 'moment')
     elseif config.metrics_rank == 2
         metrics_label = 'std';
     end
-    
+
+elseif strcmp(config.method, 'linreg_ols')
+    metrics_label = 'R2';
     
 end
 end
