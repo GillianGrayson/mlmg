@@ -65,7 +65,7 @@ if strcmp(config.method, 'linreg') && config.plot_method == 2
     end
     
 elseif strcmp(config.method, 'manova') && config.plot_method == 2
-
+    
     p_value_lim = 1e-8;
     p_value_lim_log = -log10(p_value_lim);
     
@@ -86,15 +86,110 @@ elseif strcmp(config.method, 'manova') && config.plot_method == 2
             id = id
         end
     end
+
+elseif strcmp(config.method, 'manova') && config.plot_method == 3
     
+    p_value_lim = 1e-8;
+    p_value_lim_log = -log10(p_value_lim);
+    
+    metrics_id = get_metrics_id(config);
+    metrics_1 = all_data_1(:, metrics_id);
+    metrics_2 = all_data_2(:, metrics_id);
+    metrics_1 = process_metrics(metrics_1, config);
+    metrics_2 = process_metrics(metrics_2, config);
+    
+    for id = 1:num_names
+        if(metrics_1(id) > p_value_lim_log) || (metrics_2(id) > p_value_lim_log)
+            names = vertcat(names, all_names(id));
+            data_1 = vertcat(data_1, all_data_1(id, :));
+            data_2 = vertcat(data_2, all_data_2(id, :));
+        end
+        
+        if mod(id, 1000) == 0
+            id = id
+        end
+    end
+
+elseif strcmp(config.method, 'manova') && config.plot_method == 4
+    metrics_id = get_metrics_id(config);
+    metrics_1 = all_data_1(:, metrics_id);
+    metrics_2 = all_data_2(:, metrics_id);
+    metrics_1 = process_metrics(metrics_1, config);
+    metrics_2 = process_metrics(metrics_2, config);
+    
+    config_moment.data_base = config.data_base;
+    config_moment.data_type = config.data_type;
+    
+    config_moment.chromosome_type = config.chromosome_type;
+    
+    config_moment.class_type = config.class_type;
+    
+    config_moment.info_type = config.info_type;
+    
+    config_moment.scenario = config.scenario;
+    config_moment.approach = 'inside_bop';
+    config_moment.method = 'moment';
+    
+    config_moment.disease = 'any';
+    config_moment.gender = 'F';
+    
+    config_moment.is_clustering = 0;
+    
+    if strcmp(getenv('computername'), 'MSI')
+        config_moment.up = 'D:/YandexDisk/Work/mlmg';
+    elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS')
+        config_moment.up = 'D:/Aaron/Bio/mlmg';
+    else
+        config_moment.up = 'E:/YandexDisk/Work/mlmg';
+    end
+    
+    fn = sprintf('%s/data/%s/inside_bop.txt', ...
+        config_moment.up, ...
+        get_result_path(config_moment));
+    
+    f_inside_bop_data = importdata(fn, ' ');
+    f_bops = f_inside_bop_data.textdata(:, 1);
+    f_means = f_inside_bop_data.data(:, 1);
+    f_stds = f_inside_bop_data.data(:, 2);
+    
+    config_moment.gender = 'M';
+    
+    fn = sprintf('%s/data/%s/inside_bop.txt', ...
+        config_moment.up, ...
+        get_result_path(config_moment));
+    
+    m_inside_bop_data = importdata(fn, ' ');
+    m_bops = m_inside_bop_data.textdata(:, 1);
+    m_means = m_inside_bop_data.data(:, 1);
+    m_stds = m_inside_bop_data.data(:, 2);
+    
+    for id = 1:size(metrics_1, 1)
+        bop_name = all_names{id};
+        ids = find(string(f_bops) == string(bop_name));
+        num_targets = size(ids, 1);
+        for i = 1:num_targets
+            f_interval = [f_means(ids(i))-f_stds(ids(i)), f_means(ids(i))+f_stds(ids(i))];
+            m_interval = [m_means(ids(i))-m_stds(ids(i)), m_means(ids(i))+m_stds(ids(i))];
+            if((f_interval(1)<min(m_interval)) && (min(m_interval)<f_interval(2))) || ((f_interval(1)<max(m_interval)) && (max(m_interval)<f_interval(2))) || ((m_interval(1)<min(f_interval)) && (min(f_interval)<m_interval(2))) || ((m_interval(1)<max(f_interval)) && (max(f_interval)<m_interval(2)))
+                continue
+            else
+                names = vertcat(names, all_names(id));
+                data_1 = vertcat(data_1, all_data_1(id, :));
+                data_2 = vertcat(data_2, all_data_2(id, :));
+            end
+        end
+        if mod(id, 1000) == 0
+            id = id
+        end
+    end 
 else
     
     names = all_names;
     data_1 = all_data_1;
     data_2 = all_data_2;
     
-end
-
-
-
-end
+    end
+    
+    
+    
+    end

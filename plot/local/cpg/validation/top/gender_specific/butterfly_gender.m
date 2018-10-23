@@ -24,11 +24,13 @@ config.gender = '';
 
 config.is_clustering = 0;
 
-if strcmp(getenv('computername'), 'MSI')
-    config.up = 'D:/YandexDisk/Work/mlmg';
-else
-    config.up = 'E:/YandexDisk/Work/mlmg';
-end
+if strcmp(getenv('computername'), 'MSI') 
+    config.up = 'D:/YandexDisk/Work/mlmg'; 
+elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS') 
+    config.up = 'D:/Aaron/Bio/mlmg'; 
+else 
+    config.up = 'E:/YandexDisk/Work/mlmg'; 
+end 
 
 % ======== save_config ========
 save_config.data_base = config.data_base;
@@ -47,7 +49,14 @@ save_config.method = 'gender_specific';
 save_config.disease = config.disease;
 save_config.gender = 'versus';
 
-save_config.up = 'C:/Users/user/Google Drive/mlmg/figures';
+
+if strcmp(getenv('computername'), 'MSI') 
+    save_config.up = 'C:/Users/user/Google Drive/mlmg/figures'; 
+elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS') 
+    save_config.up = 'D:/Aaron/Bio/mlmg/figures'; 
+else 
+    save_config.up = 'C:/Users/user/Google Drive/mlmg/figures'; 
+end
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
