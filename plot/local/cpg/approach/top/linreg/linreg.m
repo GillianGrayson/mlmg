@@ -1,10 +1,10 @@
 clear all;
 
 % ======== params ========
-cpg = 'cg08967938';
+cpg = 'cg00167275C:\Users\user\Google Drive\mlmg\figures\GSE87571\cpg_data\non_gender\genic\result\validation\top\gender_specific\any\versus';
 
 % ======== config ========
-config.data_base = 'GSE87571';
+config.data_base = 'GSE40279';
 config.data_type = 'cpg_data';
 
 config.chromosome_type = 'non_gender';

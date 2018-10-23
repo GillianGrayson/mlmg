@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-gene = 'CCNYL1';
+gene = 'RNU12';
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -94,7 +94,7 @@ genes_names = data.textdata;
 genes_data = data.data;
 
 gene_name = string(gene);
-idx = find(genes_names==gene_name);
+idx = find(genes_names==gene_name)
 gene_data = genes_data(idx, :)';
 
 gene_data_passed = size(indexes, 1);
