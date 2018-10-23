@@ -27,7 +27,7 @@ elseif strcmp(config.method, 'moment')
         metrics_label = 'std';
     end
 
-if strcmp(config.method, 'linreg_ols')
+elseif strcmp(config.method, 'linreg_ols')
     metrics_label = 'R2';
     
 end

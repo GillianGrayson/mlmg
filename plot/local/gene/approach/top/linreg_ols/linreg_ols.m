@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-gene = 'SDHAP3';
+gene = 'CCNYL1';
 
 % ======== config ========
 config.data_base = 'GSE87571';
