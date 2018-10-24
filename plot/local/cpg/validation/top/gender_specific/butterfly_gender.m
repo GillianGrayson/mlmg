@@ -6,7 +6,7 @@ config.plot_method = 1;
 config.part = 0.0005;
 
 % ======== config ========
-config.data_base = 'GSE40279';
+config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
 config.chromosome_type = 'non_gender';

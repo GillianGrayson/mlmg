@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-cpg = 'cg00167275C:\Users\user\Google Drive\mlmg\figures\GSE87571\cpg_data\non_gender\genic\result\validation\top\gender_specific\any\versus';
+cpg = 'cg00167275';
 
 % ======== config ========
 config.data_base = 'GSE40279';
