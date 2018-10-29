@@ -113,6 +113,19 @@ def get_method_metrics(method, is_clustering=False):
 
     return metrics
 
+def get_method_order_metrics(method):
+    metrics = []
+    if method is Method.linreg_ols:
+        metrics = [
+            'names',
+            'areas',
+            'areas_normed'
+        ]
+    elif method is Method.manova:
+        metrics = ['names']
+
+    return metrics
+
 def get_method_main_metric(method):
     metric = ''
     if method is Method.linreg:
