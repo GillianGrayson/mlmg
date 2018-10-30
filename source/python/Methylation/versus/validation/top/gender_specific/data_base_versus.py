@@ -51,6 +51,8 @@ def genes_intersection(config, data_bases, methods, sort_ids, num_top):
     for genes in gene_lists:
         gene_intersection = list(set(gene_intersection).intersection(genes))
 
+    gene_intersection.sort()
+
     for gene in gene_intersection:
         print(gene)
     print(str(len(gene_intersection)))

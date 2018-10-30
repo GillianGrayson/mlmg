@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-cpg = 'cg03911306';
+cpg = 'cg26324366';
 
 % ======== config ========
 config.data_base = 'GSE87571';
