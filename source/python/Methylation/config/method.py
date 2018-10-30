@@ -20,6 +20,7 @@ class Method(Enum):
     match = 'match'
     gender_specific = 'gender_specific'
     moment = 'moment'
+    classification = 'classification'
 
 def get_top_fn(method, params_dict):
     fn = 'top.txt'
@@ -121,8 +122,11 @@ def get_method_order_metrics(method):
             'areas',
             'areas_normed'
         ]
-    elif method is Method.manova:
-        metrics = ['names']
+    elif method is Method.classification:
+        metrics = [
+            'names',
+            'metric'
+        ]
 
     return metrics
 

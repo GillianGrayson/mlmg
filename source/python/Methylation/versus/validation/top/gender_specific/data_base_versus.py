@@ -7,25 +7,29 @@ from infrastructure.save.features import save_features
 import math
 
 
-def genes_intersection(config, data_bases, method, sort_id, part):
+def genes_intersection(config, data_bases, methods, sort_ids, part):
     data_bases_str = [x.value for x in data_bases]
     data_bases_str.sort()
     data_bases_str = '_'.join(data_bases_str)
+
     gene_lists = []
     for data_base in data_bases:
         config.data_base = data_base
 
-        fn = 'method(' + method.value + ').xlsx'
-        keys = get_method_order_metrics(method)
-        top_dict = load_top_dict(config, keys, fn=fn)
+        for method_id in range(0, len(methods)):
+            method = methods[method_id]
 
-        part_int = math.floor(len(top_dict[keys[0]]) * part)
+            fn = 'method(' + method.value + ').xlsx'
+            keys = get_method_order_metrics(method)
+            top_dict = load_top_dict(config, keys, fn=fn)
 
-        order = np.argsort(top_dict[keys[sort_id]])
-        for key in keys:
-            top_dict[key] = list(np.array(top_dict[key])[order])
+            part_int = math.floor(len(top_dict[keys[0]]) * part)
 
-        gene_lists.append(top_dict[keys[0]][0:part_int])
+            order = np.argsort(top_dict[keys[sort_ids[method_id]]])
+            for key in keys:
+                top_dict[key] = list(np.array(top_dict[key])[order])
+
+            gene_lists.append(top_dict[keys[0]][0:part_int])
 
 
     gene_intersection = gene_lists[0]
@@ -36,12 +40,13 @@ def genes_intersection(config, data_bases, method, sort_id, part):
         print(gene)
     print(str(len(gene_intersection)))
 
-target_method = Method.linreg_ols
-target_sort_id = 1
-target_part = 0.00665335994
+target_data_bases = [DataBase.GSE87571, DataBase.GSE40279]
+target_methods = [Method.classification, Method.linreg_ols]
+target_sort_ids = [1, 1]
+target_part = 0.05
 
 data_base = DataBase.data_base_versus
-data_bases = [DataBase.GSE87571, DataBase.GSE40279]
+
 data_type = DataType.gene
 
 chromosome_type = ChromosomeTypes.non_gender
@@ -87,4 +92,4 @@ config = Config(
     is_clustering=is_clustering
 )
 
-genes_intersection(config, data_bases, target_method, target_sort_id, target_part)
+genes_intersection(config, target_data_bases, target_methods, target_sort_ids, target_part)
