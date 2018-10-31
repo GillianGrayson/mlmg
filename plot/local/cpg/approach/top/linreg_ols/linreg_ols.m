@@ -1,16 +1,15 @@
 clear all;
 
 % ======== params ========
-gene = 'ZPBP2';
+cpg = 'cg26324366';
 
 % ======== config ========
-config.data_base = 'GSE40279';
-config.data_type = 'gene_data';
+config.data_base = 'GSE87571';
+config.data_type = 'cpg_data';
 
 config.chromosome_type = 'non_gender';
 
-config.geo_type = 'islands_shores';
-config.gene_data_type = 'mean';
+config.dna_region = 'genic';
 
 config.info_type = 'result';
 
@@ -36,17 +35,16 @@ f = figure;
 if strcmp(config.gender, 'versus')
     config.gender = 'F';
     config.color = 'r';
-    plot_linreg_ols_gene(config, gene)
+    plot_linreg_ols_cpg(config, cpg)
     config.gender = 'M';
     config.color = 'b';
-    plot_linreg_ols_gene(config, gene)
+    plot_linreg_ols_cpg(config, cpg)
     config.gender = 'versus';
 else
-    plot_linreg_ols_gene(config, gene)
+    plot_linreg_ols_gene(config, cpg)
 end
 
-suffix = sprintf('gene(%s)', gene);
-
+suffix = sprintf('cpg(%s)', cpg);
 
 up_save = 'C:/Users/user/Google Drive/mlmg/figures';
 
@@ -58,11 +56,11 @@ mkdir(save_path);
 box on;
 b = gca; legend(b,'off');
 
-savefig(f, sprintf('%s/linreg_ols_%s.fig', save_path, suffix))
-saveas(f, sprintf('%s/linreg_ols_%s.png', save_path, suffix))
+savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
+saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
 
 
-function plot_linreg_ols_gene(config, gene)
+function plot_linreg_ols_cpg(config, cpg)
 
 fn = sprintf('%s/data/%s/top.txt', ...
     config.up, ...
@@ -70,7 +68,7 @@ fn = sprintf('%s/data/%s/top.txt', ...
 
 top_data = importdata(fn);
 
-genes = top_data.textdata;
+cpgs = string(top_data.textdata);
 intercepts = top_data.data(:, 2);
 slopes = top_data.data(:, 3);
 intercepts_std = top_data.data(:, 4);
@@ -85,31 +83,36 @@ for id = 1:size(indexes, 1)
     ages_passed(id) = ages(index);
 end
 
-fn = sprintf('%s/data/%s/gene_data.txt', ...
-    config.up, ...
-    get_gene_data_path(config));
+fn = sprintf('%s/data/%s/average_beta.txt', config.up, config.data_base);
+fid = fopen(fn);
+num_lines = 1;
+while ~feof(fid)
+    tline = strsplit(fgetl(fid), '\t');
+    curr_cpg = string(tline(1));
+    if strcmp(curr_cpg, cpg)
+        cpg_data = str2double(tline(2:end))';
+        break;
+    end
+    if mod(num_lines, 1000) == 0
+        num_lines = num_lines
+    end
+    num_lines = num_lines + 1;
+end
+fclose(fid);
 
-data = importdata(fn);
-genes_names = data.textdata;
-genes_data = data.data;
-
-gene_name = string(gene);
-idx = find(genes_names==gene_name)
-gene_data = genes_data(idx, :)';
-
-gene_data_passed = size(indexes, 1);
+cpg_data_passed = size(indexes, 1);
 for id = 1:size(indexes, 1)
-    gene_data_passed(id) = gene_data(indexes(id));
+    cpg_data_passed(id) = cpg_data(indexes(id));
 end
 
-gene_id = find(genes==gene_name);
+cpg_id = find(cpgs==cpg);
 
 sigma = 3;
 
-slope = slopes(gene_id);
-intercept = intercepts(gene_id);
-intercept_std = intercepts_std(gene_id);
-slope_std = slopes_std(gene_id);
+slope = slopes(cpg_id);
+intercept = intercepts(cpg_id);
+intercept_std = intercepts_std(cpg_id);
+slope_std = slopes_std(cpg_id);
 
 x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
@@ -130,20 +133,15 @@ y_up = [slope_up * x_lin(1) + intercept_up, slope_up * x_lin(2) + intercept_up];
 y_down = [slope_down * x_lin(1) + intercept_down, slope_down * x_lin(2) + intercept_down];
 
 plot_data.scatter_x = ages_passed;
-plot_data.scatter_y = gene_data_passed;
+plot_data.scatter_y = cpg_data_passed;
 plot_data.line_x = x_lin;
 plot_data.line_y = y_lin;
 plot_data.line_y_down = y_down;
 plot_data.line_y_up = y_up;
-plot_data.line_name = sprintf('%s: %s', gene, config.gender);
+plot_data.line_name = sprintf('%s: %s', cpg, config.gender);
 plot_data.color = config.color;
 
 plot_linreg_ols(plot_data)
 
 end
-
-
-
-
-
 

@@ -20,6 +20,7 @@ class Method(Enum):
     match = 'match'
     gender_specific = 'gender_specific'
     moment = 'moment'
+    classification = 'classification'
 
 def get_top_fn(method, params_dict):
     fn = 'top.txt'
@@ -110,6 +111,22 @@ def get_method_metrics(method, is_clustering=False):
             metrics = metrics + clustering_metrics
     elif method is Method.manova:
         metrics = ['pval']
+
+    return metrics
+
+def get_method_order_metrics(method):
+    metrics = []
+    if method is Method.linreg_ols:
+        metrics = [
+            'names',
+            'areas',
+            'areas_normed'
+        ]
+    elif method is Method.classification:
+        metrics = [
+            'names',
+            'metric'
+        ]
 
     return metrics
 

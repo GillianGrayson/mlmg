@@ -4,6 +4,9 @@ from infrastructure.path.path import *
 from config.method import *
 import numpy as np
 import os.path
+import pandas as pd
+from pandas import ExcelWriter
+from pandas import ExcelFile
 
 
 def load_top_gene_names_by_article(config, fn):
@@ -40,27 +43,35 @@ def load_top_data(config, num_top, index):
     return gene_names
 
 def load_top_dict(config, keys, fn='top.txt', num_top=1000000):
-    params_last_run_dict = load_top_params_last_run_dict(config)
-    if params_last_run_dict:
-        fn = get_top_fn(config.approach_method, params_last_run_dict)
-    fn = get_result_path(config, fn)
-    f = open(fn)
-    top_dict = {}
-    num_lines = 0
-    for line in f:
-        line = line.rstrip()
-        cols = line.split(' ')
-        for key_id in range(0, len(keys)):
-            key = keys[key_id]
-            if key not in top_dict:
-                top_dict[key] = [cols[key_id]]
-            else:
-                top_dict[key].append(cols[key_id])
-        num_lines += 1
-        if num_lines >= num_top:
-            print('Top contains more than ' + str(num_top))
-            break
-    return top_dict
+    if fn.endswith('.txt'):
+        params_last_run_dict = load_top_params_last_run_dict(config)
+        if params_last_run_dict:
+            fn = get_top_fn(config.approach_method, params_last_run_dict)
+        fn = get_result_path(config, fn)
+        f = open(fn)
+        top_dict = {}
+        num_lines = 0
+        for line in f:
+            line = line.rstrip()
+            cols = line.split(' ')
+            for key_id in range(0, len(keys)):
+                key = keys[key_id]
+                if key not in top_dict:
+                    top_dict[key] = [cols[key_id]]
+                else:
+                    top_dict[key].append(cols[key_id])
+            num_lines += 1
+            if num_lines >= num_top:
+                print('Top contains more than ' + str(num_top))
+                break
+        return top_dict
+    elif fn.endswith('.xlsx'):
+        fn = get_result_path(config, fn)
+        df = pd.read_excel(fn)
+        top_dict = {}
+        for key in keys:
+            top_dict[key] = list(df[key])
+        return top_dict
 
 def load_top_params_last_run_dict(config):
     fn = 'params_last_run.txt'

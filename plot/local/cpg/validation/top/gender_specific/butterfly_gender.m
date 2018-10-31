@@ -1,12 +1,12 @@
 clear all;
 
 % ======== params ========
-config.metrics_rank = 3;
-config.plot_method = 2;
+config.metrics_rank = 1;
+config.plot_method = 1;
 config.part = 0.0005;
 
 % ======== config ========
-config.data_base = 'GSE40279';
+config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
 config.chromosome_type = 'non_gender';
@@ -17,7 +17,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg';
+config.method = 'linreg_ols';
 
 config.disease = 'any';
 config.gender = '';

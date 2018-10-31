@@ -12,7 +12,7 @@ config.diff_metrics = diff_metrics;
 
 num_names = size(config.names, 1)
 
-order = get_gender_specific_order(config);
+order = get_gender_specific_order(config, save_config);
 
 diff_metrics_srt = diff_metrics(order);
 names_srt = names(order);
