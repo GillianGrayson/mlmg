@@ -32,6 +32,9 @@ class Config:
                  disease=Disease.any,
                  gender=Gender.any,
 
+                 attributes_types=None,
+                 attribute_target=None,
+
                  is_clustering=False
                  ):
 
@@ -60,6 +63,11 @@ class Config:
         # Level 4: Attributes
         self.disease = disease
         self.gender = gender
+
+        self.attributes_types = attributes_types
+        if len(self.attributes_types) > 0:
+            self.attributes_types.sort()
+        self.attribute_target = attribute_target
 
         # Aux
         self.read_only = read_only

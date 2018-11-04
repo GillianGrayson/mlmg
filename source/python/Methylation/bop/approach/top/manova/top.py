@@ -9,7 +9,7 @@ from method.clustering.order import *
 import pandas as pd
 
 
-def save_top_manova(config, attributes_types, attribute_target, window=3, test=MANOVATest.pillai_bartlett):
+def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
     dict_bop_cpgs = get_dict_bop_cpgs(config)
     dict_bop_genes = get_dict_bop_genes(config)
     dict_cpg_data = load_dict_cpg_data(config)
@@ -18,9 +18,11 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
 
     atr_table = []
     atr_cols = []
-    for atr_type in attributes_types:
+    for atr_type in config.attributes_types:
         if isinstance(atr_type, Attribute):
-            atr_table.append(get_attributes(config, atr_type))
+            atr = get_attributes(config, atr_type)
+            atr = proceed_attributes(atr, atr_type)
+            atr_table.append(atr)
         elif isinstance(atr_type, CellPop):
             atr_table.append(get_cell_pop(config, [atr_type]))
         atr_cols.append(atr_type.value)
@@ -60,7 +62,7 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
                 x = pd.DataFrame(table, columns=cols)
                 manova = MANOVA.from_formula(formula, x)
                 mv_test_res = manova.mv_test()
-                pvals = mv_test_res.results[attribute_target.value]['stat'].values[0:4, 4]
+                pvals = mv_test_res.results[config.attribute_target.value]['stat'].values[0:4, 4]
                 target_pval = pvals[0]
                 if test is MANOVATest.wilks:
                     target_pval = pvals[0]
@@ -83,6 +85,8 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
     bops_sorted = list(np.array(bops_passed)[order])
     p_values_sorted = list(np.array(p_values_corrected)[order])
 
+    suffix = '_target(' + config.attribute_target.value + ')_exog(' + '_'.join([x.value for x in config.attributes_types]) + ').txt'
+
     clusters_mean_shift = []
     clusters_affinity_prop = []
     features = [
@@ -103,9 +107,9 @@ def save_top_manova(config, attributes_types, attribute_target, window=3, test=M
             clusters_mean_shift,
             clusters_affinity_prop
         ]
-        fn = 'top_with_clustering.txt'
+        fn = 'top_with_clustering' + suffix
     else:
-        fn = 'top.txt'
+        fn = 'top' + suffix
     fn = get_result_path(config, fn)
     save_features(fn, features)
 
