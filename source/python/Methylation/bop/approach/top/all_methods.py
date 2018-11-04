@@ -3,12 +3,12 @@ from bop.approach.top.manova.top import save_top_manova
 from config.method import Method
 
 
-def top_proc(config, attributes_types, attribute_target):
+def top_proc(config):
     if config.method is Method.manova:
-        save_top_manova(config, attributes_types, attribute_target)
+        save_top_manova(config)
 
 
-data_base = DataBase.GSE40279
+data_bases = [DataBase.GSE87571, DataBase.GSE40279]
 data_type = DataType.bop
 
 chromosome_type = ChromosomeTypes.non_gender
@@ -16,7 +16,7 @@ chromosome_type = ChromosomeTypes.non_gender
 class_types = [ClassType.class_ab]
 
 disease = Disease.any
-genders = [Gender.F, Gender.M, Gender.any]
+genders = [Gender.any]
 
 scenario = Scenario.approach
 approach = Approach.top
@@ -24,6 +24,7 @@ methods = [Method.manova]
 
 is_clustering = False
 
+"""
 attributes_types = [Attribute.age,
                     CellPop.plasma_blast,
                     CellPop.cd8_p,
@@ -36,32 +37,38 @@ attributes_types = [Attribute.age,
                     CellPop.mono,
                     CellPop.gran]
 attribute_target = Attribute.age
+"""
 
-for method in methods:
-    print(method.value)
-    for gender in genders:
-        print('\t' + gender.value)
-        for class_type in class_types:
-            print('\t\t' + class_type.value)
+attributes_types = [Attribute.gender]
+attribute_target = Attribute.gender
 
-            config = Config(
-                data_base=data_base,
-                data_type=data_type,
+for data_base in data_bases:
+    for method in methods:
+        print(method.value)
+        for gender in genders:
+            print('\t' + gender.value)
+            for class_type in class_types:
+                print('\t\t' + class_type.value)
 
-                chromosome_type=chromosome_type,
+                config = Config(
+                    data_base=data_base,
+                    data_type=data_type,
 
-                class_type=class_type,
+                    chromosome_type=chromosome_type,
 
-                disease=disease,
-                gender=gender,
+                    class_type=class_type,
 
-                scenario=scenario,
-                approach=approach,
-                method=method,
+                    disease=disease,
+                    gender=gender,
 
-                is_clustering=is_clustering
-            )
+                    scenario=scenario,
+                    approach=approach,
+                    method=method,
 
-            top_proc(config, attributes_types, attribute_target)
+                    attributes_types=attributes_types,
+                    attribute_target=attribute_target,
 
+                    is_clustering=is_clustering
+                )
 
+                top_proc(config)

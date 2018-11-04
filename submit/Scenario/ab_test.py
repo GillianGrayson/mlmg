@@ -4,6 +4,6 @@ import sys
 import socket
 
 source_path = '/common/home/kalyakulina_a/Work/mlmg/source/python/Methylation'
-source_name = 'infrastructure.hierarchy'
+source_name = 'bop.approach.top.manova.all_methods'
 
 os.system('sbatch ./ab_submit.sh' + ' ' + source_path + ' ' + source_name)
