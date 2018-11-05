@@ -6,12 +6,12 @@ config.diff_metrics = get_gender_specific_diff_metrics(config);
 
 num_names = size(config.names, 1)
 
-order = get_gender_specific_order(config, save_config);
+config.order = get_gender_specific_order(config);
 
-diff_metrics_srt = diff_metrics(order);
-names_srt = names(order);
-metrics_1_srt = metrics_1(order);
-metrics_2_srt = metrics_2(order);
+diff_metrics_srt = diff_metrics(config.order);
+names_srt = names(config.order);
+metrics_1_srt = metrics_1(config.order);
+metrics_2_srt = metrics_2(config.order);
 
 plot_data.num_bins = 100;
 plot_data.num_rare = floor(config.part * size(names_srt, 1));
