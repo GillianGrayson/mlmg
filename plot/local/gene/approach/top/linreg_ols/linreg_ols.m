@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-gene = 'ZPBP2';
+gene = 'ELOVL2';
 
 % ======== config ========
 config.data_base = 'GSE40279';
@@ -19,7 +19,7 @@ config.approach = 'top';
 config.method = 'linreg_ols';
 
 config.disease = 'any';
-config.gender = 'versus';
+config.gender = 'any';
 
 config.is_clustering = 0;
 
@@ -42,6 +42,8 @@ if strcmp(config.gender, 'versus')
     plot_linreg_ols_gene(config, gene)
     config.gender = 'versus';
 else
+    config.gender = 'any';
+    config.color = 'b';
     plot_linreg_ols_gene(config, gene)
 end
 
