@@ -65,8 +65,6 @@ class Config:
         self.gender = gender
 
         self.attributes_types = attributes_types
-        if self.attributes_types is not None:
-            self.attributes_types.sort()
         self.attribute_target = attribute_target
 
         # Aux

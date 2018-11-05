@@ -39,8 +39,8 @@ attributes_types = [Attribute.age,
 attribute_target = Attribute.age
 """
 
-attributes_types = [Attribute.gender]
-attribute_target = Attribute.gender
+attributes_types = [Attribute.gender, Attribute.age]
+attribute_target = [Attribute.gender, Attribute.age, (Attribute.gender, Attribute.age)]
 
 for data_base in data_bases:
     for method in methods:

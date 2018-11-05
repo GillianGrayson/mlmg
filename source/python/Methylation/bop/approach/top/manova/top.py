@@ -30,7 +30,8 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
     num_bops = 0
     bops_passed = []
     p_values = []
-    for bop in dict_bop_cpgs:
+    for bop_id in range(0, 20):
+        bop = list(dict_bop_cpgs.keys())[bop_id]
         curr_cpgs = dict_bop_cpgs.get(bop)
         cpgs_passed = []
         for cpg in curr_cpgs:
@@ -57,42 +58,65 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
                 for atr_col_id in range(1, len(atr_cols)):
                     atr_col = atr_cols[atr_col_id]
                     formula += ' + ' + atr_col
+                for target_id in range(0, len(config.attribute_target)):
+                    if isinstance(config.attribute_target[target_id],tuple):
+                        formula += ' + ' + '*'.join([x.value for x in config.attribute_target[target_id]])
 
                 table = list(map(list, zip(*table)))
                 x = pd.DataFrame(table, columns=cols)
                 manova = MANOVA.from_formula(formula, x)
                 mv_test_res = manova.mv_test()
-                pvals = mv_test_res.results[config.attribute_target.value]['stat'].values[0:4, 4]
-                target_pval = pvals[0]
-                if test is MANOVATest.wilks:
-                    target_pval = pvals[0]
-                elif test is MANOVATest.pillai_bartlett:
-                    target_pval = pvals[1]
-                elif test is MANOVATest.lawley_hotelling:
-                    target_pval = pvals[2]
-                elif test is MANOVATest.roy:
-                    target_pval = pvals[3]
+                pvals = []
+                target_pval = []
+                for target_id in range(0, len(config.attribute_target)):
+                    if isinstance(config.attribute_target[target_id],tuple):
+                        atr_name = ':'.join([x.value for x in config.attribute_target[target_id]])
+                    else:
+                        atr_name = config.attribute_target[target_id].value
+                    pvals.append(mv_test_res.results[atr_name]['stat'].values[0:4, 4])
+                    if test is MANOVATest.wilks:
+                        target_pval.append(pvals[target_id][0])
+                    elif test is MANOVATest.pillai_bartlett:
+                        target_pval.append(pvals[target_id][1])
+                    elif test is MANOVATest.lawley_hotelling:
+                        target_pval.append(pvals[target_id][2])
+                    elif test is MANOVATest.roy:
+                        target_pval.append(pvals[target_id][3])
                 pvals_on_bop.append(target_pval)
-            min_pval = np.min(pvals_on_bop)
+            pvals_on_bop = list(map(list, zip(*pvals_on_bop)))
+            argmin_pval = int(np.argmin(pvals_on_bop[-1]))
+            min_pvals = []
+            for target_id in range(0, len(config.attribute_target)):
+                min_pvals.append(pvals_on_bop[target_id][argmin_pval])
             bops_passed.append(bop)
-            p_values.append(min_pval)
+            p_values.append(min_pvals)
         num_bops += 1
         if num_bops % config.print_rate == 0:
             print('num_bops: ' + str(num_bops))
 
-    reject, p_values_corrected, alphacSidak, alphacBonf = multipletests(p_values, 0.05, method='fdr_bh')
-    order = np.argsort(p_values_corrected)
+    p_values = list(map(list, zip(*p_values)))
+    p_values_corrected = []
+    for target_id in range(0, len(config.attribute_target)):
+        reject, pvals_corr, alphacSidak, alphacBonf = multipletests(p_values[target_id], 0.05, method='fdr_bh')
+        p_values_corrected.append(pvals_corr)
+    order = np.argsort(p_values_corrected[-1])
     bops_sorted = list(np.array(bops_passed)[order])
-    p_values_sorted = list(np.array(p_values_corrected)[order])
+    p_values_sorted = [np.array(x)[order] for x in p_values_corrected]
 
-    suffix = '_target(' + config.attribute_target.value + ')_exog(' + '_'.join([x.value for x in config.attributes_types]) + ').txt'
+    target_str = config.attribute_target[0].value
+    for target_id in range(1, len(config.attribute_target)):
+        if isinstance(config.attribute_target[target_id], tuple):
+            target_str += '_' + '_x_'.join([x.value for x in config.attribute_target[target_id]])
+        else:
+            target_str += '_' + config.attribute_target[target_id].value
+
+    types_str = '_'.join([x.value for x in config.attributes_types])
+    suffix = '_target(' + target_str + ')_exog(' + types_str + ').txt'
 
     clusters_mean_shift = []
     clusters_affinity_prop = []
-    features = [
-        bops_sorted,
-        p_values_sorted
-    ]
+    features = [bops_sorted]
+    [features.append(list(x)) for x in p_values_sorted]
     if config.is_clustering:
         metrics_sorted_np = np.asarray(list(map(np.log10, p_values_sorted))).reshape(-1, 1)
         bandwidth = estimate_bandwidth(metrics_sorted_np)
@@ -119,7 +143,7 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
     clusters_affinity_prop_genes = []
     for id in range(0, len(bops_sorted)):
         bop = bops_sorted[id]
-        p_value = p_values_sorted[id]
+        p_value = p_values_sorted[-1][id]
         if config.is_clustering:
             cluster_mean_shift = clusters_mean_shift[id]
             cluster_affinity_prop = clusters_affinity_prop[id]
@@ -147,13 +171,13 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
         p_values_genes,
     ]
     if config.is_clustering:
-        fn = 'top_with_clustering.txt'
+        fn = 'top_with_clustering' + suffix
         features = features + [
             clusters_mean_shift_genes,
             clusters_affinity_prop_genes
         ]
     else:
-        fn = 'top.txt'
+        fn = 'top' + suffix
 
     fn = get_result_path(config, fn)
     save_features(fn, features)

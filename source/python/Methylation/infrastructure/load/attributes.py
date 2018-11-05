@@ -57,11 +57,13 @@ def get_attributes(config, attribute=Attribute.age):
     return atr
 
 def proceed_attributes(attribute_list, attribute_type):
-    atr = []
     if attribute_type is Attribute.gender:
+        atr = []
         for atr_id in range(0, len(attribute_list)):
             if (attribute_list[atr_id] == 'F'):
                 atr.append(0)
             elif (attribute_list[atr_id] == 'M'):
                 atr.append(1)
-    return atr
+        return atr
+    else:
+        return attribute_list
