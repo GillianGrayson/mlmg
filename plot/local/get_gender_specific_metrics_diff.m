@@ -1,4 +1,4 @@
-function diff_metrics = get_gender_specific_diff_metrics(config)
+function [metrics_diff, metrics_diff_labels] = get_gender_specific_metrics_diff(config)
 
 if strcmp(config.method, 'linreg_ols')
     
@@ -61,13 +61,15 @@ if strcmp(config.method, 'linreg_ols')
         areas_normed(id) = areas(id) / (area_pgon_1 + area_pgon_2 - areas(id));
     end
     
-    diff_metrics = horzcat(areas, areas_normed);
+    metrics_diff = horzcat(areas, areas_normed);
+    metrics_diff_labels = ["areas", "areas_normed"];
     
 else
     
-    diff_metrics = zeros(size(config.names, 1), 1);
+    metrics_diff = zeros(size(config.names, 1), 1);
     for gene_id = 1:size(config.names, 1)
-        diff_metrics(gene_id) = config.metrics_1(gene_id) - config.metrics_2(gene_id);
+        metrics_diff(gene_id) = config.metrics_1(gene_id) - config.metrics_2(gene_id);
     end
+    metrics_diff_labels = ['metric'];
 
 end
