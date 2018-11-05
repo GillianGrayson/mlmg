@@ -3,6 +3,7 @@ clear all;
 % ======== params ========
 config.metrics_rank = 1;
 config.plot_method = 1;
+config.diff_metrics_id = 1;
 config.part = 0.05;
 
 % ======== config ========
@@ -62,4 +63,4 @@ end
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing =======
-butterfly(config, save_config);
+gender_specific(config, save_config);

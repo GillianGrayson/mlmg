@@ -1,4 +1,5 @@
 function order = get_gender_specific_order(config, save_config)
+
     suffix = sprintf('method(%s)', ...
     config.method);
     path = sprintf('%s/data/%s', ...
@@ -80,7 +81,7 @@ if strcmp(config.method, 'linreg_ols')
     
 else
     
-    [tmp, order] = sort(abs(config.diff_metrics), 'descend');
+    [tmp, order] = sort(abs(config.diff_metrics(config.diff_metrics_id)), 'descend');
     
 end
 end
