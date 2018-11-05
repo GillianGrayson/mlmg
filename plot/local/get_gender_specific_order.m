@@ -67,7 +67,7 @@ if strcmp(config.method, 'linreg_ols')
         pgon_intersect = intersect(pgon_1, pgon_2);
         
         areas(id) = polyarea(pgon_intersect.Vertices(:, 1), pgon_intersect.Vertices(:, 2));
-        areas_normed(id) = areas(id) / (area_pgon_1 + area_pgon_2);
+        areas_normed(id) = areas(id) / (area_pgon_1 + area_pgon_2 - areas(id));
     end
     
     [tmp, order] = sort(areas, 'ascend');
