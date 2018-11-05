@@ -1,14 +1,8 @@
-function butterfly(config, save_config)
+function gender_specific(config, save_config)
 
-[names, data_1, data_2] = get_gender_specific_data(config);
-config.names = names;
-config.data_1 = data_1;
-config.data_2 = data_2;
-[metrics_1, metrics_2] = get_gender_specific_metrics(config);
-config.metrics_1 = metrics_1;
-config.metrics_2 = metrics_2;
-diff_metrics = get_gender_specific_diff_metrics(config);
-config.diff_metrics = diff_metrics;
+[config.names, config.data_1, config.data_2] = get_gender_specific_data(config);
+[config.metrics_1, config.metrics_2] = get_gender_specific_metrics(config);
+config.diff_metrics = get_gender_specific_diff_metrics(config);
 
 num_names = size(config.names, 1)
 

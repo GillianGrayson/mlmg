@@ -19,15 +19,15 @@ def save_cpg_data(config, fn):
             curr_str += curr_vals[id] + ' '
         str_list.append(curr_str)
 
-    np.savetxt(fn + '_cpgs.txt', str_list, fmt="%s")
+    np.savetxt(fn + '_data.txt', str_list, fmt="%s")
 
 
 
 config = Config(
-    db=DataBase.GSE52588,
-    geo=GeoType.any
+    data_base=DataBase.GSE63347,
+    geo_type=GeoType.any
 )
 
-fn = 'horvatz_cpgs'
+fn = 'hannum_cpgs'
 fn = get_suppl_path(config, fn)
 save_cpg_data(config, fn)

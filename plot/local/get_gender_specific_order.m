@@ -1,4 +1,5 @@
 function order = get_gender_specific_order(config, save_config)
+
     suffix = sprintf('method(%s)', ...
     config.method);
     path = sprintf('%s/data/%s', ...
@@ -67,7 +68,7 @@ if strcmp(config.method, 'linreg_ols')
         pgon_intersect = intersect(pgon_1, pgon_2);
         
         areas(id) = polyarea(pgon_intersect.Vertices(:, 1), pgon_intersect.Vertices(:, 2));
-        areas_normed(id) = areas(id) / (area_pgon_1 + area_pgon_2);
+        areas_normed(id) = areas(id) / (area_pgon_1 + area_pgon_2 - areas(id));
     end
     
     [tmp, order] = sort(areas, 'ascend');
@@ -80,7 +81,7 @@ if strcmp(config.method, 'linreg_ols')
     
 else
     
-    [tmp, order] = sort(abs(config.diff_metrics), 'descend');
+    [tmp, order] = sort(abs(config.diff_metrics(config.diff_metrics_id)), 'descend');
     
 end
 end

@@ -1,10 +1,10 @@
 clear all;
 
 % ======== params ========
-gene = 'ELOVL2';
+num_genes = 750;
 
 % ======== config ========
-config.data_base = 'GSE40279';
+config.data_base = 'GSE87571';
 config.data_type = 'gene_data';
 
 config.chromosome_type = 'non_gender';

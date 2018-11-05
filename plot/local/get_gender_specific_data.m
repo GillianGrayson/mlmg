@@ -86,7 +86,7 @@ elseif strcmp(config.method, 'manova') && config.plot_method == 2
             id = id
         end
     end
-
+    
 elseif strcmp(config.method, 'manova') && config.plot_method == 3
     
     p_value_lim = 1e-8;
@@ -109,7 +109,7 @@ elseif strcmp(config.method, 'manova') && config.plot_method == 3
             id = id
         end
     end
-
+    
 elseif strcmp(config.method, 'manova') && config.plot_method == 4
     metrics_id = get_metrics_id(config);
     metrics_1 = all_data_1(:, metrics_id);
@@ -181,15 +181,15 @@ elseif strcmp(config.method, 'manova') && config.plot_method == 4
         if mod(id, 1000) == 0
             id = id
         end
-    end 
+    end
 else
     
     names = all_names;
     data_1 = all_data_1;
     data_2 = all_data_2;
     
-    end
-    
-    
-    
-    end
+end
+
+
+
+end
