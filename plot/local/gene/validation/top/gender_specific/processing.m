@@ -4,6 +4,7 @@ clear all;
 config.metrics_rank = 1;
 config.plot_method = 1;
 config.diff_metrics_id = 1;
+config.diff_metrics_direction = 'ascend';
 config.part = 0.05;
 
 % ======== config ========

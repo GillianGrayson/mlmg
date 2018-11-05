@@ -30,8 +30,7 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
     num_bops = 0
     bops_passed = []
     p_values = []
-    for bop_id in range(0, 20):
-        bop = list(dict_bop_cpgs.keys())[bop_id]
+    for bop in dict_bop_cpgs:
         curr_cpgs = dict_bop_cpgs.get(bop)
         cpgs_passed = []
         for cpg in curr_cpgs:
