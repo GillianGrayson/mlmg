@@ -13,8 +13,6 @@ def genes_intersection(config, data_bases, methods, sort_ids, num_top):
     data_bases_str.sort()
     data_bases_str = '_'.join(data_bases_str)
 
-
-
     gene_lists = []
     for data_base in data_bases:
         config.data_base = data_base
