@@ -1,3 +1,3 @@
 function order = get_gender_specific_order(config)
-    [tmp, order] = sort(config.diff_metrics(config.diff_metrics_id), config.diff_metrics_direction);
+    [tmp, order] = sort(config.metrics_diff(:, config.metrics_diff_id), config.metrics_diff_direction);
 end

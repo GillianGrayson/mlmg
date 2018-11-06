@@ -3,8 +3,8 @@ clear all;
 % ======== params ========
 config.metrics_rank = 1;
 config.plot_method = 1;
-config.diff_metrics_id = 1;
-config.diff_metrics_direction = 'ascend';
+config.metrics_diff_id = 2;
+config.metrics_diff_direction = 'ascend';
 config.part = 0.05;
 
 % ======== config ========
