@@ -25,8 +25,7 @@ if strcmp(config.method, 'linreg_ols')
     variance_diff = zeros(size(names, 1), 1);
     slope_intersection = zeros(size(names, 1), 1);
     
-    for id = 1 : size(names, 1)
-        
+    for id = 1 : size(names, 1)  
         intercept_minus_1 = intercepts_1(id) - sigma * intercepts_std_1(id);
         slope_minus_1 = slopes_1(id) - sigma * slopes_std_1(id);
         intercept_plus_1 = intercepts_1(id) + sigma * intercepts_std_1(id);
@@ -63,8 +62,8 @@ if strcmp(config.method, 'linreg_ols')
         areas(id) = polyarea(pgon_intersect.Vertices(:, 1), pgon_intersect.Vertices(:, 2));
         areas_normed(id) = areas(id) / (area_pgon_1 + area_pgon_2 - areas(id));
         
-        variance_1 = intercept_up_1;
-        variance_2 = intercept_up_2;
+        variance_1 = y1(4) - y1(1);
+        variance_2 = y2(4) - y2(1);
         variance_diff(id) = max(variance_1, variance_2) / min(variance_1, variance_2);
         
         if slope_plus_1 > slope_minus_2 && slope_plus_2 > slope_minus_1
@@ -78,7 +77,7 @@ if strcmp(config.method, 'linreg_ols')
     end
     
     metrics_diff = horzcat(areas, areas_normed, variance_diff, slope_intersection);
-    metrics_diff_labels = ["areas", "areas_normed", "variance_diff", "slope_intersection"];
+    metrics_diff_labels = ["areas", "areas_normed", "variance", "slope_intersection"];
     
 else
     

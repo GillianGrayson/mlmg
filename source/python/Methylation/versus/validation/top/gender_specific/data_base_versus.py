@@ -8,12 +8,14 @@ from annotations.gene import get_dict_cpg_gene
 import math
 
 
-def genes_intersection(config, data_bases, methods, sort_ids, num_top):
+def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, num_top):
     data_bases_str = [x.value for x in data_bases]
     data_bases_str.sort()
     data_bases_str = '_'.join(data_bases_str)
 
     gene_lists = []
+
+    basic_genes = []
     for data_base in data_bases:
         config.data_base = data_base
 
@@ -37,15 +39,19 @@ def genes_intersection(config, data_bases, methods, sort_ids, num_top):
             top_dict = load_top_dict(config, keys, fn=fn)
 
             order = np.argsort(top_dict[keys[sort_ids[method_id]]])
+            if sort_directions[method_id] < 0:
+                order = order[::-1]
+
             for key in keys:
                 top_dict[key] = list(np.array(top_dict[key])[order])
+
+            basic_genes = top_dict[keys[0]]
 
             if config.data_type is DataType.gene:
                 gene_lists.append(top_dict[keys[0]][0:num_top])
             elif config.data_type is DataType.cpg:
                 config.read_only = False
                 dict_cpg_gene = get_dict_cpg_gene(config)
-
                 genes = []
                 for name in top_dict[keys[0]]:
                     if len(genes) > num_top:
@@ -61,15 +67,17 @@ def genes_intersection(config, data_bases, methods, sort_ids, num_top):
     for genes in gene_lists:
         gene_intersection = list(set(gene_intersection).intersection(genes))
 
-    gene_intersection.sort()
+    # Order of intersection genes corresponds to last database
+    for gene in basic_genes:
+        if gene in gene_intersection:
+            print(gene)
 
-    for gene in gene_intersection:
-        print(gene)
     print(str(len(gene_intersection)))
 
-target_data_bases = [DataBase.GSE87571, DataBase.GSE40279]
-target_methods = [Method.manova]
-target_sort_ids = [1]
+target_data_bases = [DataBase.GSE40279, DataBase.GSE87571]
+target_methods = [Method.linreg_ols]
+target_sort_ids = [3, 1]
+target_sort_directions = [-1, 1]
 target_num_top = 750
 
 data_base = DataBase.data_base_versus
@@ -83,8 +91,8 @@ class_type = ClassType.class_ab
 # cpg
 dna_region = DNARegion.genic
 # gene
-geo_type = GeoType.from_bop
-gene_data_type = GeneDataType.from_bop
+geo_type = GeoType.islands_shores
+gene_data_type = GeneDataType.mean
 
 scenario = Scenario.validation
 approach = Approach.top
@@ -127,4 +135,4 @@ config = Config(
     is_clustering=is_clustering
 )
 
-genes_intersection(config, target_data_bases, target_methods, target_sort_ids, target_num_top)
+genes_intersection(config, target_data_bases, target_methods, target_sort_ids, target_sort_directions, target_num_top)
