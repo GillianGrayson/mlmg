@@ -32,12 +32,8 @@ names = config.names;
 data = config.data;
 
 d = vertcat('names', names);
-if config.data_type == 'gene_data'
-    d = horzcat(d, vertcat(config.attribute_target{end}, num2cell(data)));
-else
-    for metrics_id = 1:size(data, 2)
-        d = horzcat(d, vertcat(config.attribute_target{metrics_id}, num2cell(data(:,metrics_id))));
-    end
+for metrics_id = 1:size(data, 2)
+    d = horzcat(d, vertcat(config.attribute_target{metrics_id}, num2cell(data(:,metrics_id))));
 end
 
 xlswrite(fn, d);
