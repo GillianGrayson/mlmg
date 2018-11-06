@@ -5,6 +5,7 @@ from config.types import *
 import pandas as pd
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
+from annotations.bop import get_dict_bop_genes
 import math
 
 
@@ -47,10 +48,9 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
             for key in keys:
                 top_dict[key] = list(np.array(top_dict[key])[order])
 
-            basic_genes = top_dict[keys[0]]
-
             if config.data_type is DataType.gene:
                 gene_lists.append(top_dict[keys[0]][0:num_top])
+                basic_genes = top_dict[keys[0]]
             elif config.data_type is DataType.cpg:
                 config.read_only = False
                 dict_cpg_gene = get_dict_cpg_gene(config)
@@ -65,6 +65,22 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
                                 gene_cpg[gene] = name
                                 genes.append(gene)
                 gene_lists.append(genes[0:num_top])
+                basic_genes = genes
+            elif config.data_type is DataType.bop:
+                config.read_only = False
+                dict_bop_gene = get_dict_bop_genes(config)
+                genes = []
+                for name in top_dict[keys[0]]:
+                    if len(genes) > num_top:
+                        break
+                    if name in top_dict[keys[0]]:
+                        curr_genes = dict_bop_gene[name]
+                        for gene in curr_genes:
+                            if gene not in genes:
+                                gene_bop[gene] = name
+                                genes.append(gene)
+                gene_lists.append(genes[0:num_top])
+                basic_genes = genes
 
     gene_intersection = gene_lists[0]
     for genes in gene_lists:
@@ -77,18 +93,20 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
                 print(gene)
             elif config.data_type is DataType.cpg:
                 print(gene + ' ' + gene_cpg[gene])
+            elif config.data_type is DataType.bop:
+                print(gene + ' ' + gene_bop[gene])
 
     print(str(len(gene_intersection)))
 
 target_data_bases = [DataBase.GSE40279, DataBase.GSE87571]
-target_methods = [Method.linreg_ols]
-target_sort_ids = [3, 1]
+target_methods = [Method.manova]
+target_sort_ids = [3]
 target_sort_directions = [-1, 1]
 target_num_top = 750
 
 data_base = DataBase.data_base_versus
 
-data_type = DataType.gene
+data_type = DataType.bop
 
 chromosome_type = ChromosomeTypes.non_gender
 
