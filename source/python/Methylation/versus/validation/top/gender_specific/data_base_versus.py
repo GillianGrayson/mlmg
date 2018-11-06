@@ -20,7 +20,19 @@ def genes_intersection(config, data_bases, methods, sort_ids, num_top):
         for method_id in range(0, len(methods)):
             method = methods[method_id]
 
-            fn = 'method(' + method.value + ').xlsx'
+            suffix = ''
+            if method == Method.manova:
+                target_str = config.attribute_target[0].value
+                for target_id in range(1, len(config.attribute_target)):
+                    if isinstance(config.attribute_target[target_id], tuple):
+                        target_str += '_' + '_x_'.join([x.value for x in config.attribute_target[target_id]])
+                    else:
+                        target_str += '_' + config.attribute_target[target_id].value
+
+                types_str = '_'.join([x.value for x in config.attributes_types])
+                suffix = '_target(' + target_str + ')_exog(' + types_str + ')'
+
+            fn = 'method(' + method.value + ')' + suffix + '.xlsx'
             keys = get_method_order_metrics(method)
             top_dict = load_top_dict(config, keys, fn=fn)
 
@@ -56,13 +68,13 @@ def genes_intersection(config, data_bases, methods, sort_ids, num_top):
     print(str(len(gene_intersection)))
 
 target_data_bases = [DataBase.GSE87571, DataBase.GSE40279]
-target_methods = [Method.linreg_ols]
+target_methods = [Method.manova]
 target_sort_ids = [1]
 target_num_top = 750
 
 data_base = DataBase.data_base_versus
 
-data_type = DataType.cpg
+data_type = DataType.gene
 
 chromosome_type = ChromosomeTypes.non_gender
 
@@ -71,8 +83,8 @@ class_type = ClassType.class_ab
 # cpg
 dna_region = DNARegion.genic
 # gene
-geo_type = GeoType.islands_shores
-gene_data_type = GeneDataType.mean
+geo_type = GeoType.from_bop
+gene_data_type = GeneDataType.from_bop
 
 scenario = Scenario.validation
 approach = Approach.top
@@ -80,6 +92,9 @@ method = Method.gender_specific
 
 disease = Disease.any
 gender = Gender.versus
+
+attributes_types = [Attribute.gender, Attribute.age]
+attribute_target = [Attribute.gender, Attribute.age, (Attribute.gender, Attribute.age)]
 
 is_clustering = False
 
@@ -105,6 +120,9 @@ config = Config(
 
     disease=disease,
     gender=gender,
+
+    attributes_types=attributes_types,
+    attribute_target=attribute_target,
 
     is_clustering=is_clustering
 )
