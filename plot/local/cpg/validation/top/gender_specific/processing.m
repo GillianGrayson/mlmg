@@ -3,6 +3,8 @@ clear all;
 % ======== params ========
 config.metrics_rank = 1;
 config.plot_method = 1;
+config.metrics_diff_id = 2;
+config.metrics_diff_direction = 'ascend';
 config.part = 0.0005;
 
 % ======== config ========
@@ -20,7 +22,7 @@ config.approach = 'top';
 config.method = 'linreg_ols';
 
 config.disease = 'any';
-config.gender = '';
+config.gender = 'versus';
 
 config.is_clustering = 0;
 
@@ -60,4 +62,4 @@ end
 save_config.is_clustering = config.is_clustering;
 
 % ======== processing ========
-butterfly(config, save_config);
+gender_specific(config, save_config);
