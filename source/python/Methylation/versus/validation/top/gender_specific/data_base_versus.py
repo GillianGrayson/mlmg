@@ -15,6 +15,8 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
 
     gene_lists = []
 
+    gene_bop = {}
+    gene_cpg = {}
     basic_genes = []
     for data_base in data_bases:
         config.data_base = data_base
@@ -60,6 +62,7 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
                         curr_genes = dict_cpg_gene[name]
                         for gene in curr_genes:
                             if gene not in genes:
+                                gene_cpg[gene] = name
                                 genes.append(gene)
                 gene_lists.append(genes[0:num_top])
 
@@ -70,7 +73,10 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
     # Order of intersection genes corresponds to last database
     for gene in basic_genes:
         if gene in gene_intersection:
-            print(gene)
+            if config.data_type is DataType.gene:
+                print(gene)
+            elif config.data_type is DataType.cpg:
+                print(gene + ' ' + gene_cpg[gene])
 
     print(str(len(gene_intersection)))
 
