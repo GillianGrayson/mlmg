@@ -24,8 +24,8 @@ methods = [Method.manova]
 
 is_clustering = False
 
-"""
-attributes_types = [Attribute.age,
+attributes_types = [Attribute.gender,
+                    Attribute.age,
                     CellPop.plasma_blast,
                     CellPop.cd8_p,
                     CellPop.cd4_naive,
@@ -36,11 +36,11 @@ attributes_types = [Attribute.age,
                     CellPop.b_cell,
                     CellPop.mono,
                     CellPop.gran]
-attribute_target = Attribute.age
-"""
 
-attributes_types = [Attribute.gender, Attribute.age]
-attribute_target = [Attribute.gender, Attribute.age, (Attribute.gender, Attribute.age)]
+attribute_target = [Attribute.gender,
+                    Attribute.age,
+                    (Attribute.gender,
+                     Attribute.age)]
 
 for data_base in data_bases:
     for method in methods:

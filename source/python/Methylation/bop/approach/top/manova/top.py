@@ -30,7 +30,8 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
     num_bops = 0
     bops_passed = []
     p_values = []
-    for bop in dict_bop_cpgs:
+    for i in range(0, 10):
+        bop = list(dict_bop_cpgs.keys())[i]
         curr_cpgs = dict_bop_cpgs.get(bop)
         cpgs_passed = []
         for cpg in curr_cpgs:
@@ -103,13 +104,36 @@ def save_top_manova(config, window=3, test=MANOVATest.pillai_bartlett):
     p_values_sorted = [np.array(x)[order] for x in p_values_corrected]
 
     target_str = config.attribute_target[0].value
+    is_cells = False
     for target_id in range(1, len(config.attribute_target)):
         if isinstance(config.attribute_target[target_id], tuple):
-            target_str += '_' + '_x_'.join([x.value for x in config.attribute_target[target_id]])
+            tmp = []
+            is_mult_cells = False
+            for x in config.attribute_target[target_id]:
+                if isinstance(x, Attribute):
+                    tmp.append(x.value)
+                elif isinstance(x, CellPop):
+                    is_mult_cells = True
+            target_str += '_' + '_x_'.join([x for x in tmp])
+            if is_mult_cells:
+                target_str += '_x_cells'
+        elif isinstance(config.attribute_target[target_id], CellPop):
+            if not is_cells:
+                is_cells = True
+                target_str += '_cells'
         else:
             target_str += '_' + config.attribute_target[target_id].value
 
-    types_str = '_'.join([x.value for x in config.attributes_types])
+    types_str = config.attributes_types[0].value
+    is_cells = False
+    for type_id in range(1, len(config.attributes_types)):
+        if isinstance(config.attributes_types[type_id], Attribute):
+            types_str += '_' + config.attributes_types[type_id].value
+        elif isinstance(config.attributes_types[type_id], CellPop):
+            if not is_cells:
+                is_cells = True
+                types_str += '_cells'
+
     suffix = '_target(' + target_str + ')_exog(' + types_str + ').txt'
 
     clusters_mean_shift = []
