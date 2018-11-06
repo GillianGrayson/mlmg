@@ -3,8 +3,8 @@ clear all;
 % ======== params ========
 config.metrics_rank = 1;
 config.plot_method = 1;
-config.metrics_diff_id = 1;
-config.metrics_diff_direction = 'descend';
+config.metrics_diff_id = 2;
+config.metrics_diff_direction = 'ascend';
 config.part = 0.05;
 
 % ======== config ========
@@ -20,7 +20,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg';
+config.method = 'linreg_ols';
 
 config.disease = 'any';
 config.gender = 'any';

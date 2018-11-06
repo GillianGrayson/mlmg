@@ -35,6 +35,11 @@ plot_data.suffix = sprintf('gender_method(%s)_rank(%d)_plot(%d)_part(%0.4f)', ..
 
 mkdir(plot_data.save_path);
 
-plot_butterfly(plot_data);
+if strcmp(config.method, 'linreg_ols')
+    plot_metrics_diff(plot_data);
+else
+    plot_butterfly(plot_data);
+    plot_metrics_diff(plot_data);
+end
 
 end
