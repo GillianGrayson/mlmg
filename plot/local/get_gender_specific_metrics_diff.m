@@ -68,8 +68,8 @@ else
     
     metrics_diff = zeros(size(config.names, 1), 1);
     for gene_id = 1:size(config.names, 1)
-        metrics_diff(gene_id) = config.metrics_1(gene_id) - config.metrics_2(gene_id);
+        metrics_diff(gene_id) = abs(config.metrics_1(gene_id) - config.metrics_2(gene_id));
     end
-    metrics_diff_labels = ['metric'];
+    metrics_diff_labels = ["metric"];
 
 end
