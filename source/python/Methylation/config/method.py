@@ -127,6 +127,11 @@ def get_method_order_metrics(method):
             'names',
             'metric'
         ]
+    elif method is Method.manova:
+        metrics = [
+            'names',
+            'gender_x_age'
+        ]
 
     return metrics
 
