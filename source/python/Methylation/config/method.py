@@ -120,7 +120,9 @@ def get_method_order_metrics(method):
         metrics = [
             'names',
             'areas',
-            'areas_normed'
+            'areas_normed',
+            'variance',
+            'slope_intersection'
         ]
     elif method is Method.classification:
         metrics = [

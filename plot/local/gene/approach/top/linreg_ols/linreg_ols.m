@@ -1,7 +1,7 @@
 clear all;
 
 % ======== params ========
-num_genes = 750;
+gene = 'ISOC2';
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -19,7 +19,7 @@ config.approach = 'top';
 config.method = 'linreg_ols';
 
 config.disease = 'any';
-config.gender = 'any';
+config.gender = 'versus';
 
 config.is_clustering = 0;
 

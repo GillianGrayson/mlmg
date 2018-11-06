@@ -1,6 +1,6 @@
 function gender_specific(config, save_config)
 
-if config.gender == 'any'
+if strcmp(config.gender, 'any')
     [config.names, config.data] = get_data(config);
     save_data(config, save_config);
 else
