@@ -3,6 +3,7 @@ from infrastructure.load.top import *
 from cpg.approach.top.enet.top import save_top_enet
 from cpg.approach.top.linreg.top import save_top_linreg
 from cpg.approach.top.linreg_ols.top import save_top_linreg_ols
+from cpg.approach.top.linreg_ols_wo_outliers.top import save_top_linreg_ols_wo_outliers
 from cpg.approach.top.anova.top import save_top_anova
 from cpg.approach.top.spearman.top import save_top_spearman
 from cpg.approach.top.moment.top import save_top_moment
@@ -21,6 +22,8 @@ def top_proc(config):
         save_top_moment(config)
     elif config.method is Method.linreg_ols:
         save_top_linreg_ols(config)
+    elif config.method is Method.linreg_ols_wo_outliers:
+        save_top_linreg_ols_wo_outliers(config)
 
 data_base = DataBase.GSE87571
 data_type = DataType.cpg
@@ -35,7 +38,7 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_ols,
+    Method.linreg_ols_wo_outliers,
 ]
 
 is_clustering = False

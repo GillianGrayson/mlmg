@@ -23,10 +23,10 @@ def save_cpg_data(config, fn):
 
 
 config = Config(
-    data_base=DataBase.GSE40279,
+    data_base=DataBase.GSE87571,
     geo_type=GeoType.any
 )
 
-fn = 'GSE40279'
+fn = 'GSE87571'
 fn = get_suppl_path(config, fn)
 save_cpg_data(config, fn)

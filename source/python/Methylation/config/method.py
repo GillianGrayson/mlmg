@@ -10,6 +10,7 @@ class Method(Enum):
     linreg_dispersion = 'linreg_dispersion'
     linreg_variance = 'linreg_variance'
     linreg_ols = 'linreg_ols'
+    linreg_ols_wo_outliers = 'linreg_ols_wo_outliers'
     anova = 'anova'
     spearman = 'spearman'
     manova = 'manova'
@@ -117,6 +118,14 @@ def get_method_metrics(method, is_clustering=False):
 def get_method_order_metrics(method):
     metrics = []
     if method is Method.linreg_ols:
+        metrics = [
+            'names',
+            'areas',
+            'areas_normed',
+            'variance',
+            'slope_intersection'
+        ]
+    elif method is Method.linreg_ols_wo_outliers:
         metrics = [
             'names',
             'areas',
