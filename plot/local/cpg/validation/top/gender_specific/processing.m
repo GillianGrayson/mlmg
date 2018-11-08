@@ -19,7 +19,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_ols';
+config.method = 'linreg_ols_wo_outliers';
 
 config.disease = 'any';
 config.gender = 'versus';

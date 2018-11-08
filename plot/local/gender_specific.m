@@ -39,7 +39,7 @@ else
     
     mkdir(plot_data.save_path);
     
-    if strcmp(config.method, 'linreg_ols')
+    if strcmp(config.method, 'linreg_ols') || strcmp(config.method, 'linreg_ols_wo_outliers')
         plot_metrics_diff(plot_data);
     else
         plot_butterfly(plot_data);

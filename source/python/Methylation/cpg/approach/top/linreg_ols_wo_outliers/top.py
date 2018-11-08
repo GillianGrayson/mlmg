@@ -11,14 +11,12 @@ from scipy import stats
 import statsmodels.api as sm
 
 
-def save_top_linreg_ols_wo_outliers(config, part=0.95):
+def save_top_linreg_ols_wo_outliers(config, number_outliers=5):
     attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
-
-    part_int = int(part * len(attributes))
 
     R2s = []
     intercepts = []
@@ -40,7 +38,7 @@ def save_top_linreg_ols_wo_outliers(config, part=0.95):
             diffs.append(abs(pred_y - curr_y))
 
         order = np.argsort(list(map(abs, diffs)))[::-1]
-        bad_ids = order[0:part_int]
+        bad_ids = order[0:number_outliers]
         good_ids = np.linspace(0, len(attributes) - 1, len(attributes), dtype=int)
         good_ids = list(set(good_ids) - set(bad_ids))
         good_ids.sort()
