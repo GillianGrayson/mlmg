@@ -13,6 +13,7 @@ def load_top_gene_names_by_article(config, fn):
     full_path = get_origin_path(config, fn)
     file = open(full_path)
     table = file.read().splitlines()
+    file.close()
     return table
 
 def load_top_gene_data(config, num_top):
