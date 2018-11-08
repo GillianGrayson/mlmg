@@ -13,21 +13,20 @@ def save_cpg_data(config, fn):
 
     str_list = []
     for cpg in target_cpgs:
-        curr_vals = vals[cpgs.index(cpg)]
-        curr_str = cpg + ' '
-        for id in range(0, len(curr_vals)):
-            curr_str += curr_vals[id] + ' '
-        str_list.append(curr_str)
+        if cpg in cpgs:
+            curr_vals = vals[cpgs.index(cpg)]
+            curr_str = cpg + ' ' + ' '.join(curr_vals)
+            str_list.append(curr_str)
 
     np.savetxt(fn + '_data.txt', str_list, fmt="%s")
 
 
 
 config = Config(
-    data_base=DataBase.GSE63347,
+    data_base=DataBase.GSE87571,
     geo_type=GeoType.any
 )
 
-fn = 'hannum_cpgs'
+fn = 'GSE87571'
 fn = get_suppl_path(config, fn)
 save_cpg_data(config, fn)

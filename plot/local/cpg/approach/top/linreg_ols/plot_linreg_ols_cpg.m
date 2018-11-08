@@ -1,65 +1,3 @@
-clear all;
-
-% ======== params ========
-cpg = 'cg26324366';
-
-% ======== config ========
-config.data_base = 'GSE87571';
-config.data_type = 'cpg_data';
-
-config.chromosome_type = 'non_gender';
-
-config.dna_region = 'genic';
-
-config.info_type = 'result';
-
-config.scenario = 'approach';
-config.approach = 'top';
-config.method = 'linreg_ols';
-
-config.disease = 'any';
-config.gender = 'versus';
-
-config.is_clustering = 0;
-
-config.color = '';
-
-if strcmp(getenv('computername'), 'MSI')
-    config.up = 'D:/YandexDisk/Work/mlmg';
-else
-    config.up = 'E:/YandexDisk/Work/mlmg';
-end
-
-% ======== processing ========
-f = figure;
-if strcmp(config.gender, 'versus')
-    config.gender = 'F';
-    config.color = 'r';
-    plot_linreg_ols_cpg(config, cpg)
-    config.gender = 'M';
-    config.color = 'b';
-    plot_linreg_ols_cpg(config, cpg)
-    config.gender = 'versus';
-else
-    plot_linreg_ols_gene(config, cpg)
-end
-
-suffix = sprintf('cpg(%s)', cpg);
-
-up_save = 'C:/Users/user/Google Drive/mlmg/figures';
-
-save_path = sprintf('%s/%s', ...
-    up_save, ...
-    get_result_path(config));
-mkdir(save_path);
-
-box on;
-b = gca; legend(b,'off');
-
-savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
-saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
-
-
 function plot_linreg_ols_cpg(config, cpg)
 
 fn = sprintf('%s/data/%s/top.txt', ...
@@ -85,19 +23,14 @@ end
 
 fn = sprintf('%s/data/%s/average_beta.txt', config.up, config.data_base);
 fid = fopen(fn);
-num_lines = 1;
-while ~feof(fid)
-    tline = strsplit(fgetl(fid), '\t');
-    curr_cpg = string(tline(1));
-    if strcmp(curr_cpg, cpg)
-        cpg_data = str2double(tline(2:end))';
-        break;
-    end
-    if mod(num_lines, 1000) == 0
-        num_lines = num_lines
-    end
-    num_lines = num_lines + 1;
-end
+data = textscan(fid, '%s %*[^\n]','HeaderLines',1);
+frewind(fid)
+all_cpgs = data{1};
+idx = find(string(all_cpgs)==string(cpg))
+target_row = textscan(fid,'%s',1,'delimiter','\n', 'headerlines', idx-1);
+tline = strsplit(fgetl(fid), '\t');
+curr_cpg = string(tline(1));
+cpg_data = str2double(tline(2:end))';
 fclose(fid);
 
 cpg_data_passed = size(indexes, 1);

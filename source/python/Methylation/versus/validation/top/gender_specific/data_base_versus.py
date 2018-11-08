@@ -78,7 +78,9 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
                 config.read_only = False
                 dict_cpg_gene = get_dict_cpg_gene(config)
                 genes = []
+                num_passed_names = 0
                 for name in top_dict[keys[0]]:
+                    num_passed_names += 1
                     if len(genes) > num_top:
                         break
                     if name in top_dict[keys[0]]:
@@ -89,11 +91,14 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
                                 genes.append(gene)
                 gene_lists.append(genes[0:num_top])
                 basic_genes = genes
+                print('num_passed_names: ' + str(num_passed_names))
             elif config.data_type is DataType.bop:
                 config.read_only = False
                 dict_bop_gene = get_dict_bop_genes(config)
                 genes = []
+                num_passed_names = 0
                 for name in top_dict[keys[0]]:
+                    num_passed_names += 1
                     if len(genes) > num_top:
                         break
                     if name in top_dict[keys[0]]:
@@ -104,6 +109,7 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
                                 genes.append(gene)
                 gene_lists.append(genes[0:num_top])
                 basic_genes = genes
+                print('num_passed_names: ' + str(num_passed_names))
 
     gene_intersection = gene_lists[0]
     for genes in gene_lists:
@@ -122,14 +128,14 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
     print(str(len(gene_intersection)))
 
 target_data_bases = [DataBase.GSE40279, DataBase.GSE87571]
-target_methods = [Method.manova]
-target_sort_ids = [3]
+target_methods = [Method.linreg_ols]
+target_sort_ids = [3, 1]
 target_sort_directions = [-1, 1]
 target_num_top = 750
 
 data_base = DataBase.data_base_versus
 
-data_type = DataType.bop
+data_type = DataType.cpg
 
 chromosome_type = ChromosomeTypes.non_gender
 
