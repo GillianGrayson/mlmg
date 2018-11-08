@@ -1,6 +1,6 @@
 function [metrics_diff, metrics_diff_labels] = get_gender_specific_metrics_diff(config)
 
-if strcmp(config.method, 'linreg_ols')
+if strcmp(config.method, 'linreg_ols') || strcmp(config.method, 'linreg_ols_wo_outliers')
     
     sigma = 3;
     

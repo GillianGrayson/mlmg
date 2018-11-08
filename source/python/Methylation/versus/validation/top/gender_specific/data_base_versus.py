@@ -128,9 +128,9 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
     print(str(len(gene_intersection)))
 
 target_data_bases = [DataBase.GSE40279, DataBase.GSE87571]
-target_methods = [Method.linreg_ols]
-target_sort_ids = [3, 1]
-target_sort_directions = [-1, 1]
+target_methods = [Method.linreg_ols_wo_outliers]
+target_sort_ids = [2, 1]
+target_sort_directions = [1, 1]
 target_num_top = 750
 
 data_base = DataBase.data_base_versus
