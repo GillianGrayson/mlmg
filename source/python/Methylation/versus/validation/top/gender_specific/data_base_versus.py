@@ -28,13 +28,36 @@ def genes_intersection(config, data_bases, methods, sort_ids, sort_directions, n
             suffix = ''
             if method == Method.manova:
                 target_str = config.attribute_target[0].value
+                is_cells = False
                 for target_id in range(1, len(config.attribute_target)):
                     if isinstance(config.attribute_target[target_id], tuple):
-                        target_str += '_' + '_x_'.join([x.value for x in config.attribute_target[target_id]])
+                        tmp = []
+                        is_mult_cells = False
+                        for x in config.attribute_target[target_id]:
+                            if isinstance(x, Attribute):
+                                tmp.append(x.value)
+                            elif isinstance(x, CellPop):
+                                is_mult_cells = True
+                        target_str += '_' + '_x_'.join([x for x in tmp])
+                        if is_mult_cells:
+                            target_str += '_x_cells'
+                    elif isinstance(config.attribute_target[target_id], CellPop):
+                        if not is_cells:
+                            is_cells = True
+                            target_str += '_cells'
                     else:
                         target_str += '_' + config.attribute_target[target_id].value
 
-                types_str = '_'.join([x.value for x in config.attributes_types])
+                types_str = config.attributes_types[0].value
+                is_cells = False
+                for type_id in range(1, len(config.attributes_types)):
+                    if isinstance(config.attributes_types[type_id], Attribute):
+                        types_str += '_' + config.attributes_types[type_id].value
+                    elif isinstance(config.attributes_types[type_id], CellPop):
+                        if not is_cells:
+                            is_cells = True
+                            types_str += '_cells'
+
                 suffix = '_target(' + target_str + ')_exog(' + types_str + ')'
 
             fn = 'method(' + method.value + ')' + suffix + '.xlsx'
@@ -131,8 +154,23 @@ method = Method.gender_specific
 disease = Disease.any
 gender = Gender.versus
 
-attributes_types = [Attribute.gender, Attribute.age]
-attribute_target = [Attribute.gender, Attribute.age, (Attribute.gender, Attribute.age)]
+attributes_types = [Attribute.gender,
+                    Attribute.age,
+                    CellPop.plasma_blast,
+                    CellPop.cd8_p,
+                    CellPop.cd4_naive,
+                    CellPop.cd8_naive,
+                    CellPop.cd8_t,
+                    CellPop.cd4_t,
+                    CellPop.nk,
+                    CellPop.b_cell,
+                    CellPop.mono,
+                    CellPop.gran]
+
+attribute_target = [Attribute.gender,
+                    Attribute.age,
+                    (Attribute.gender,
+                     Attribute.age)]
 
 is_clustering = False
 
