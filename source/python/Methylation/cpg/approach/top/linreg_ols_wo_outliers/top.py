@@ -30,8 +30,8 @@ def save_top_linreg_ols_wo_outliers(config):
         x = sm.add_constant(attributes)
         results = sm.OLS(values, x).fit()
 
-        slope_plus = results.params[1] + 5.0 * results.bse[1]
-        intercept_plus = results.params[0] + 5.0 * results.bse[0]
+        slope_plus = results.params[1] + 2.0 * results.bse[1]
+        intercept_plus = results.params[0] + 2.0 * results.bse[0]
 
         slope = results.params[1]
         intercept = results.params[0]

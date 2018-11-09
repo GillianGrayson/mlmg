@@ -29,45 +29,39 @@ else
     config.up = 'E:/YandexDisk/Work/mlmg';
 end
 
-cr_cpgs = get_cross_reactive_cpgs(config);
-
 for cpg_id = 1:size(cpgs, 1)
     
     cpg = cpgs(cpg_id)
     
-    if ~ismember(cpg, cr_cpgs)
-        
-        % ======== processing ========
-        f = figure;
-        if strcmp(config.gender, 'versus')
-            config.gender = 'F';
-            config.color = 'r';
-            plot_linreg_ols_cpg(config, cpg)
-            config.gender = 'M';
-            config.color = 'b';
-            plot_linreg_ols_cpg(config, cpg)
-            config.gender = 'versus';
-        else
-            plot_linreg_ols_gene(config, cpg)
-        end
-        
-        suffix = sprintf('cpg(%s)', cpg);
-        
-        up_save = 'C:/Users/user/Google Drive/mlmg/figures';
-        
-        save_path = sprintf('%s/%s', ...
-            up_save, ...
-            get_result_path(config));
-        mkdir(save_path);
-        
-        box on;
-        b = gca; 
-        legend(b,'off');
-        title(cpg, 'FontSize', 16)
-        
-        savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
-        saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
-        
+    % ======== processing ========
+    f = figure;
+    if strcmp(config.gender, 'versus')
+        config.gender = 'F';
+        config.color = 'r';
+        plot_linreg_ols_cpg(config, cpg)
+        config.gender = 'M';
+        config.color = 'b';
+        plot_linreg_ols_cpg(config, cpg)
+        config.gender = 'versus';
+    else
+        plot_linreg_ols_gene(config, cpg)
     end
+    
+    suffix = sprintf('cpg(%s)', cpg);
+    
+    up_save = 'C:/Users/user/Google Drive/mlmg/figures';
+    
+    save_path = sprintf('%s/%s', ...
+        up_save, ...
+        get_result_path(config));
+    mkdir(save_path);
+    
+    box on;
+    b = gca;
+    legend(b,'off');
+    title(cpg, 'FontSize', 16)
+    
+    savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
+    saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
     
 end
