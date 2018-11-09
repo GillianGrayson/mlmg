@@ -66,6 +66,19 @@ if strcmp(config.method, 'linreg_ols') || strcmp(config.method, 'linreg_ols_wo_o
         variance_2 = y2(4) - y2(1);
         variance_diff(id) = max(variance_1, variance_2) / min(variance_1, variance_2);
         
+        pgon_slope_1_x = [slope_minus_1, slope_plus_1, slope_plus_1, slope_minus_1];
+        slope_diff_1 = slope_plus_1 - slope_minus_1;
+        pgon_slope_1_y = [0.0, 0.0, slope_diff_1, slope_diff_1];
+        pgon_slope_1 = polyshape(pgon_slope_1_x, pgon_slope_1_y);
+        
+        pgon_slope_2_x = [slope_minus_2, slope_plus_2, slope_plus_2, slope_minus_2];
+        slope_diff_2 = slope_plus_2 - slope_minus_2;
+        pgon_slope_2_y = [0.0, 0.0, slope_diff_2, slope_diff_2];
+        pgon_slope_2 = polyshape(pgon_slope_2_x, pgon_slope_2_y);
+        
+        pgon_slope_intersect = intersect(pgon_slope_1, pgon_slope_2);
+        slope_intersection(id) = abs(pgon_slope_intersect.Vertices(4,1) - pgon_slope_intersect.Vertices(1,1));
+        
         if slope_plus_1 > slope_minus_2 && slope_plus_2 > slope_minus_1
             slope_intersection(id) = (slope_plus_1 - slope_minus_2) / (slope_plus_2 - slope_minus_1);
         elseif slope_plus_2 > slope_minus_1 && slope_plus_1 > slope_minus_2
@@ -77,7 +90,7 @@ if strcmp(config.method, 'linreg_ols') || strcmp(config.method, 'linreg_ols_wo_o
     end
     
     metrics_diff = horzcat(areas, areas_normed, variance_diff, slope_intersection);
-    metrics_diff_labels = ["areas", "areas_normed", "variance", "slope_intersection"];
+    metrics_diff_labels = ['areas', 'areas_normed', 'variance', 'slope_intersection'];
     
 else
     
@@ -85,6 +98,6 @@ else
     for gene_id = 1:size(config.names, 1)
         metrics_diff(gene_id) = abs(config.metrics_1(gene_id) - config.metrics_2(gene_id));
     end
-    metrics_diff_labels = ["metric"];
+    metrics_diff_labels = ['metric'];
 
 end

@@ -1,8 +1,8 @@
 clear all;
 
 % ======== params ========
-bop = 'chr11:7534554-7535727*N_Shore';
-start_cpg = 'cg14838970';
+bop = 'chr1:118727816-118728097*S_Shore';
+start_cpg = 'cg09497789';
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -47,8 +47,10 @@ else
     plot_linreg_gene(config, cpg)
 end
 
-
-suffix = sprintf('bop(%s)_start_cpg(%s)', bop, start_cpg);
+bop_name = strrep(bop, ':', '_');
+bop_name = strrep(bop_name, '*', '_');
+bop_name = strrep(bop_name, '-', '_');
+suffix = sprintf('bop(%s)_start_cpg(%s)', bop_name, start_cpg);
 
 if strcmp(getenv('computername'), 'MSI') 
     up_save = 'C:/Users/user/Google Drive/mlmg/figures'; 
