@@ -11,7 +11,7 @@ from scipy import stats
 import statsmodels.api as sm
 
 
-def save_top_linreg_ols_wo_outliers(config, number_outliers=5):
+def save_top_linreg_ols_wo_outliers(config):
     attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
@@ -30,21 +30,24 @@ def save_top_linreg_ols_wo_outliers(config, number_outliers=5):
         x = sm.add_constant(attributes)
         results = sm.OLS(values, x).fit()
 
-        diffs = []
+        slope_plus = results.params[1] + 5.0 * results.bse[1]
+        intercept_plus = results.params[0] + 5.0 * results.bse[0]
+
+        slope = results.params[1]
+        intercept = results.params[0]
+
+        max_diff = ((slope_plus * max(attributes) + intercept_plus) - (slope * max(attributes) + intercept))
+
+        passed_ids = []
         for p_id in range(0, len(attributes)):
             curr_x = attributes[p_id]
             curr_y = values[p_id]
             pred_y = results.params[1] * curr_x + results.params[0]
-            diffs.append(abs(pred_y - curr_y))
+            if abs(pred_y - curr_y) < max_diff:
+                passed_ids.append(p_id)
 
-        order = np.argsort(list(map(abs, diffs)))[::-1]
-        bad_ids = order[0:number_outliers]
-        good_ids = np.linspace(0, len(attributes) - 1, len(attributes), dtype=int)
-        good_ids = list(set(good_ids) - set(bad_ids))
-        good_ids.sort()
-
-        values_good = list(np.array(values)[good_ids])
-        attributes_good = list(np.array(attributes)[good_ids])
+        values_good = list(np.array(values)[passed_ids])
+        attributes_good = list(np.array(attributes)[passed_ids])
 
         x = sm.add_constant(attributes_good)
         results = sm.OLS(values_good, x).fit()
