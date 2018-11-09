@@ -25,7 +25,7 @@ def top_proc(config):
     elif config.method is Method.linreg_ols_wo_outliers:
         save_top_linreg_ols_wo_outliers(config)
 
-data_base = DataBase.GSE87571
+data_base = DataBase.GSE40279
 data_type = DataType.cpg
 
 chromosome_type = ChromosomeTypes.non_gender

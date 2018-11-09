@@ -59,7 +59,7 @@ def exclude_cpgs(config, data_bases, methods):
 
 
 target_data_bases = [DataBase.GSE40279, DataBase.GSE87571]
-target_methods = [Method.linreg_ols_wo_outliers]
+target_methods = [Method.linreg_ols]
 
 data_base = DataBase.data_base_versus
 
