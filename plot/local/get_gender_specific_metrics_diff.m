@@ -67,24 +67,23 @@ if strcmp(config.method, 'linreg_ols') || strcmp(config.method, 'linreg_ols_wo_o
         variance_diff(id) = max(variance_1, variance_2) / min(variance_1, variance_2);
         
         pgon_slope_1_x = [slope_minus_1, slope_plus_1, slope_plus_1, slope_minus_1];
-        slope_diff_1 = slope_plus_1 - slope_minus_1;
-        pgon_slope_1_y = [0.0, 0.0, slope_diff_1, slope_diff_1];
+        pgon_slope_1_y = [0.0, 0.0, 1.0, 1.0];
         pgon_slope_1 = polyshape(pgon_slope_1_x, pgon_slope_1_y);
         
         pgon_slope_2_x = [slope_minus_2, slope_plus_2, slope_plus_2, slope_minus_2];
-        slope_diff_2 = slope_plus_2 - slope_minus_2;
-        pgon_slope_2_y = [0.0, 0.0, slope_diff_2, slope_diff_2];
+        pgon_slope_2_y = [0.0, 0.0, 1.0, 1.0];
         pgon_slope_2 = polyshape(pgon_slope_2_x, pgon_slope_2_y);
         
         pgon_slope_intersect = intersect(pgon_slope_1, pgon_slope_2);
-        slope_intersection(id) = abs(pgon_slope_intersect.Vertices(4,1) - pgon_slope_intersect.Vertices(1,1));
+        pgon_slope_union = union(pgon_slope_1, pgon_slope_2);
         
-        if slope_plus_1 > slope_minus_2 && slope_plus_2 > slope_minus_1
-            slope_intersection(id) = (slope_plus_1 - slope_minus_2) / (slope_plus_2 - slope_minus_1);
-        elseif slope_plus_2 > slope_minus_1 && slope_plus_1 > slope_minus_2
-            slope_intersection(id) = slope_plus_2 - slope_minus_1 / (slope_plus_1 - slope_minus_2);
-        else
+        area_intersection = polyarea(pgon_slope_intersect.Vertices(:, 1), pgon_slope_intersect.Vertices(:, 2));
+        area_union = polyarea(pgon_slope_union.Vertices(:, 1), pgon_slope_union.Vertices(:, 2));
+        
+        if area_intersection < 1e-8
             slope_intersection(id) = 0.0;
+        else
+            slope_intersection(id) = area_intersection / area_union;
         end
         
     end

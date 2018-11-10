@@ -64,10 +64,3 @@ fn = sprintf('%s/%s.xlsx', ...
 d = vertcat('names', intersect_names);
 
 xlswrite(fn, d);
-
-
-
-
-
-
-ololo = 1;

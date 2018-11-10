@@ -23,7 +23,7 @@ num_names = size(all_names, 1);
 
 all_data_1 = d_1_tmp;
 all_data_2 = zeros(num_names, 1);
-for id_1 = 1:num_names
+for id_1 = 1:10000
     name = string(all_names(id_1));
     id_2 = find(names_2==name);
     for m_id = 1:size(all_data_1, 2)
