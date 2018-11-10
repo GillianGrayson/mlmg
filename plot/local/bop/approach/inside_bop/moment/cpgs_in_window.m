@@ -1,8 +1,8 @@
 clear all;
 
 % ======== params ========
-bop = 'chr1:118727816-118728097*S_Shore';
-start_cpg = 'cg09497789';
+bop = 'chr17:48474516-48475047*N_Shore';
+start_cpg = 'cg09592867';
 
 % ======== config ========
 config.data_base = 'GSE87571';
