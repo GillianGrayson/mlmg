@@ -89,7 +89,7 @@ if strcmp(config.method, 'linreg_ols') || strcmp(config.method, 'linreg_ols_wo_o
     end
     
     metrics_diff = horzcat(areas, areas_normed, variance_diff, slope_intersection);
-    metrics_diff_labels = ['areas', 'areas_normed', 'variance', 'slope_intersection'];
+    metrics_diff_labels = ["areas", "areas_normed", "variance", "slope_intersection"];
     
 else
     
@@ -97,6 +97,6 @@ else
     for gene_id = 1:size(config.names, 1)
         metrics_diff(gene_id) = abs(config.metrics_1(gene_id) - config.metrics_2(gene_id));
     end
-    metrics_diff_labels = ['metric'];
+    metrics_diff_labels = ["metric"];
 
 end
