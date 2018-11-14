@@ -1,6 +1,7 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
+from config.types.experiments.method import *
 import pandas as pd
 
 num_top = 500

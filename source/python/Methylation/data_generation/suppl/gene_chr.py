@@ -1,7 +1,5 @@
-import numpy as np
 from config.config import *
 from annotations.gene import *
-from infrastructure.path import *
 
 
 def save_gene_chr(config):

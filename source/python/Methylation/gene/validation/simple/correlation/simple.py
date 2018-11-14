@@ -1,4 +1,6 @@
 from config.config import *
+from config.types.annotations import GeneDataType, GeoType
+from config.types.attributes.common import Gender
 from infrastructure.load.top import *
 from annotations.gene import get_dict_gene_cpg
 from infrastructure.load.cpg_data import load_dict_cpg_data

@@ -1,13 +1,6 @@
-import numpy as np
-from infrastructure.load.attributes import get_attributes
 from infrastructure.load.cpg_data import load_dict_cpg_data
-from infrastructure.path import get_result_path
 from infrastructure.save.features import save_features
-from annotations.gene import get_dict_cpg_gene
-from config.types import *
 from config.config import *
-from scipy import stats
-import seaborn as sns
 import math
 
 

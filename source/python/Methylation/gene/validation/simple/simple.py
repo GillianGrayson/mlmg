@@ -1,5 +1,7 @@
 from config.config import *
-from config.method import Method
+from config.types.experiments.method import Method
+from config.types.annotations import GeneDataType, GeoType
+from config.types.attributes.common import Gender
 from gene.validation.simple.linreg_mult.simple import save_simple_linreg_mult
 from gene.validation.simple.linreg.simple import save_simple_linreg
 

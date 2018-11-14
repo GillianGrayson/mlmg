@@ -3,7 +3,7 @@ from infrastructure.path.path import get_data_path
 from annotations.gene import get_dict_cpg_gene, get_dict_cpg_map_info
 from infrastructure.load.cpg_data import load_dict_cpg_data, get_non_inc_cpgs
 from infrastructure.load.attributes import get_attributes
-from config.types import *
+from config.config import *
 import os.path
 import pickle
 

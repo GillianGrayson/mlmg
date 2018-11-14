@@ -1,4 +1,4 @@
-from config.types import *
+from config.config import *
 
 
 def cpg_name_condition(config, annotation):
@@ -16,14 +16,37 @@ def dna_region_condition(config, annotation):
     gene = annotation[Annotation.gene.value]
 
     match = False
-    if dna_region is DNARegion.any:
+    if dna_region is DNARegionType.any:
         match = True
-    elif dna_region is DNARegion.genic:
+    elif dna_region is DNARegionType.genic:
         if len(gene) > 0:
             match = True
-    elif dna_region is DNARegion.non_genic:
+    elif dna_region is DNARegionType.non_genic:
         if len(gene) == 0:
             match = True
+
+    return match
+
+def snp_condition(config, annotation):
+    snp = config.snp
+    curr_snp = annotation[Annotation.Probe_SNPs.value]
+    curr_snp_10 = annotation[Annotation.Probe_SNPs_10.value]
+
+    match = True
+    if snp is SNPType.snp_excluded:
+        if curr_snp != '' or curr_snp_10 != '':
+            match = False
+
+    return match
+
+def cross_reactive_condition(config, annotation):
+    cross_reactive = config.cross_reactive
+    cr = annotation[Annotation.cross_reactive.value]
+
+    match = True
+    if cross_reactive is CrossReactiveType.cross_reactive_excluded:
+        if cr == 1:
+            match = False
 
     return match
 
@@ -32,15 +55,15 @@ def chromosome_condition(config, annotation):
     chr = annotation[Annotation.chr.value]
 
     match = False
-    if chromosome_type is ChromosomeTypes.all:
+    if chromosome_type is ChromosomeType.all:
         match = True
-    elif chromosome_type is ChromosomeTypes.non_gender:
+    elif chromosome_type is ChromosomeType.non_gender:
         if chr != 'X' and chr != 'Y':
             match = True
-    elif chromosome_type is ChromosomeTypes.x:
+    elif chromosome_type is ChromosomeType.x:
         if chr == 'X':
             match = True
-    elif chromosome_type is ChromosomeTypes.y:
+    elif chromosome_type is ChromosomeType.y:
         if chr == 'Y':
             match = True
 

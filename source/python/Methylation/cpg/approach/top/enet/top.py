@@ -7,7 +7,7 @@ from infrastructure.load.params import load_params_dict
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
-from config.types import *
+from config.config import *
 
 
 def save_top_enet(config, num_bootstrap_runs=10, num_top=500):

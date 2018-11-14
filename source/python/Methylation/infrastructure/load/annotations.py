@@ -1,5 +1,5 @@
+from config.config import *
 from infrastructure.path.path import *
-from config.types import *
 import os.path
 import pickle
 
@@ -39,6 +39,10 @@ def load_annotations(config):
                         annotations[key].append(int(vals[key_id].rstrip()))
                     else:
                         annotations[key].append(0)
+                elif key == Annotation.Probe_SNPs.value:
+                    annotations[key].append(vals[key_id].rstrip())
+                elif key == Annotation.Probe_SNPs_10.value:
+                    annotations[key].append(vals[key_id].rstrip())
                 elif key == Annotation.gene.value:
                     annotations[key].append(vals[key_id].rstrip())
                 elif key == Annotation.class_type.value:
@@ -46,6 +50,8 @@ def load_annotations(config):
                 elif key == Annotation.geo.value:
                     annotations[key].append(vals[key_id].rstrip())
                 elif key == Annotation.bop.value:
+                    annotations[key].append(vals[key_id].rstrip())
+                elif key == Annotation.cross_reactive.value:
                     annotations[key].append(vals[key_id].rstrip())
 
         f.close()

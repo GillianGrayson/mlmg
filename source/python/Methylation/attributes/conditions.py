@@ -1,4 +1,4 @@
-from config.types import *
+from config.types.attributes.attribute import Attribute
 
 
 def age_less(config, limit):

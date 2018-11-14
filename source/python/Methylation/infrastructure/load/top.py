@@ -1,12 +1,9 @@
-from infrastructure.path import *
 from infrastructure.load.routines import line_proc
 from infrastructure.path.path import *
-from config.method import *
+from config.types.experiments.method import *
 import numpy as np
 import os.path
 import pandas as pd
-from pandas import ExcelWriter
-from pandas import ExcelFile
 
 
 def load_top_gene_names_by_article(config, fn):

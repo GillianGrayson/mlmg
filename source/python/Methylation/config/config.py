@@ -1,9 +1,24 @@
+from config.types.common import *
+
+from config.types.annotations.annotation import *
+from config.types.annotations.bop import *
+from config.types.annotations.cpg import *
+from config.types.annotations.gene import *
+from config.types.annotations.common import *
+
+from config.types.experiments.scenario import *
+from config.types.experiments.approach import *
+from config.types.experiments.method import *
+
+from config.types.attributes.common import *
+from config.types.attributes.attribute import *
+from config.types.attributes.common import *
+from config.types.attributes.cell_pop import *
+
 from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
 from infrastructure.load.cell_pop import *
 from infrastructure.load.indexes import get_indexes
-from config.types import *
-from config.method import *
 import socket
 import getpass
 
@@ -16,14 +31,16 @@ class Config:
                  data_base=DataBase.GSE40279,
                  data_type=DataType.gene,
 
-                 chromosome_type=ChromosomeTypes.non_gender,
+                 cross_reactive=CrossReactiveType.cross_reactive_included,
+                 snp=SNPType.snp_included,
+                 chromosome_type=ChromosomeType.non_gender,
 
                  class_type=ClassType.class_ab,
 
                  geo_type=GeoType.islands_shores,
                  gene_data_type=GeneDataType.mean,
 
-                 dna_region=DNARegion.any,
+                 dna_region=DNARegionType.any,
 
                  scenario=Scenario.approach,
                  approach=Approach.top,
@@ -46,6 +63,8 @@ class Config:
         self.data_type = data_type
 
         # Level 2: Annotations
+        self.cross_reactive = cross_reactive
+        self.snp = snp
         self.chromosome_type = chromosome_type
         # BOP
         self.class_type = class_type
@@ -75,7 +94,7 @@ class Config:
 
         # Checking for GENE
         if self.data_type is DataType.gene:
-            self.dna_region = DNARegion.genic
+            self.dna_region = DNARegionType.genic
 
         # Checking for GENE
         if self.data_type is DataType.cpg:

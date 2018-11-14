@@ -1,5 +1,4 @@
-from config.types import *
-from config.method import *
+from config.types.annotations import ClassType
 
 
 def get_class_types(config):

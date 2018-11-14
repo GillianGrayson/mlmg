@@ -1,4 +1,5 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
 from cpg.approach.top.enet.top import save_top_enet
 from cpg.approach.top.linreg.top import save_top_linreg
@@ -28,9 +29,11 @@ def top_proc(config):
 data_base = DataBase.GSE40279
 data_type = DataType.cpg
 
-chromosome_type = ChromosomeTypes.non_gender
+cross_reactive = CrossReactiveType.cross_reactive_included
+snp = SNPType.snp_included
+chromosome_type = ChromosomeType.non_gender
 
-dna_region = DNARegion.genic
+dna_region = DNARegionType.genic
 
 disease = Disease.any
 genders = [Gender.F, Gender.M]
@@ -38,7 +41,7 @@ genders = [Gender.F, Gender.M]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_ols_wo_outliers,
+    Method.linreg_ols,
 ]
 
 is_clustering = False
@@ -52,6 +55,8 @@ for method in methods:
             data_base=data_base,
             data_type=data_type,
 
+            cross_reactive=cross_reactive,
+            snp=snp,
             chromosome_type=chromosome_type,
 
             dna_region=dna_region,

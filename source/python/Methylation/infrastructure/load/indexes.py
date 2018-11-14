@@ -1,4 +1,6 @@
-from config.types import *
+from config.types.attributes.attribute import Attribute
+from config.types.attributes.common import Disease, Gender
+
 
 def get_indexes(config):
     geo_accessions = config.attributes[Attribute.geo_accession.value]

@@ -1,6 +1,6 @@
 from annotations.gene import get_dict_cpg_gene
 from infrastructure.path.path import get_path
-from config.types import *
+from config.config import *
 from infrastructure.load.routines import line_proc
 import numpy as np
 import os.path
@@ -99,6 +99,8 @@ def load_cpg_data_raw(config):
         col_vals = line_proc(config, line)
         cpg = col_vals[0]
         vals = col_vals[1::]
+        vals[-1] = vals[-1].rstrip()
+
         vals = list(np.array(vals)[indexes])
 
         vals_passed.append(vals)

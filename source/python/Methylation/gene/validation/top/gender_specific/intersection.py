@@ -1,6 +1,7 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
+from config.types.experiments.method import *
 import pandas as pd
 
 num_top = 500
@@ -8,7 +9,7 @@ num_top = 500
 data_base = DataBase.GSE87571
 data_type = DataType.gene
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 gene_data_type = GeneDataType.mean
 geo_type = GeoType.islands_shores

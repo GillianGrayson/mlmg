@@ -1,4 +1,5 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
 
 num_top = 500

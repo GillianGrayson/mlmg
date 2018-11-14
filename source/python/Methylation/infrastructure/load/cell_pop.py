@@ -1,5 +1,5 @@
-from infrastructure.path.path import *
-from config.types import *
+from config.types.attributes.cell_pop import CellPop
+from infrastructure.path.path import get_path
 import numpy as np
 
 

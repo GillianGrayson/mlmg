@@ -1,13 +1,11 @@
 from config.config import *
+from config.types.annotations import GeneDataType, GeoType, ClassType, DNARegion, ChromosomeType
+from config.types.attributes.attribute import Attribute
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
-from config.types import *
+from config.types.experiments.method import *
 import pandas as pd
-from infrastructure.save.features import save_features
-from annotations.gene import get_dict_cpg_gene
-from annotations.bop import get_dict_bop_genes
 from infrastructure.path.path import get_origin_path
-import math
 
 
 def exclude_cpgs(config, data_bases, methods):
@@ -65,7 +63,7 @@ data_base = DataBase.data_base_versus
 
 data_type = DataType.cpg
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 # bop
 class_type = ClassType.class_ab

@@ -1,8 +1,6 @@
-import numpy as np
 from config.config import *
 from infrastructure.load.gene_data import get_raw_dict
 from infrastructure.path.path import get_data_path
-from config.types import *
 import os
 
 
@@ -82,14 +80,20 @@ def save_gene_data(config):
 
 data_base = DataBase.GSE87571
 geo_types = [GeoType.islands_shores]
-chromosome_type=ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
+cross_reactive = CrossReactiveType.cross_reactive_included
+snp = SNPType.snp_included
 
 for geo_type in geo_types:
     print('geo: ' + str(geo_type))
     config = Config(
         data_base=data_base,
         data_type=DataType.gene,
+        
+        cross_reactive=cross_reactive,
+        snp=snp,
         chromosome_type=chromosome_type,
+
         geo_type=geo_type,
     )
     save_gene_data(config)

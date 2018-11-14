@@ -1,8 +1,6 @@
-import numpy as np
 from config.config import *
 from annotations.gene import *
 from infrastructure.load.cpg_data import load_cpg_data_raw
-from infrastructure.path import *
 
 
 def save_cpg_data(config, fn):
@@ -23,10 +21,10 @@ def save_cpg_data(config, fn):
 
 
 config = Config(
-    data_base=DataBase.GSE87571,
+    data_base=DataBase.GSE40279,
     geo_type=GeoType.any
 )
 
-fn = 'GSE87571'
+fn = 'GSE40279_4classes_new_list_best_cpg_from_1000_top_genes'
 fn = get_suppl_path(config, fn)
 save_cpg_data(config, fn)

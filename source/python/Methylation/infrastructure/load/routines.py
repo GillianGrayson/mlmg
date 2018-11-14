@@ -1,4 +1,4 @@
-from config.types import *
+from config.config import *
 
 
 def line_proc(config, line):

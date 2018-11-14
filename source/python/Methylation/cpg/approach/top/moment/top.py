@@ -3,7 +3,7 @@ from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
-from config.types import *
+from config.config import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
 

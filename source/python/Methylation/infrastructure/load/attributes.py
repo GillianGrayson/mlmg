@@ -1,4 +1,4 @@
-from config.types import *
+from config.types.attributes.attribute import Attribute
 from infrastructure.path.path import get_path
 import numpy as np
 import os.path
