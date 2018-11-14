@@ -15,9 +15,9 @@ names = config.names;
 metrics_diff = config.metrics_diff;
 metrics_diff_labels = config.metrics_diff_labels;
 
-d = vertcat('names', names(order));
+d = vertcat("names", string(names(order)));
 for metrics_id = 1:size(metrics_diff, 2)
-    d = horzcat(d, vertcat(metrics_diff_labels(metrics_id), metrics_diff(order, metrics_id)));
+    d = horzcat(d, vertcat(metrics_diff_labels(metrics_id), string(metrics_diff(order, metrics_id))));
 end
 
 xlswrite(fn, d);

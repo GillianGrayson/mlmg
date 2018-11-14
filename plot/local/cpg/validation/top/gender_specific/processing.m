@@ -8,7 +8,7 @@ config.metrics_diff_direction = 'ascend';
 config.part = 0.0005;
 
 % ======== config ========
-config.data_base = 'GSE87571';
+config.data_base = 'GSE40279';
 config.data_type = 'cpg_data';
 
 config.chromosome_type = 'non_gender';
@@ -19,7 +19,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_ols_wo_outliers';
+config.method = 'linreg_ols';
 
 config.disease = 'any';
 config.gender = 'versus';

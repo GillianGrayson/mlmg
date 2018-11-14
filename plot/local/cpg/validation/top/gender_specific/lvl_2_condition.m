@@ -17,7 +17,7 @@ areas = cell2mat(raw(2:end, 3));
 
 passed_names = [];
 for id = 1:size(names)
-    if areas(id) < 0.2
+    if areas(id) < 0.5
         passed_names = vertcat(passed_names, names(id));
     end
 end
