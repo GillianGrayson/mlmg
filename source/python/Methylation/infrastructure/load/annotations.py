@@ -52,7 +52,7 @@ def load_annotations(config):
                 elif key == Annotation.bop.value:
                     annotations[key].append(vals[key_id].rstrip())
                 elif key == Annotation.cross_reactive.value:
-                    annotations[key].append(vals[key_id].rstrip())
+                    annotations[key].append(int(vals[key_id].rstrip()))
 
         f.close()
 
