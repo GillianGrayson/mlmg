@@ -12,6 +12,7 @@ class Method(Enum):
     linreg_ols = 'linreg_ols'
     linreg_ols_wo_outliers = 'linreg_ols_wo_outliers'
     anova = 'anova'
+    anova_statsmodels = 'anova_statsmodels'
     spearman = 'spearman'
     manova = 'manova'
     random_forest = 'random_forest'
