@@ -8,6 +8,7 @@ from config.config import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
 import statsmodels.api as sm
+from annotations.cpg import *
 
 
 def save_top_linreg_ols_wo_outliers(config):
@@ -16,7 +17,9 @@ def save_top_linreg_ols_wo_outliers(config):
     dict_cpg_data = load_dict_cpg_data(config)
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
 
+    cpg_names_passed = []
     R2s = []
     intercepts = []
     slopes = []
@@ -25,45 +28,48 @@ def save_top_linreg_ols_wo_outliers(config):
     intercepts_p_values = []
     slopes_p_values = []
     for id in range(0, len(cpg_names)):
-        values = cpg_values[id]
-        x = sm.add_constant(attributes)
-        results = sm.OLS(values, x).fit()
+        cpg = cpg_names[id]
+        if cpg in approved_cpgs:
+            cpg_names_passed.append(cpg)
+            values = cpg_values[id]
+            x = sm.add_constant(attributes)
+            results = sm.OLS(values, x).fit()
 
-        slope_plus = results.params[1] + 2.0 * results.bse[1]
-        intercept_plus = results.params[0] + 2.0 * results.bse[0]
+            slope_plus = results.params[1] + 2.0 * results.bse[1]
+            intercept_plus = results.params[0] + 2.0 * results.bse[0]
 
-        slope = results.params[1]
-        intercept = results.params[0]
+            slope = results.params[1]
+            intercept = results.params[0]
 
-        max_diff = ((slope_plus * max(attributes) + intercept_plus) - (slope * max(attributes) + intercept))
+            max_diff = ((slope_plus * max(attributes) + intercept_plus) - (slope * max(attributes) + intercept))
 
-        passed_ids = []
-        for p_id in range(0, len(attributes)):
-            curr_x = attributes[p_id]
-            curr_y = values[p_id]
-            pred_y = results.params[1] * curr_x + results.params[0]
-            if abs(pred_y - curr_y) < max_diff:
-                passed_ids.append(p_id)
+            passed_ids = []
+            for p_id in range(0, len(attributes)):
+                curr_x = attributes[p_id]
+                curr_y = values[p_id]
+                pred_y = results.params[1] * curr_x + results.params[0]
+                if abs(pred_y - curr_y) < max_diff:
+                    passed_ids.append(p_id)
 
-        values_good = list(np.array(values)[passed_ids])
-        attributes_good = list(np.array(attributes)[passed_ids])
+            values_good = list(np.array(values)[passed_ids])
+            attributes_good = list(np.array(attributes)[passed_ids])
 
-        x = sm.add_constant(attributes_good)
-        results = sm.OLS(values_good, x).fit()
+            x = sm.add_constant(attributes_good)
+            results = sm.OLS(values_good, x).fit()
 
-        R2s.append(results.rsquared)
-        intercepts.append(results.params[0])
-        slopes.append(results.params[1])
-        intercepts_std_errors.append(results.bse[0])
-        slopes_std_errors.append(results.bse[1])
-        intercepts_p_values.append(results.pvalues[0])
-        slopes_p_values.append(results.pvalues[1])
+            R2s.append(results.rsquared)
+            intercepts.append(results.params[0])
+            slopes.append(results.params[1])
+            intercepts_std_errors.append(results.bse[0])
+            slopes_std_errors.append(results.bse[1])
+            intercepts_p_values.append(results.pvalues[0])
+            slopes_p_values.append(results.pvalues[1])
 
-        if id % config.print_rate == 0:
-            print('cpg_id: ' + str(id))
+            if id % config.print_rate == 0:
+                print('cpg_id: ' + str(id))
 
     order = np.argsort(list(map(abs, R2s)))[::-1]
-    cpgs_sorted = list(np.array(cpg_names)[order])
+    cpgs_sorted = list(np.array(cpg_names_passed)[order])
     R2s_sorted = list(np.array(R2s)[order])
     intercepts_sorted = list(np.array(intercepts)[order])
     slopes_sorted = list(np.array(slopes)[order])

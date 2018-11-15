@@ -6,6 +6,7 @@ from annotations.gene import get_dict_cpg_gene
 from config.config import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
+from annotations.cpg import *
 
 
 def save_top_moment(config):
@@ -13,19 +14,24 @@ def save_top_moment(config):
     dict_cpg_data = load_dict_cpg_data(config)
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
 
+    cpg_names_passed = []
     means = []
     stds = []
     for id in range(0, len(cpg_names)):
-        values = cpg_values[id]
-        means.append(np.mean(values))
-        stds.append(np.std(values))
+        cpg = cpg_names[id]
+        if cpg in approved_cpgs:
+            cpg_names_passed.append(cpg)
+            values = cpg_values[id]
+            means.append(np.mean(values))
+            stds.append(np.std(values))
 
-        if id % config.print_rate == 0:
-            print('cpg_id: ' + str(id))
+            if id % config.print_rate == 0:
+                print('cpg_id: ' + str(id))
 
     order = np.argsort(list(map(abs, means)))[::-1]
-    cpgs_sorted = list(np.array(cpg_names)[order])
+    cpgs_sorted = list(np.array(cpg_names_passed)[order])
     means_sorted = list(np.array(means)[order])
     stds_sorted = list(np.array(stds)[order])
 

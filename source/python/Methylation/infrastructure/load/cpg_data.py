@@ -32,7 +32,6 @@ def get_non_inc_cpgs(config):
 
 def load_dict_cpg_data(config):
     indexes = config.indexes
-    dict_cpg_gene = get_dict_cpg_gene(config)
 
     fn_txt = get_path(config, 'average_beta.txt')
     fn_pkl = get_path(config, 'dict_cpg_data.pkl')
@@ -65,8 +64,7 @@ def load_dict_cpg_data(config):
                 vals = list(map(float, col_vals[1::]))
 
                 if cpg not in cpg_non_inc:
-                    if cpg in dict_cpg_gene:
-                        dict_cpg_data[cpg] = vals
+                    dict_cpg_data[cpg] = vals
 
             num_lines += 1
             if num_lines % config.print_rate == 0:

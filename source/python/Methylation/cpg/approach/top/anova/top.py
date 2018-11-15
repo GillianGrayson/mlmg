@@ -5,6 +5,7 @@ from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
+from annotations.cpg import *
 from scipy import stats
 
 
@@ -12,22 +13,27 @@ def save_top_anova(config, num_top=500):
     attributes_dict = get_attributes_dict(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
-    cpgs = list(dict_cpg_data.keys())
-    vals = list(dict_cpg_data.values())
+    cpg_names = list(dict_cpg_data.keys())
+    cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
 
+    cpg_names_passed = []
     pvals = []
-    for id in range(0, len(cpgs)):
-        curr_vals = vals[id]
+    for id in range(0, len(cpg_names)):
+        cpg = cpg_names[id]
+        if cpg in  approved_cpgs:
+            cpg_names_passed.append(cpg)
+            curr_vals = cpg_values[id]
 
-        curr_beta_dict = {}
-        for key_age in attributes_dict:
-            curr_beta_dict[key_age] = list(np.asarray(curr_vals)[attributes_dict[key_age]])
+            curr_beta_dict = {}
+            for key_age in attributes_dict:
+                curr_beta_dict[key_age] = list(np.asarray(curr_vals)[attributes_dict[key_age]])
 
-        anova_res = stats.f_oneway(*curr_beta_dict.values())
-        pvals.append(anova_res.pvalue)
+            anova_res = stats.f_oneway(*curr_beta_dict.values())
+            pvals.append(anova_res.pvalue)
 
     order = np.argsort(pvals)
-    cpgs_sorted = list(np.array(cpgs)[order])
+    cpgs_sorted = list(np.array(cpg_names_passed)[order])
     pvals_sorted = list(np.array(pvals)[order])
     genes_sorted = []
     pvals_genes = []
