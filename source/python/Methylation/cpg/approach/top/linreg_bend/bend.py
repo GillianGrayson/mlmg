@@ -5,9 +5,12 @@ from scipy import stats
 from attributes.conditions import *
 from config.config import *
 from copy import deepcopy
+from annotations.cpg import *
 
 
 def save_bend_linreg(config, limit, pval, num_opt=1000):
+
+    dfdf
     config_less = deepcopy(config)
     age_less(config_less, limit)
     atr_l = get_attributes(config_less)

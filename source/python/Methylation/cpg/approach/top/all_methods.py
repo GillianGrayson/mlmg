@@ -1,4 +1,5 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
 from cpg.approach.top.enet.top import save_top_enet
 from cpg.approach.top.linreg.top import save_top_linreg
@@ -25,12 +26,14 @@ def top_proc(config):
     elif config.method is Method.linreg_ols_wo_outliers:
         save_top_linreg_ols_wo_outliers(config)
 
-data_base = DataBase.GSE40279
+data_bases = [DataBase.GSE87571, DataBase.GSE40279]
 data_type = DataType.cpg
 
-chromosome_type = ChromosomeTypes.non_gender
+cross_reactives = [CrossReactiveType.cross_reactive_included, CrossReactiveType.cross_reactive_excluded]
+snps = [SNPType.snp_included, SNPType.snp_excluded]
+chromosome_type = ChromosomeType.non_gender
 
-dna_region = DNARegion.genic
+dna_region = DNARegionType.genic
 
 disease = Disease.any
 genders = [Gender.F, Gender.M]
@@ -38,32 +41,40 @@ genders = [Gender.F, Gender.M]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_ols_wo_outliers,
+    Method.linreg_ols,
 ]
 
 is_clustering = False
 
-for method in methods:
-    print(method.value)
-    for gender in genders:
-        print('\t' + gender.value)
+for data_base in data_bases:
+    print(data_base.value)
+    for cross_reactive in cross_reactives:
+        print(cross_reactive.value)
+        for snp in snps:
+            print(snp.value)
+            for method in methods:
+                print(method.value)
+                for gender in genders:
+                    print(gender.value)
 
-        config = Config(
-            data_base=data_base,
-            data_type=data_type,
+                    config = Config(
+                        data_base=data_base,
+                        data_type=data_type,
 
-            chromosome_type=chromosome_type,
+                        cross_reactive=cross_reactive,
+                        snp=snp,
+                        chromosome_type=chromosome_type,
 
-            dna_region=dna_region,
+                        dna_region=dna_region,
 
-            scenario=scenario,
-            approach=approach,
-            method=method,
+                        scenario=scenario,
+                        approach=approach,
+                        method=method,
 
-            disease=disease,
-            gender=gender,
+                        disease=disease,
+                        gender=gender,
 
-            is_clustering=is_clustering
-        )
+                        is_clustering=is_clustering
+                    )
 
-        top_proc(config)
+                    top_proc(config)

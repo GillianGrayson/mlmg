@@ -1,5 +1,4 @@
-from config.types import *
-from config.method import *
+from config.types.annotations import DNARegion
 
 
 def get_dna_regions(config):

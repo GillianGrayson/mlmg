@@ -1,5 +1,4 @@
-from config.types import *
-from config.method import *
+from config.types.annotations import GeneDataType, GeoType
 
 
 def get_geo_types(config):

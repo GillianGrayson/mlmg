@@ -4,10 +4,11 @@ from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
-from config.types import *
+from config.config import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
 from scipy import stats
+from annotations.cpg import *
 
 
 def save_top_linreg(config):
@@ -16,25 +17,30 @@ def save_top_linreg(config):
     dict_cpg_data = load_dict_cpg_data(config)
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
 
+    cpg_names_passed = []
     r_values = []
     p_values = []
     slopes = []
     intercepts = []
     std_errors = []
     for id in range(0, len(cpg_names)):
-        values = cpg_values[id]
-        slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, values)
-        r_values.append(r_value)
-        p_values.append(p_value)
-        slopes.append(slope)
-        intercepts.append(intercept)
-        std_errors.append(std_error)
-        if id % config.print_rate == 0:
-            print('cpg_id: ' + str(id))
+        cpg = cpg_names[id]
+        if cpg in approved_cpgs:
+            cpg_names_passed.append(cpg)
+            values = cpg_values[id]
+            slope, intercept, r_value, p_value, std_error = stats.linregress(attributes, values)
+            r_values.append(r_value)
+            p_values.append(p_value)
+            slopes.append(slope)
+            intercepts.append(intercept)
+            std_errors.append(std_error)
+            if id % config.print_rate == 0:
+                print('cpg_id: ' + str(id))
 
     order = np.argsort(list(map(abs, r_values)))[::-1]
-    cpgs_sorted = list(np.array(cpg_names)[order])
+    cpgs_sorted = list(np.array(cpg_names_passed)[order])
     r_values_sorted = list(np.array(r_values)[order])
     p_values_sorted = list(np.array(p_values)[order])
     slopes_sorted = list(np.array(slopes)[order])

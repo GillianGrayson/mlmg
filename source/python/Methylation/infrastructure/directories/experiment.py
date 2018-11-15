@@ -1,5 +1,5 @@
-from config.config import *
-from config.method import *
+from config.types.experiments.method import *
+from config.types.attributes.common import Disease, Gender
 
 
 def get_diseases(config):

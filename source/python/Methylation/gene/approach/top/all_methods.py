@@ -1,4 +1,5 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
 from gene.approach.top.enet.params import save_params_enet
 from gene.approach.top.enet.top import save_top_enet
@@ -39,7 +40,7 @@ def top_proc(config):
 data_base = DataBase.GSE40279
 data_type = DataType.gene
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 geo_types = [GeoType.islands_shores]
 gene_data_type = GeneDataType.mean

@@ -4,25 +4,31 @@ from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
-from config.types import *
+from config.config import *
 from scipy import stats
+from annotations.cpg import *
 
 
 def save_top_spearman(config, num_top=500):
     attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
-    cpgs = list(dict_cpg_data.keys())
-    vals = list(dict_cpg_data.values())
+    cpg_names = list(dict_cpg_data.keys())
+    cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
 
+    cpg_names_passed = []
     rhos = []
-    for id in range(0, len(cpgs)):
-        curr_vals = vals[id]
-        rho, pval = stats.spearmanr(attributes, curr_vals)
-        rhos.append(rho)
+    for id in range(0, len(cpg_names)):
+        cpg = cpg_names[id]
+        if cpg in approved_cpgs:
+            cpg_names_passed.append(cpg)
+            curr_vals = cpg_values[id]
+            rho, pval = stats.spearmanr(attributes, curr_vals)
+            rhos.append(rho)
 
     order = np.argsort(list(map(abs, rhos)))[::-1]
-    cpgs_sorted = list(np.array(cpgs)[order])
+    cpgs_sorted = list(np.array(cpg_names_passed)[order])
     rhos_sorted = list(np.array(rhos)[order])
 
     genes_sorted = []

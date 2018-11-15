@@ -7,7 +7,8 @@ from infrastructure.load.params import load_params_dict
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
-from config.types import *
+from annotations.cpg import *
+from config.config import *
 
 
 def save_top_enet(config, num_bootstrap_runs=10, num_top=500):
@@ -19,15 +20,25 @@ def save_top_enet(config, num_bootstrap_runs=10, num_top=500):
 
     attributes = get_attributes(config)
     dict_cpg_data = load_dict_cpg_data(config)
-    cpgs_passed = list(dict_cpg_data.keys())
-    vals_passed = list(dict_cpg_data.values())
+    cpg_names = list(dict_cpg_data.keys())
+    cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
+
+    cpg_names_passed = []
+    cpg_values_passed = []
+    for id in range(0, len(cpg_names)):
+        cpg = cpg_names[id]
+        values = cpg_values[id]
+        if cpg in  approved_cpgs:
+            cpg_names_passed.append(cpg)
+            cpg_values_passed.append(values)
 
 
     test_size = int(len(attributes) * config.test_part)
     train_size = len(attributes) - test_size
     rs = ShuffleSplit(num_bootstrap_runs, test_size, train_size)
     indexes = np.linspace(0, len(attributes) - 1, len(attributes), dtype=int).tolist()
-    enet_X = np.array(vals_passed).T.tolist()
+    enet_X = np.array(cpg_values_passed).T.tolist()
 
     bootstrap_id = 0
     cpg_top_dict = {}
@@ -46,7 +57,7 @@ def save_top_enet(config, num_bootstrap_runs=10, num_top=500):
 
         order = np.argsort(list(map(abs, coef)))[::-1]
         coef_sorted = list(np.array(coef)[order])
-        cpg_sorted = list(np.array(cpgs_passed)[order])
+        cpg_sorted = list(np.array(cpg_names_passed)[order])
         coef_top = coef_sorted[0:num_top]
         cpg_top = cpg_sorted[0:num_top]
 

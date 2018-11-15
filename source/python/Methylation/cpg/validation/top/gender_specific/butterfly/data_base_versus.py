@@ -1,11 +1,10 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
-import pandas as pd
+from config.types.experiments.method import *
 from annotations.gene import get_dict_cpg_gene
 from infrastructure.save.features import save_features
 from cpg.validation.top.gender_specific.butterfly.butterfly_dict import get_butterfly_dict
-import math
 
 
 def data_bases_versus(config, data_bases, part):
@@ -98,9 +97,9 @@ part = 0.05
 data_bases = [DataBase.GSE87571, DataBase.GSE40279]
 data_type = DataType.cpg
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
-dna_region = DNARegion.genic
+dna_region = DNARegionType.genic
 
 disease = Disease.any
 

@@ -1,10 +1,10 @@
-from config.method import Method
-from config.types import *
 from infrastructure.path.bop import *
 from infrastructure.path.gene import *
 from infrastructure.path.cpg import *
-from infrastructure.path.solution import *
+from infrastructure.path.experiment import *
 from infrastructure.path.attributes import *
+from config.config import *
+from config.types.common import *
 import os.path
 
 
@@ -65,7 +65,7 @@ def get_result_path(config, file_name):
         path = ''
 
     path += '/' + InfoType.result.value + \
-            '/' + get_solution_path(config) + \
+            '/' + get_experiment_path(config) + \
             '/' + get_attributes_path(config)
 
     if not os.path.exists(path):
@@ -87,7 +87,7 @@ def get_param_path(config, file_name):
         path = ''
 
     path += '/' + InfoType.result.value + \
-            '/' + get_solution_path(config) + \
+            '/' + get_experiment_path(config) + \
             '/' + get_attributes_path(config)
 
     if not os.path.exists(path):

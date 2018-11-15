@@ -48,9 +48,9 @@ def save_inside_gene_linreg(config):
 data_base = DataBase.GSE87571
 data_type = DataType.cpg
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
-dna_region = DNARegion.genic
+dna_region = DNARegionType.genic
 
 scenario = Scenario.approach
 approach = Approach.inside_gene

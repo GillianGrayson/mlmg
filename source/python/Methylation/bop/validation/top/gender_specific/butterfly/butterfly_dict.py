@@ -1,9 +1,8 @@
 from config.config import *
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
+from config.types.experiments.method import *
 import pandas as pd
-from infrastructure.save.features import save_features
-import math
 
 
 def get_butterfly_dict(config):
@@ -102,7 +101,7 @@ def get_butterfly_dict(config):
 data_base = DataBase.GSE87571
 data_type = DataType.bop
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 class_type = ClassType.class_ab
 

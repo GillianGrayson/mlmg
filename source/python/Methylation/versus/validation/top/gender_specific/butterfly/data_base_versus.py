@@ -1,10 +1,8 @@
 from config.config import *
+from config.types.annotations import GeneDataType, GeoType, ClassType, DNARegion, ChromosomeType
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
-from config.types import *
-import pandas as pd
-from infrastructure.save.features import save_features
-import math
+from config.types.experiments.method import *
 
 
 def data_types_genes_intersection(config, data_bases, data_types, part):
@@ -60,7 +58,7 @@ data_base = DataBase.data_base_versus
 data_bases = [DataBase.GSE87571, DataBase.GSE40279]
 data_types = {DataType.gene: Method.linreg, DataType.bop: Method.manova, DataType.cpg:Method.linreg}
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 # bop
 class_type = ClassType.class_ab

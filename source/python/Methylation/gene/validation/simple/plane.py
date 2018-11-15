@@ -1,5 +1,6 @@
 from config.config import *
-from config.method import Method
+from config.types.experiments.method import Method
+from config.types.annotations import GeneDataType, GeoType
 from gene.validation.simple.linreg.plane import save_plane_linreg
 
 def plane_proc(config):

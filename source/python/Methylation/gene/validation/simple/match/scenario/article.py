@@ -1,4 +1,6 @@
 from config.config import *
+from config.types.annotations import GeneDataType, GeoType
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
 
 

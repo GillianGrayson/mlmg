@@ -1,5 +1,6 @@
+from config.types.attributes.attribute import Attribute
 from infrastructure.load.attributes import get_attributes
-from config.types import *
+
 
 def get_attributes_dict(config):
 

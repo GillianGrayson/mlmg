@@ -1,7 +1,7 @@
-from config.types import *
 import numpy as np
 from annotations.gene import get_dict_cpg_gene
 from annotations.conditions import *
+from config.config import *
 from infrastructure.path.path import *
 import os.path
 import pickle
@@ -9,11 +9,12 @@ import pickle
 
 def bop_condition(config, annotation):
     match = False
-    if chromosome_condition(config, annotation):
-        if cpg_name_condition(config, annotation):
-            if dna_region_condition(config, annotation):
-                if class_type_condition(config, annotation):
-                    match = True
+    if snp_condition(config, annotation):
+        if chromosome_condition(config, annotation):
+            if cpg_name_condition(config, annotation):
+                if dna_region_condition(config, annotation):
+                    if class_type_condition(config, annotation):
+                        match = True
     return match
 
 
@@ -38,6 +39,9 @@ def get_dict_bop_cpgs(config):
         map_info = annotations[Annotation.map_info.value]
         bop = annotations[Annotation.bop.value]
         class_type = annotations[Annotation.class_type.value]
+        snp = annotations[Annotation.Probe_SNPs.value]
+        snp1_10 = annotations[Annotation.Probe_SNPs_10.value]
+        cross_reactive = annotations[Annotation.cross_reactive.value]
         for i in range(0, len(cpg)):
 
             curr_cpg = cpg[i]
@@ -47,6 +51,9 @@ def get_dict_bop_cpgs(config):
             curr_map_info = map_info[i]
             curr_bop = bop[i]
             curr_class_type = class_type[i]
+            curr_snp = snp[i]
+            curr_snp_10 = snp1_10[i]
+            curr_cross_reactive = cross_reactive[i]
 
             annotation = {}
             annotation[Annotation.cpg.value] = curr_cpg
@@ -56,6 +63,9 @@ def get_dict_bop_cpgs(config):
             annotation[Annotation.map_info.value] = curr_map_info
             annotation[Annotation.bop.value] = curr_bop
             annotation[Annotation.class_type.value] = curr_class_type
+            annotation[Annotation.Probe_SNPs.value] = curr_snp
+            annotation[Annotation.Probe_SNPs_10.value] = curr_snp_10
+            annotation[Annotation.cross_reactive.value] = curr_cross_reactive
 
             if bop_condition(config, annotation):
                 if len(curr_bop) > 0:
@@ -79,6 +89,15 @@ def get_dict_bop_cpgs(config):
             num_bops += 1
             if num_bops % config.print_rate == 0:
                 print('num_bops: ' + str(num_bops))
+
+        # cross_reactive strict checking
+        if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
+            for bop, cpgs in dict_bop_cpgs.items():
+                for cpg in cpgs:
+                    cpg_index = cpg.index(cpg)
+                    curr_cross_reactive = cross_reactive[cpg_index]
+                    if curr_cross_reactive == 1:
+                        del dict_bop_cpgs[bop]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_bop_cpgs, f, pickle.HIGHEST_PROTOCOL)

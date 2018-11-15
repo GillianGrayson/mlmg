@@ -1,6 +1,5 @@
 from config.config import *
 from annotations.gene import *
-from infrastructure.path import *
 from infrastructure.save.features import save_features
 
 def save_gene_by_cpg(config, fn):

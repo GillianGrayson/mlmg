@@ -4,11 +4,11 @@ from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.path.path import get_result_path
 from infrastructure.save.features import save_features
 from annotations.gene import get_dict_cpg_gene
-from config.types import *
+from config.config import *
 from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
 from method.clustering.order import *
-from scipy import stats
 import statsmodels.api as sm
+from annotations.cpg import *
 
 
 def save_top_linreg_ols(config):
@@ -17,7 +17,9 @@ def save_top_linreg_ols(config):
     dict_cpg_data = load_dict_cpg_data(config)
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
+    approved_cpgs = get_approved_cpgs(config)
 
+    cpg_names_passed = []
     R2s = []
     intercepts = []
     slopes = []
@@ -26,22 +28,25 @@ def save_top_linreg_ols(config):
     intercepts_p_values = []
     slopes_p_values = []
     for id in range(0, len(cpg_names)):
-        values = cpg_values[id]
-        x = sm.add_constant(attributes)
-        results = sm.OLS(values, x).fit()
-        R2s.append(results.rsquared)
-        intercepts.append(results.params[0])
-        slopes.append(results.params[1])
-        intercepts_std_errors.append(results.bse[0])
-        slopes_std_errors.append(results.bse[1])
-        intercepts_p_values.append(results.pvalues[0])
-        slopes_p_values.append(results.pvalues[1])
+        cpg = cpg_names[id]
+        if cpg in approved_cpgs:
+            cpg_names_passed.append(cpg)
+            values = cpg_values[id]
+            x = sm.add_constant(attributes)
+            results = sm.OLS(values, x).fit()
+            R2s.append(results.rsquared)
+            intercepts.append(results.params[0])
+            slopes.append(results.params[1])
+            intercepts_std_errors.append(results.bse[0])
+            slopes_std_errors.append(results.bse[1])
+            intercepts_p_values.append(results.pvalues[0])
+            slopes_p_values.append(results.pvalues[1])
 
         if id % config.print_rate == 0:
             print('cpg_id: ' + str(id))
 
     order = np.argsort(list(map(abs, R2s)))[::-1]
-    cpgs_sorted = list(np.array(cpg_names)[order])
+    cpgs_sorted = list(np.array(cpg_names_passed)[order])
     R2s_sorted = list(np.array(R2s)[order])
     intercepts_sorted = list(np.array(intercepts)[order])
     slopes_sorted = list(np.array(slopes)[order])

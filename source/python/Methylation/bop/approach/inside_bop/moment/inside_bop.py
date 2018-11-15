@@ -2,7 +2,6 @@ from infrastructure.save.features import save_features
 from annotations.bop import get_dict_bop_cpgs, get_dict_bop_genes
 from infrastructure.load.cpg_data import load_dict_cpg_data
 from config.config import *
-from scipy import stats
 
 
 def save_inside_bop_moment(config):
@@ -56,7 +55,7 @@ def save_inside_bop_moment(config):
 data_base = DataBase.GSE87571
 data_type = DataType.bop
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 class_type = ClassType.class_ab
 

@@ -1,6 +1,9 @@
 from config.config import *
 from bop.approach.top.manova.top import save_top_manova
-from config.method import Method
+from config.types.experiments.method import Method
+from config.types.attributes.attribute import Attribute
+from config.types.attributes.cell_pop import CellPop
+from config.types.attributes.common import Disease, Gender
 
 
 def top_proc(config):
@@ -11,7 +14,7 @@ def top_proc(config):
 data_bases = [DataBase.GSE87571, DataBase.GSE40279]
 data_type = DataType.bop
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 class_types = [ClassType.class_ab]
 

@@ -1,4 +1,6 @@
 from config.config import *
+from config.types.annotations import GeneDataType, GeoType
+from config.types.attributes.common import Gender
 from infrastructure.load.top import *
 from infrastructure.save.features import save_features
 import xlsxwriter

@@ -1,10 +1,10 @@
 from config.config import *
+from config.types.annotations import GeneDataType, GeoType, ChromosomeType
+from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from config.method import *
-import pandas as pd
+from config.types.experiments.method import *
 from infrastructure.save.features import save_features
 from gene.validation.top.gender_specific.butterfly.butterfly_dict import get_butterfly_dict
-import math
 
 
 def data_bases_versus(config, data_bases, part):
@@ -79,7 +79,7 @@ part = 0.05
 data_bases = [DataBase.GSE87571, DataBase.GSE40279]
 data_type = DataType.gene
 
-chromosome_type = ChromosomeTypes.non_gender
+chromosome_type = ChromosomeType.non_gender
 
 gene_data_type = GeneDataType.mean
 geo_type = GeoType.islands_shores

@@ -1,4 +1,5 @@
 from config.config import *
+from config.types.annotations import Annotation
 from infrastructure.save.features import *
 
 def form_snip_cpgs(config):
