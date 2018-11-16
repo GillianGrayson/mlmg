@@ -8,10 +8,10 @@ config.metrics_diff_direction = 'ascend';
 config.part = 0.0005;
 
 % ======== config ========
-config.data_base = 'GSE40279';
+config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
-config.cross_reactive = 'cross_reactive_included';
+config.cross_reactive = 'cross_reactive_excluded';
 config.snp = 'snp_included';
 config.chromosome_type = 'non_gender';
 
