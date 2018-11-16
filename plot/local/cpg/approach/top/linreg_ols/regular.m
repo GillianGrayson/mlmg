@@ -7,7 +7,7 @@ config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
 config.cross_reactive = 'cross_reactive_excluded';
-config.snp = 'snp_included';
+config.snp = 'snp_excluded';
 config.chromosome_type = 'non_gender';
 
 config.dna_region = 'genic';
@@ -27,9 +27,14 @@ config.color = '';
 
 config.up = get_up_data_path(); 
 
+[annotations_map, labels] = get_annotations(config);
+
 for cpg_id = 1:size(cpgs, 1)
     
     cpg = cpgs(cpg_id)
+    
+    curr_ann = annotations_map(cpg);
+    genes = curr_ann(find(labels=="UCSC_REFGENE_NAME"));
     
     % ======== processing ========
     f = figure;
@@ -57,9 +62,16 @@ for cpg_id = 1:size(cpgs, 1)
     box on;
     b = gca;
     legend(b,'off');
-    title(cpg, 'FontSize', 16)
+    yl = ylim;
+    if yl(1) < 0
+       ylim([0, yl(2)]); 
+    end
+    if yl(2) > 1
+       ylim([yl(1), 1]);
+    end
+    title(sprintf('%s(%s)', cpg, genes), 'FontSize', 16)
     
-    savefig(f, sprintf('%s/linreg_%s.fig', save_path, suffix))
-    saveas(f, sprintf('%s/linreg_%s.png', save_path, suffix))
+    savefig(f, sprintf('%s/%d_linreg_%s.fig', save_path, cpg_id, suffix))
+    saveas(f, sprintf('%s/%d_linreg_%s.png', save_path, cpg_id, suffix))
     
 end
