@@ -6,6 +6,7 @@ from cpg.approach.top.linreg.top import save_top_linreg
 from cpg.approach.top.linreg_ols.top import save_top_linreg_ols
 from cpg.approach.top.linreg_ols_wo_outliers.top import save_top_linreg_ols_wo_outliers
 from cpg.approach.top.anova.top import save_top_anova
+from cpg.approach.top.anova_statsmodels.top import save_top_anova_statsmodels
 from cpg.approach.top.spearman.top import save_top_spearman
 from cpg.approach.top.moment.top import save_top_moment
 
@@ -17,6 +18,8 @@ def top_proc(config):
         save_top_linreg(config)
     elif config.method is Method.anova:
         save_top_anova(config)
+    elif config.method is Method.anova_statsmodels:
+        save_top_anova_statsmodels(config)
     elif config.method is Method.spearman:
         save_top_spearman(config)
     elif config.method is Method.moment:
@@ -26,7 +29,7 @@ def top_proc(config):
     elif config.method is Method.linreg_ols_wo_outliers:
         save_top_linreg_ols_wo_outliers(config)
 
-data_bases = [DataBase.GSE87571, DataBase.GSE40279]
+data_bases = [DataBase.GSE87571]
 data_type = DataType.cpg
 
 cross_reactives = [CrossReactiveType.cross_reactive_included, CrossReactiveType.cross_reactive_excluded]
@@ -41,10 +44,29 @@ genders = [Gender.F, Gender.M]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_ols,
+    Method.anova_statsmodels,
 ]
 
 is_clustering = False
+
+attributes_types = [Attribute.age]
+
+""""
+attributes_types = [Attribute.gender,
+                    Attribute.age,
+                    CellPop.plasma_blast,
+                    CellPop.cd8_p,
+                    CellPop.cd4_naive,
+                    CellPop.cd8_naive,
+                    CellPop.cd8_t,
+                    CellPop.cd4_t,
+                    CellPop.nk,
+                    CellPop.b_cell,
+                    CellPop.mono,
+                    CellPop.gran]
+"""
+
+attribute_target = [Attribute.age]
 
 for data_base in data_bases:
     print(data_base.value)
@@ -74,7 +96,10 @@ for data_base in data_bases:
                         disease=disease,
                         gender=gender,
 
-                        is_clustering=is_clustering
+                        is_clustering=is_clustering,
+
+                        attributes_types=attributes_types,
+                        attribute_target=attribute_target
                     )
 
                     top_proc(config)
