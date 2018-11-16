@@ -15,8 +15,18 @@ raw_data_2 = importdata(fn, ' ');
 names_1 = raw_data_1.textdata;
 d_1_tmp = raw_data_1.data;
 
+map_1 = containers.Map();
+for id = 1:size(names_1, 1)
+    map_1(string(names_1(id))) = d_1_tmp(id, :);
+end
+
 names_2 = raw_data_2.textdata;
 d_2_tmp = raw_data_2.data;
+
+map_2 = containers.Map();
+for id = 1:size(names_1, 1)
+    map_2(string(names_2(id))) = d_2_tmp(id, :);
+end
 
 all_names = names_1;
 num_names = size(all_names, 1);
@@ -25,9 +35,9 @@ all_data_1 = d_1_tmp;
 all_data_2 = zeros(num_names, 1);
 for id_1 = 1:num_names
     name = string(all_names(id_1));
-    id_2 = find(names_2==name);
+    data_2_curr = map_2(name);
     for m_id = 1:size(all_data_1, 2)
-        all_data_2(id_1, m_id) = d_2_tmp(id_2, m_id);
+        all_data_2(id_1, m_id) = data_2_curr(m_id);
     end
     
     if mod(id_1, 1000) == 0

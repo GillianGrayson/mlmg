@@ -1,13 +1,14 @@
 clear all;
 
-config.experiment = 2;
+config_lvl_1.experiment = 2;
+config_lvl_2.experiment = config_lvl_1.experiment;
 
 % ======== config ========
 config_lvl_1.data_base = 'GSE87571';
 config_lvl_1.data_type = 'cpg_data';
 
 config_lvl_1.cross_reactive = 'cross_reactive_excluded';
-config_lvl_1.snp = 'snp_included';
+config_lvl_1.snp = 'snp_excluded';
 config_lvl_1.chromosome_type = 'non_gender';
 
 config_lvl_1.dna_region = 'genic';
@@ -48,43 +49,21 @@ config_lvl_2.is_clustering = config_lvl_1.is_clustering;
 
 config_lvl_2.up = config_lvl_1.up;
 
-[lvl_1_names, lvl_1_metrics_labels, lvl_1_metrics_data] = lvl_1_condition(config_lvl_1);
-[lvl_2_names, lvl_2_metrics_labels, lvl_2_metrics_data] = lvl_2_condition(config_lvl_1, config_lvl_2);
+[lvl_1_names, lvl_1_metrics_labels, lvl_1_metrics_map] = lvl_1_condition(config_lvl_1);
+[lvl_2_names, lvl_2_metrics_labels, lvl_2_metrics_map] = lvl_2_condition(config_lvl_1, config_lvl_2);
 
 intersect_names = intersect(lvl_1_names, lvl_2_names);
 
 metrics_data = [];
-metrics_labels = [];
+metrics_labels = horzcat(lvl_1_metrics_labels, lvl_2_metrics_labels);
 
 for name_id = 1:size(intersect_names,1)
-    name = intersect_names(name_id);
-    
-    
+    name = string(intersect_names(name_id));
+    data = horzcat(lvl_1_metrics_map(name), lvl_2_metrics_map(name));
+    metrics_data = vertcat(metrics_data, data);
 end
 
-
-
-
-
-
-order = config.order;
-names = config.names;
-metrics_diff = config.metrics_diff;
-metrics_diff_labels = config.metrics_diff_labels;
-
-d = vertcat("names", string(names(order)));
-for metrics_id = 1:size(metrics_diff, 2)
-    d = horzcat(d, vertcat(metrics_diff_labels(metrics_id), string(metrics_diff(order, metrics_id))));
-end
-
-xlswrite(fn, d);
-
-
-
-
-
-
-suffix = sprintf('lvl_3_experiment(%s)', config.experiment);
+suffix = sprintf('lvl_3_by_lvl_1(%d)_lvl_2(%d)', config_lvl_1.experiment, config_lvl_2.experiment);
 path = sprintf('%s/data/%s', ...
     config_lvl_1.up, ...
     get_result_path(config_lvl_2));
@@ -93,6 +72,9 @@ fn = sprintf('%s/%s.xlsx', ...
     path, ...
     suffix);
 
-d = vertcat('names', intersect_names);
+d = vertcat("names", intersect_names);
+for metrics_id = 1:size(metrics_data, 2)
+    d = horzcat(d, vertcat(metrics_labels(metrics_id), string(metrics_data(:, metrics_id))));
+end
 
 xlswrite(fn, d);

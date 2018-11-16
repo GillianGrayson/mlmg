@@ -6,6 +6,8 @@ cpgs = string(importdata('cpgs.txt'));
 config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
+config.cross_reactive = 'cross_reactive_excluded';
+config.snp = 'snp_included';
 config.chromosome_type = 'non_gender';
 
 config.dna_region = 'genic';
@@ -14,7 +16,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_ols_wo_outliers';
+config.method = 'linreg_ols';
 
 config.disease = 'any';
 config.gender = 'versus';
@@ -23,11 +25,7 @@ config.is_clustering = 0;
 
 config.color = '';
 
-if strcmp(getenv('computername'), 'MSI')
-    config.up = 'D:/YandexDisk/Work/mlmg';
-else
-    config.up = 'E:/YandexDisk/Work/mlmg';
-end
+config.up = get_up_data_path(); 
 
 for cpg_id = 1:size(cpgs, 1)
     
