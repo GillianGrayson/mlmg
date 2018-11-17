@@ -56,7 +56,13 @@ for cpg_id = 1:size(cpgs, 1)
         b = gca;
         legend(b,'off');
         title(config.data_base, 'FontSize', 16)
-        
+        yl = ylim;
+        if yl(1) < 0
+            ylim([0, yl(2)]);
+        end
+        if yl(2) > 1
+            ylim([yl(1), 1]);
+        end
         sgtitle(cpg, 'FontSize', 20)
         propertyeditor('on')
         

@@ -1,7 +1,7 @@
 clear all;
 
 config_lvl_1.experiment = 2;
-config_lvl_2.experiment = config_lvl_1.experiment;
+config_lvl_2.experiment = 2;
 
 % ======== config ========
 config_lvl_1.data_base = 'GSE87571';
