@@ -29,15 +29,17 @@ if strcmp(config.method, 'linreg_ols')
         
         slopes_1 = data_1(:, 3);
         slopes_2 = data_2(:, 3);
+        slope_pvals_1 = data_1(:, 7);
+        slope_pvals_2 = data_2(:, 7);
         
-        metrics_labels = ["slope_f", "slope_m"];
+        metrics_labels = ["slope_f", "slope_m", "slope_pvals_f", "slope_pvals_m"];
         
         passed_names = [];
         metrics_map = containers.Map(); 
         for id = 1:size(names)
             if abs(slopes_1(id)) > slope_lim || abs(slopes_2(id)) > slope_lim
                 passed_names = vertcat(passed_names, names(id));
-                metrics_map(string(names(id))) = [slopes_1(id), slopes_2(id)];
+                metrics_map(string(names(id))) = [slopes_1(id), slopes_2(id), slope_pvals_1(id), slope_pvals_2(id)];
             end
         end
         
