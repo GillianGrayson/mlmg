@@ -16,15 +16,15 @@ if strcmp(config_lvl_1.method, 'linreg_ols')
      if config_lvl_2.experiment == 1
 
         names = raw(2:end, 1);
-        areas = cell2mat(raw(2:end, 3));
+        area_intersection = cell2mat(raw(2:end, 3));
         metrics_labels = [raw(1, 3)];
 
         passed_names = [];
         metrics_map = containers.Map();
         for id = 1:size(names)
-            if areas(id) < 0.5
+            if area_intersection(id) < 0.5
                 passed_names = vertcat(passed_names, names(id));
-                metrics_map(string(names(id))) = areas(id);
+                metrics_map(string(names(id))) = area_intersection(id);
             end
         end
         
