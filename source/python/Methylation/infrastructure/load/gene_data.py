@@ -1,6 +1,6 @@
 import numpy as np
 from infrastructure.path.path import get_data_path
-from annotations.gene import get_dict_cpg_gene, get_dict_cpg_map_info
+from annotations.gene import get_dict_cpg_gene, get_dict_cpg_map_info, get_dict_gene_cpg
 from infrastructure.load.cpg_data import load_dict_cpg_data, get_non_inc_cpgs
 from infrastructure.load.attributes import get_attributes
 from config.config import *
@@ -30,9 +30,12 @@ def load_gene_data(config):
     return genes_passed, vals_passed
 
 def get_raw_dict(config):
+    dict_gene_cpgs = get_dict_gene_cpg(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_map = get_dict_cpg_map_info(config)
+
     attributes = get_attributes(config)
+
     dict_cpg_data = load_dict_cpg_data(config)
     cpgs = list(dict_cpg_data.keys())
     vals = list(dict_cpg_data.values())
@@ -65,12 +68,15 @@ def get_raw_dict(config):
                         map_dict[gene].append(int(map_info))
 
     for gene in gene_raw_dict:
-        raw = gene_raw_dict[gene]
-        map_info = map_dict[gene]
-        order = np.argsort(map_info)
-        gene_raw_dict[gene] = []
-        for record in raw:
-            sorted_record = list(np.array(record)[order])
-            gene_raw_dict[gene].append(sorted_record)
+        if gene in dict_gene_cpgs:
+            raw = gene_raw_dict[gene]
+            map_info = map_dict[gene]
+            order = np.argsort(map_info)
+            gene_raw_dict[gene] = []
+            for record in raw:
+                sorted_record = list(np.array(record)[order])
+                gene_raw_dict[gene].append(sorted_record)
+        else:
+            del gene_raw_dict[gene]
 
     return gene_raw_dict
