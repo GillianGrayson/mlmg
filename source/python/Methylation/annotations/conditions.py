@@ -28,25 +28,38 @@ def dna_region_condition(config, annotation):
     return match
 
 def snp_condition(config, annotation):
+    data_type = config.data_type
     snp = config.snp
     curr_snp = annotation[Annotation.Probe_SNPs.value]
     curr_snp_10 = annotation[Annotation.Probe_SNPs_10.value]
 
     match = True
-    if snp is SNPType.snp_excluded:
-        if curr_snp != '' or curr_snp_10 != '':
-            match = False
+    if data_type is DataType.cpg:
+        if snp is SNPType.snp_excluded or snp is SNPType.snp_excluded_weak:
+            if curr_snp != '' or curr_snp_10 != '':
+                match = False
+    elif data_type is DataType.gene or data_type is DataType.bop:
+        if snp is SNPType.snp_excluded_weak:
+            if curr_snp != '' or curr_snp_10 != '':
+                match = False
 
     return match
 
 def cross_reactive_condition(config, annotation):
+    data_type = config.data_type
     cross_reactive = config.cross_reactive
     cr = annotation[Annotation.cross_reactive.value]
 
     match = True
-    if cross_reactive is CrossReactiveType.cross_reactive_excluded:
-        if cr == 1:
-            match = False
+    if data_type is DataType.cpg:
+        if cross_reactive is CrossReactiveType.cross_reactive_excluded \
+                or cross_reactive is CrossReactiveType.cross_reactive_excluded_weak:
+            if cr == 1:
+                match = False
+    elif data_type is DataType.gene or data_type is DataType.bop:
+        if cross_reactive is CrossReactiveType.cross_reactive_excluded_weak:
+            if cr == 1:
+                match = False
 
     return match
 

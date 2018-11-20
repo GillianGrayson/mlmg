@@ -1,4 +1,3 @@
-import numpy as np
 from annotations.gene import get_dict_cpg_gene
 from annotations.conditions import *
 from config.config import *
@@ -9,12 +8,13 @@ import pickle
 
 def bop_condition(config, annotation):
     match = False
-    if snp_condition(config, annotation):
-        if chromosome_condition(config, annotation):
-            if cpg_name_condition(config, annotation):
-                if dna_region_condition(config, annotation):
-                    if class_type_condition(config, annotation):
-                        match = True
+    if cross_reactive_condition(config, annotation):
+        if snp_condition(config, annotation):
+            if chromosome_condition(config, annotation):
+                if cpg_name_condition(config, annotation):
+                    if dna_region_condition(config, annotation):
+                        if class_type_condition(config, annotation):
+                            match = True
     return match
 
 

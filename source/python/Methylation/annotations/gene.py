@@ -7,11 +7,13 @@ import numpy as np
 
 def gene_condition(config, annotation):
     match = False
-    if chromosome_condition(config, annotation):
-        if cpg_name_condition(config, annotation):
-            if dna_region_condition(config, annotation):
-                if geo_type_condition(config, annotation):
-                    match = True
+    if cross_reactive_condition(config, annotation):
+        if snp_condition(config, annotation):
+            if chromosome_condition(config, annotation):
+                if cpg_name_condition(config, annotation):
+                    if dna_region_condition(config, annotation):
+                        if geo_type_condition(config, annotation):
+                            match = True
     return match
 
 
