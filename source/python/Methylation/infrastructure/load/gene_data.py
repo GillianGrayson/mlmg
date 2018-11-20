@@ -67,6 +67,7 @@ def get_raw_dict(config):
                         map_dict[gene] = []
                         map_dict[gene].append(int(map_info))
 
+    genes_for_del = []
     for gene in gene_raw_dict:
         if gene in dict_gene_cpgs:
             raw = gene_raw_dict[gene]
@@ -77,6 +78,9 @@ def get_raw_dict(config):
                 sorted_record = list(np.array(record)[order])
                 gene_raw_dict[gene].append(sorted_record)
         else:
-            del gene_raw_dict[gene]
+            genes_for_del.append(gene)
+
+    for gene in genes_for_del:
+        del gene_raw_dict[gene]
 
     return gene_raw_dict

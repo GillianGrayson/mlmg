@@ -40,7 +40,7 @@ def get_dict_bop_cpgs(config):
         bop_names = annotations[Annotation.bop.value]
         class_type = annotations[Annotation.class_type.value]
         snp = annotations[Annotation.Probe_SNPs.value]
-        snp1_10 = annotations[Annotation.Probe_SNPs_10.value]
+        snp_10 = annotations[Annotation.Probe_SNPs_10.value]
         cross_reactive = annotations[Annotation.cross_reactive.value]
         for i in range(0, len(cpg_names)):
 
@@ -52,7 +52,7 @@ def get_dict_bop_cpgs(config):
             curr_bop = bop_names[i]
             curr_class_type = class_type[i]
             curr_snp = snp[i]
-            curr_snp_10 = snp1_10[i]
+            curr_snp_10 = snp_10[i]
             curr_cross_reactive = cross_reactive[i]
 
             annotation = {}
@@ -91,12 +91,30 @@ def get_dict_bop_cpgs(config):
 
         # cross_reactive strict checking
         if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
+            bops_for_del = []
             for curr_bop, curr_cpgs in dict_bop_cpgs.items():
                 for curr_cpg in curr_cpgs:
                     cpg_index = cpg_names.index(curr_cpg)
                     curr_cross_reactive = cross_reactive[cpg_index]
                     if curr_cross_reactive == 1:
-                        del dict_bop_cpgs[curr_bop]
+                        bops_for_del.append(curr_bop)
+                        break
+            for curr_bop in bops_for_del:
+                del dict_bop_cpgs[curr_bop]
+
+        # snp strict checking
+        if config.snp is SNPType.snp_excluded:
+            bops_for_del = []
+            for curr_bop, curr_cpgs in dict_bop_cpgs.items():
+                for curr_cpg in curr_cpgs:
+                    cpg_index = cpg_names.index(curr_cpg)
+                    curr_snp = snp[cpg_index]
+                    curr_snp_10 = snp_10[cpg_index]
+                    if curr_snp != '' or curr_snp_10 != '':
+                        bops_for_del.append(curr_bop)
+                        break
+            for curr_bop in bops_for_del:
+                del dict_bop_cpgs[curr_bop]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_bop_cpgs, f, pickle.HIGHEST_PROTOCOL)

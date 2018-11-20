@@ -7,12 +7,11 @@ import numpy as np
 
 def gene_condition(config, annotation):
     match = False
-    if snp_condition(config, annotation):
-        if chromosome_condition(config, annotation):
-            if cpg_name_condition(config, annotation):
-                if dna_region_condition(config, annotation):
-                    if geo_type_condition(config, annotation):
-                        match = True
+    if chromosome_condition(config, annotation):
+        if cpg_name_condition(config, annotation):
+            if dna_region_condition(config, annotation):
+                if geo_type_condition(config, annotation):
+                    match = True
     return match
 
 
@@ -39,7 +38,7 @@ def get_dict_cpg_gene(config):
         geo = annotations[Annotation.geo.value]
         map_info = annotations[Annotation.map_info.value]
         snp = annotations[Annotation.Probe_SNPs.value]
-        snp1_10 = annotations[Annotation.Probe_SNPs_10.value]
+        snp_10 = annotations[Annotation.Probe_SNPs_10.value]
         cross_reactive = annotations[Annotation.cross_reactive.value]
         for i in range(0, len(cpg_names)):
 
@@ -49,7 +48,7 @@ def get_dict_cpg_gene(config):
             curr_geo = geo[i]
             curr_map_info = map_info[i]
             curr_snp = snp[i]
-            curr_snp_10 = snp1_10[i]
+            curr_snp_10 = snp_10[i]
             curr_cross_reactive = cross_reactive[i]
 
             annotation = {}
@@ -68,11 +67,26 @@ def get_dict_cpg_gene(config):
 
         # cross_reactive strict checking
         if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
+            cpgs_for_del = []
             for curr_cpg in dict_cpg_gene:
                 cpg_index = cpg_names.index(curr_cpg)
                 curr_cross_reactive = cross_reactive[cpg_index]
                 if curr_cross_reactive == 1:
-                    del dict_cpg_gene[curr_cpg]
+                    cpgs_for_del.append(curr_cpg)
+            for curr_cpg in cpgs_for_del:
+                del dict_cpg_gene[curr_cpg]
+
+        # snp strict checking
+        if config.snp is SNPType.snp_excluded:
+            cpgs_for_del = []
+            for curr_cpg in dict_cpg_gene:
+                cpg_index = cpg_names.index(curr_cpg)
+                curr_snp = snp[cpg_index]
+                curr_snp_10 = snp_10[cpg_index]
+                if curr_snp != '' or curr_snp_10 != '':
+                    cpgs_for_del.append(curr_cpg)
+            for curr_cpg in cpgs_for_del:
+                del dict_cpg_gene[curr_cpg]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_cpg_gene, f, pickle.HIGHEST_PROTOCOL)
@@ -81,6 +95,7 @@ def get_dict_cpg_gene(config):
     config.dna_region = dna_region
 
     return dict_cpg_gene
+
 
 def get_dict_gene_chr(config):
     dna_region = config.dna_region
@@ -139,10 +154,23 @@ def get_dict_gene_chr(config):
 
         # cross_reactive strict checking
         if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
+            genes_for_del = []
             dict_gene_cpgs = get_dict_gene_cpg(config)
             for curr_gene in dict_gene_chr:
                 if curr_gene not in dict_gene_cpgs:
-                    del dict_gene_chr[curr_gene]
+                    genes_for_del.append(curr_gene)
+            for curr_gene in genes_for_del:
+                del dict_gene_chr[curr_gene]
+
+        # cross_reactive strict checking
+        if config.snp is SNPType.snp_excluded:
+            genes_for_del = []
+            dict_gene_cpgs = get_dict_gene_cpg(config)
+            for curr_gene in dict_gene_chr:
+                if curr_gene not in dict_gene_cpgs:
+                    genes_for_del.append(curr_gene)
+            for curr_gene in genes_for_del:
+                del dict_gene_chr[curr_gene]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_gene_chr, f, pickle.HIGHEST_PROTOCOL)
@@ -176,7 +204,7 @@ def get_dict_gene_cpg(config):
         geo = annotations[Annotation.geo.value]
         map_info = annotations[Annotation.map_info.value]
         snp = annotations[Annotation.Probe_SNPs.value]
-        snp1_10 = annotations[Annotation.Probe_SNPs_10.value]
+        snp_10 = annotations[Annotation.Probe_SNPs_10.value]
         cross_reactive = annotations[Annotation.cross_reactive.value]
         for i in range(0, len(cpg_names)):
 
@@ -186,7 +214,7 @@ def get_dict_gene_cpg(config):
             curr_geo = geo[i]
             curr_map_info = map_info[i]
             curr_snp = snp[i]
-            curr_snp_10 = snp1_10[i]
+            curr_snp_10 = snp_10[i]
             curr_cross_reactive = cross_reactive[i]
 
             annotation = {}
@@ -220,13 +248,30 @@ def get_dict_gene_cpg(config):
 
         # cross_reactive strict checking
         if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
+            genes_for_del = []
             for curr_gene, curr_cpgs in dict_gene_cpg.items():
                 for curr_cpg in curr_cpgs:
                     cpg_index = cpg_names.index(curr_cpg)
                     curr_cross_reactive = cross_reactive[cpg_index]
                     if curr_cross_reactive == 1:
-                        del dict_gene_cpg[curr_gene]
+                        genes_for_del.append(curr_gene)
                         break
+            for curr_gene in genes_for_del:
+                del dict_gene_cpg[curr_gene]
+
+        # snp strict checking
+        if config.snp is SNPType.snp_excluded:
+            genes_for_del = []
+            for curr_gene, curr_cpgs in dict_gene_cpg.items():
+                for curr_cpg in curr_cpgs:
+                    cpg_index = cpg_names.index(curr_cpg)
+                    curr_snp = snp[cpg_index]
+                    curr_snp_10 = snp_10[cpg_index]
+                    if curr_snp != '' or curr_snp_10 != '':
+                        genes_for_del.append(curr_gene)
+                        break
+            for curr_gene in genes_for_del:
+                del dict_gene_cpg[curr_gene]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_gene_cpg, f, pickle.HIGHEST_PROTOCOL)
@@ -235,6 +280,7 @@ def get_dict_gene_cpg(config):
     config.dna_region = dna_region
 
     return dict_gene_cpg
+
 
 def get_dict_cpg_map_info(config):
     dna_region = config.dna_region
@@ -259,7 +305,7 @@ def get_dict_cpg_map_info(config):
         geo = annotations[Annotation.geo.value]
         map_info = annotations[Annotation.map_info.value]
         snp = annotations[Annotation.Probe_SNPs.value]
-        snp1_10 = annotations[Annotation.Probe_SNPs_10.value]
+        snp_10 = annotations[Annotation.Probe_SNPs_10.value]
         cross_reactive = annotations[Annotation.cross_reactive.value]
         for i in range(0, len(cpg_names)):
 
@@ -269,7 +315,7 @@ def get_dict_cpg_map_info(config):
             curr_geo = geo[i]
             curr_map_info = map_info[i]
             curr_snp = snp[i]
-            curr_snp_10 = snp1_10[i]
+            curr_snp_10 = snp_10[i]
             curr_cross_reactive = cross_reactive[i]
 
             annotation = {}
@@ -287,11 +333,26 @@ def get_dict_cpg_map_info(config):
 
         # cross_reactive strict checking
         if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
+            cpgs_for_del = []
             for curr_cpg in dict_cpg_map_info:
                 cpg_index = cpg_names.index(curr_cpg)
                 curr_cross_reactive = cross_reactive[cpg_index]
                 if curr_cross_reactive == 1:
-                    del dict_cpg_map_info[curr_cpg]
+                    cpgs_for_del.append(curr_cpg)
+            for curr_cpg in cpgs_for_del:
+                del dict_cpg_map_info[curr_cpg]
+
+        # snp strict checking
+        if config.snp is SNPType.snp_excluded:
+            cpgs_for_del = []
+            for curr_cpg in dict_cpg_map_info:
+                cpg_index = cpg_names.index(curr_cpg)
+                curr_snp = snp[cpg_index]
+                curr_snp_10 = snp_10[cpg_index]
+                if curr_snp != '' or curr_snp_10 != '':
+                    cpgs_for_del.append(curr_cpg)
+            for curr_cpg in cpgs_for_del:
+                del dict_cpg_map_info[curr_cpg]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_cpg_map_info, f, pickle.HIGHEST_PROTOCOL)
