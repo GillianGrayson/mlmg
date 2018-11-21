@@ -1,4 +1,4 @@
-from infrastructure.path.path import *
+from infrastructure.path.path import get_data_path
 from annotations.conditions import *
 import os.path
 import pickle

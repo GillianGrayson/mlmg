@@ -1,17 +1,19 @@
 clear all;
 
 % ======== params ========
-gene = 'ISOC2';
+gene = 'PRR4';
 
 % ======== config ========
 config.data_base = 'GSE87571';
 config.data_type = 'gene_data';
 
+config.cross_reactive = 'cross_reactive_excluded';
+config.snp = 'snp_excluded_weak';
+
 config.chromosome_type = 'non_gender';
 
 config.geo_type = 'islands_shores';
 config.gene_data_type = 'mean';
-
 config.info_type = 'result';
 
 config.scenario = 'approach';
@@ -25,11 +27,13 @@ config.is_clustering = 0;
 
 config.color = '';
 
-if strcmp(getenv('computername'), 'MSI')
-    config.up = 'D:/YandexDisk/Work/mlmg';
-else
-    config.up = 'E:/YandexDisk/Work/mlmg';
-end
+if strcmp(getenv('computername'), 'MSI') 
+    config.up = 'D:/YandexDisk/Work/mlmg'; 
+elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS') 
+    config.up = 'C:/Users/User/YandexDisk/mlmg'; 
+else 
+    config.up = 'E:/YandexDisk/Work/mlmg'; 
+end 
 
 % ======== processing ========
 f = figure;
@@ -49,8 +53,13 @@ end
 
 suffix = sprintf('gene(%s)', gene);
 
-
-up_save = 'C:/Users/user/Google Drive/mlmg/figures';
+if strcmp(getenv('computername'), 'MSI') 
+    up_save = 'C:/Users/user/Google Drive/mlmg/figures'; 
+elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS') 
+    up_save = 'D:/Aaron/Bio/mlmg/figures'; 
+else 
+    up_save = 'C:/Users/user/Google Drive/mlmg/figures'; 
+end
 
 save_path = sprintf('%s/%s', ...
     up_save, ...
