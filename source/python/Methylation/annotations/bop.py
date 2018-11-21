@@ -1,4 +1,3 @@
-import numpy as np
 from annotations.gene import get_dict_cpg_gene
 from annotations.conditions import *
 from config.config import *
@@ -9,12 +8,13 @@ import pickle
 
 def bop_condition(config, annotation):
     match = False
-    if snp_condition(config, annotation):
-        if chromosome_condition(config, annotation):
-            if cpg_name_condition(config, annotation):
-                if dna_region_condition(config, annotation):
-                    if class_type_condition(config, annotation):
-                        match = True
+    if cross_reactive_condition(config, annotation):
+        if snp_condition(config, annotation):
+            if chromosome_condition(config, annotation):
+                if cpg_name_condition(config, annotation):
+                    if dna_region_condition(config, annotation):
+                        if class_type_condition(config, annotation):
+                            match = True
     return match
 
 
@@ -32,27 +32,27 @@ def get_dict_bop_cpgs(config):
 
         annotations = config.annotations
 
-        cpg = annotations[Annotation.cpg.value]
-        gene = annotations[Annotation.gene.value]
+        cpg_names = annotations[Annotation.cpg.value]
+        gene_names = annotations[Annotation.gene.value]
         chr = annotations[Annotation.chr.value]
         geo = annotations[Annotation.geo.value]
         map_info = annotations[Annotation.map_info.value]
-        bop = annotations[Annotation.bop.value]
+        bop_names = annotations[Annotation.bop.value]
         class_type = annotations[Annotation.class_type.value]
         snp = annotations[Annotation.Probe_SNPs.value]
-        snp1_10 = annotations[Annotation.Probe_SNPs_10.value]
+        snp_10 = annotations[Annotation.Probe_SNPs_10.value]
         cross_reactive = annotations[Annotation.cross_reactive.value]
-        for i in range(0, len(cpg)):
+        for i in range(0, len(cpg_names)):
 
-            curr_cpg = cpg[i]
-            curr_gene = gene[i]
+            curr_cpg = cpg_names[i]
+            curr_gene = gene_names[i]
             curr_chr = chr[i]
             curr_geo = geo[i]
             curr_map_info = map_info[i]
-            curr_bop = bop[i]
+            curr_bop = bop_names[i]
             curr_class_type = class_type[i]
             curr_snp = snp[i]
-            curr_snp_10 = snp1_10[i]
+            curr_snp_10 = snp_10[i]
             curr_cross_reactive = cross_reactive[i]
 
             annotation = {}
@@ -76,28 +76,45 @@ def get_dict_bop_cpgs(config):
 
         # Sorting cpgs in bops by map_info
         num_bops = 0
-        for bop in dict_bop_cpgs:
-            cpgs = dict_bop_cpgs.get(bop)
+        for curr_bop, curr_cpgs in dict_bop_cpgs.items():
             map_infos = []
-            for curr_cpg in cpgs:
-                cpg_index = cpg.index(curr_cpg)
+            for curr_cpg in curr_cpgs:
+                cpg_index = cpg_names.index(curr_cpg)
                 curr_map_info = map_info[cpg_index]
                 map_infos.append(curr_map_info)
             order = np.argsort(map_infos)
-            cpgs_sorted = list(np.array(cpgs)[order])
-            dict_bop_cpgs[bop] = cpgs_sorted
+            cpgs_sorted = list(np.array(curr_cpgs)[order])
+            dict_bop_cpgs[curr_bop] = cpgs_sorted
             num_bops += 1
             if num_bops % config.print_rate == 0:
                 print('num_bops: ' + str(num_bops))
 
         # cross_reactive strict checking
         if config.cross_reactive is CrossReactiveType.cross_reactive_excluded:
-            for bop, cpgs in dict_bop_cpgs.items():
-                for cpg in cpgs:
-                    cpg_index = cpg.index(cpg)
+            bops_for_del = []
+            for curr_bop, curr_cpgs in dict_bop_cpgs.items():
+                for curr_cpg in curr_cpgs:
+                    cpg_index = cpg_names.index(curr_cpg)
                     curr_cross_reactive = cross_reactive[cpg_index]
                     if curr_cross_reactive == 1:
-                        del dict_bop_cpgs[bop]
+                        bops_for_del.append(curr_bop)
+                        break
+            for curr_bop in bops_for_del:
+                del dict_bop_cpgs[curr_bop]
+
+        # snp strict checking
+        if config.snp is SNPType.snp_excluded:
+            bops_for_del = []
+            for curr_bop, curr_cpgs in dict_bop_cpgs.items():
+                for curr_cpg in curr_cpgs:
+                    cpg_index = cpg_names.index(curr_cpg)
+                    curr_snp = snp[cpg_index]
+                    curr_snp_10 = snp_10[cpg_index]
+                    if curr_snp != '' or curr_snp_10 != '':
+                        bops_for_del.append(curr_bop)
+                        break
+            for curr_bop in bops_for_del:
+                del dict_bop_cpgs[curr_bop]
 
         f = open(fn_pkl, 'wb')
         pickle.dump(dict_bop_cpgs, f, pickle.HIGHEST_PROTOCOL)
@@ -120,8 +137,7 @@ def get_dict_bop_genes(config):
     else:
         dict_bop_genes = {}
         dict_cpg_gene = get_dict_cpg_gene(config)
-        for bop in dict_bop_cpgs:
-            cpgs = dict_bop_cpgs.get(bop)
+        for bop, cpgs in dict_bop_cpgs.items():
             genes = []
             for curr_cpg in cpgs:
                 if curr_cpg in dict_cpg_gene:

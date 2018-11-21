@@ -1,14 +1,11 @@
-import numpy as np
-from infrastructure.load.attributes import get_attributes
-from infrastructure.load.cpg_data import load_dict_cpg_data
-from infrastructure.path.path import get_result_path
-from infrastructure.save.features import save_features
-from annotations.gene import get_dict_cpg_gene
-from config.config import *
-from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
-from method.clustering.order import *
 import statsmodels.api as sm
+from sklearn.cluster import MeanShift, estimate_bandwidth, AffinityPropagation
+
 from annotations.cpg import *
+from annotations.gene import get_dict_cpg_gene
+from infrastructure.load.cpg_data import load_dict_cpg_data
+from infrastructure.save.features import save_features
+from method.clustering.order import *
 
 
 def save_top_linreg_ols(config):

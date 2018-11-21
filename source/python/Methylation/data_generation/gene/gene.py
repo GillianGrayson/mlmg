@@ -81,8 +81,8 @@ def save_gene_data(config):
 data_base = DataBase.GSE87571
 geo_types = [GeoType.islands_shores]
 chromosome_type = ChromosomeType.non_gender
-cross_reactive = CrossReactiveType.cross_reactive_included
-snp = SNPType.snp_included
+cross_reactive = CrossReactiveType.cross_reactive_excluded
+snp = SNPType.snp_excluded_weak
 
 for geo_type in geo_types:
     print('geo: ' + str(geo_type))

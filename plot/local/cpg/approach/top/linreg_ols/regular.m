@@ -34,7 +34,10 @@ for cpg_id = 1:size(cpgs, 1)
     cpg = cpgs(cpg_id)
     
     curr_ann = annotations_map(cpg);
-    genes = curr_ann(find(labels=="UCSC_REFGENE_NAME"));
+    genes_str = curr_ann(find(labels=="UCSC_REFGENE_NAME"));
+    genes = strsplit(genes_str,';');
+    genes = unique(genes);
+    genes = strjoin(genes, ';');
     
     % ======== processing ========
     f = figure;
