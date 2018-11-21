@@ -3,7 +3,6 @@ from infrastructure.path.gene import *
 from infrastructure.path.cpg import *
 from infrastructure.path.experiment import *
 from infrastructure.path.attributes import *
-from config.config import *
 from config.types.common import *
 import os.path
 

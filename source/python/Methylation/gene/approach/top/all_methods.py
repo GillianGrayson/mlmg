@@ -37,8 +37,11 @@ def top_proc(config):
     elif config.method is Method.linreg_ols:
         save_top_linreg_ols(config)
 
-data_base = DataBase.GSE40279
+data_base = DataBase.GSE87571
 data_type = DataType.gene
+
+cross_reactives = [CrossReactiveType.cross_reactive_excluded]
+snps = [SNPType.snp_excluded_weak]
 
 chromosome_type = ChromosomeType.non_gender
 
@@ -51,36 +54,43 @@ genders = [Gender.F, Gender.M, Gender.any]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.moment,
+    Method.linreg_ols,
 ]
 
 is_clustering = False
 
 for method in methods:
     print(method.value)
-    for gender in genders:
-        print('\t' + gender.value)
-        for geo_type in geo_types:
-            print('\t\t' + geo_type.value)
+    for cross_reactive in cross_reactives:
+        print(cross_reactive.value)
+        for snp in snps:
+            print(snp.value)
+            for gender in genders:
+                print('\t' + gender.value)
+                for geo_type in geo_types:
+                    print('\t\t' + geo_type.value)
 
-            config = Config(
-                data_base=data_base,
-                data_type=data_type,
+                    config = Config(
+                        data_base=data_base,
+                        data_type=data_type,
 
-                chromosome_type=chromosome_type,
+                        cross_reactive=cross_reactive,
+                        snp=snp,
 
-                geo_type=geo_type,
-                gene_data_type=gene_data_type,
+                        chromosome_type=chromosome_type,
 
-                scenario=scenario,
-                approach=approach,
-                method=method,
+                        geo_type=geo_type,
+                        gene_data_type=gene_data_type,
 
-                disease=disease,
-                gender=gender,
+                        scenario=scenario,
+                        approach=approach,
+                        method=method,
 
-                is_clustering=is_clustering
-            )
+                        disease=disease,
+                        gender=gender,
 
-            top_proc(config)
+                        is_clustering=is_clustering
+                    )
+
+                    top_proc(config)
 
