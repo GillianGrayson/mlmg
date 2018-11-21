@@ -1,15 +1,22 @@
 function [names, data_1, data_2] = get_gender_specific_data(config)
 
+suffix = '';
+if isfield(config, 'suffix')
+    suffix = config.suffix;
+end
+
 config.gender = 'F';
-fn = sprintf('%s/data/%s/top.txt', ...
+fn = sprintf('%s/data/%s/top%s.txt', ...
     config.up, ...
-    get_result_path(config));
+    get_result_path(config), ...
+    suffix);
 raw_data_1 = importdata(fn, ' ');
 
 config.gender = 'M';
-fn = sprintf('%s/data/%s/top.txt', ...
+fn = sprintf('%s/data/%s/top%s.txt', ...
     config.up, ...
-    get_result_path(config));
+    get_result_path(config), ...
+    suffix);
 raw_data_2 = importdata(fn, ' ');
 
 names_1 = raw_data_1.textdata;

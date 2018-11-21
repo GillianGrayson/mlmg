@@ -45,6 +45,26 @@ if strcmp(config.method, 'linreg_ols')
         
     end
     
+elseif strcmp(config.method, 'anova_statsmodels')
+    
+    if config.experiment == 1
+        
+        p_vals_1 = data_1(:, 1);
+        p_vals_2 = data_2(:, 1);
+        
+        metrics_labels = ["pvals_f", "pvals_m"];
+        
+        passed_names = [];
+        metrics_map = containers.Map(); 
+        for id = 1:size(names)
+            passed_names = vertcat(passed_names, names(id));
+            metrics_map(string(names(id))) = [p_vals_1(id), p_vals_2(id)];
+        end
+        
+    end
+
 end
+
+
 
 end
