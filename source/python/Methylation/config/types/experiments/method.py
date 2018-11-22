@@ -53,6 +53,18 @@ def get_method_metrics(method, is_clustering=False):
         ]
         if is_clustering:
             metrics = metrics + clustering_metrics
+    elif method is Method.linreg_ols:
+        metrics = [
+            'R2',
+            'intercept',
+            'slope',
+            'intercepts_std',
+            'slopes_std',
+            'intercepts_p_values',
+            'slopes_p_values'
+        ]
+        if is_clustering:
+            metrics += clustering_metrics
     elif method is Method.linreg_with_rejection:
         metrics = [
             'r_value',
@@ -145,6 +157,14 @@ def get_method_order_metrics(method):
             'gender',
             'age',
             'gender_x_age'
+        ]
+    elif method is Method.linreg_mult:
+        metrics = [
+            'count',
+            'R2',
+            'r_test',
+            'evs_test',
+            'mae_test'
         ]
 
     return metrics
