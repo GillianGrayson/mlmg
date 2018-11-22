@@ -1,51 +1,34 @@
 from config.config import *
 from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
-from cpg.approach.top.enet.top import save_top_enet
-from cpg.approach.top.linreg.top import save_top_linreg
-from cpg.approach.top.linreg_ols.top import save_top_linreg_ols
-from cpg.approach.top.linreg_ols_wo_outliers.top import save_top_linreg_ols_wo_outliers
-from cpg.approach.top.anova.top import save_top_anova
-from cpg.approach.top.anova_statsmodels.top import save_top_anova_statsmodels
-from cpg.approach.top.spearman.top import save_top_spearman
-from cpg.approach.top.moment.top import save_top_moment
+from cpg.validation.clock.linreg_mult.clock import *
 
 
-def top_proc(config):
-    if config.method is Method.enet:
-        save_top_enet(config)
-    elif config.method is Method.linreg:
-        save_top_linreg(config)
-    elif config.method is Method.anova:
-        save_top_anova(config)
-    elif config.method is Method.anova_statsmodels:
-        save_top_anova_statsmodels(config)
-    elif config.method is Method.spearman:
-        save_top_spearman(config)
-    elif config.method is Method.moment:
-        save_top_moment(config)
-    elif config.method is Method.linreg_ols:
-        save_top_linreg_ols(config)
-    elif config.method is Method.linreg_ols_wo_outliers:
-        save_top_linreg_ols_wo_outliers(config)
+def clock_proc(config_lvl_2, config_lvl_1):
+    if config_lvl_2.method is Method.linreg_mult:
+        clock_linreg_mult(config_lvl_2, config_lvl_1)
 
-data_bases = [DataBase.GSE87571, DataBase.GSE40279]
+data_bases = [DataBase.GSE87571]
 data_type = DataType.cpg
 
-cross_reactives = [CrossReactiveType.cross_reactive_included, CrossReactiveType.cross_reactive_excluded]
-snps = [SNPType.snp_included, SNPType.snp_excluded]
+cross_reactives = [CrossReactiveType.cross_reactive_excluded]
+snps = [SNPType.snp_excluded]
 chromosome_type = ChromosomeType.non_gender
 
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.any, Gender.F, Gender.M]
+genders = [Gender.F, Gender.M, Gender.any]
 
-scenario = Scenario.approach
-approach = Approach.top
+scenario = Scenario.validation
+approach = Approach.clock
 methods = [
-    Method.linreg_ols,
+    Method.linreg_mult,
 ]
+
+scenario_lvl_1 = Scenario.approach
+approach_lvl_1 = Approach.top
+method_lvl_1 = Method.linreg_ols
 
 is_clustering = False
 
@@ -79,7 +62,30 @@ for data_base in data_bases:
                 for gender in genders:
                     print(gender.value)
 
-                    config = Config(
+                    config_lvl_1 = Config(
+                        data_base=data_base,
+                        data_type=data_type,
+
+                        cross_reactive=cross_reactive,
+                        snp=snp,
+                        chromosome_type=chromosome_type,
+
+                        dna_region=dna_region,
+
+                        scenario=scenario_lvl_1,
+                        approach=approach_lvl_1,
+                        method=method_lvl_1,
+
+                        disease=disease,
+                        gender=gender,
+
+                        is_clustering=is_clustering,
+
+                        attributes_types=attributes_types,
+                        attribute_target=attribute_target
+                    )
+
+                    config_lvl_2 = Config(
                         data_base=data_base,
                         data_type=data_type,
 
@@ -102,4 +108,4 @@ for data_base in data_bases:
                         attribute_target=attribute_target
                     )
 
-                    top_proc(config)
+                    clock_proc(config_lvl_2, config_lvl_1)
