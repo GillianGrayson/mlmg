@@ -9,6 +9,7 @@ class Method(Enum):
     linreg_bend = 'linreg_bend'
     linreg_dispersion = 'linreg_dispersion'
     linreg_variance = 'linreg_variance'
+    linreg_variance_ols = 'linreg_variance_ols'
     linreg_ols = 'linreg_ols'
     linreg_ols_wo_outliers = 'linreg_ols_wo_outliers'
     anova = 'anova'
@@ -62,6 +63,25 @@ def get_method_metrics(method, is_clustering=False):
             'slopes_std',
             'intercepts_p_values',
             'slopes_p_values'
+        ]
+        if is_clustering:
+            metrics += clustering_metrics
+    elif method is Method.linreg_variance_ols:
+        metrics = [
+            'R2',
+            'intercept',
+            'slope',
+            'intercepts_std',
+            'slopes_std',
+            'intercepts_p_values',
+            'slopes_p_values',
+            'R2_var',
+            'intercept_var',
+            'slope_var',
+            'intercepts_std_var',
+            'slopes_std_var',
+            'intercepts_p_values_var',
+            'slopes_p_values_var'
         ]
         if is_clustering:
             metrics += clustering_metrics
