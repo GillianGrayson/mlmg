@@ -28,7 +28,7 @@ methods = [
 
 scenario_lvl_1 = Scenario.approach
 approach_lvl_1 = Approach.top
-method_lvl_1 = Method.linreg_ols
+method_lvl_1 = Method.custom
 
 is_clustering = False
 

@@ -22,13 +22,13 @@ lvl_1_scenario = 'approach';
 lvl_1_approach = 'top';
 lvl_1_methods = ["linreg_ols"];
 lvl_1_suffixes = [""];
-lvl_1_experiments = [4];
+lvl_1_experiments = [2];
 
 lvl_2_scenario = 'validation';
 lvl_2_approach = 'top';
 lvl_2_methods = ["gender_specific"];
 lvl_2_suffixes = [""];
-lvl_2_experiments = [4];
+lvl_2_experiments = [2];
 
 all_metrics_labels = [];
 intersection_names = [];
