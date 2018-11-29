@@ -51,6 +51,7 @@ class Config:
 
                  attributes_types=None,
                  attribute_target=None,
+                 method_params=None,
 
                  is_clustering=False
                  ):
@@ -85,6 +86,8 @@ class Config:
 
         self.attributes_types = attributes_types
         self.attribute_target = attribute_target
+
+        self.method_params = method_params
 
         # Aux
         self.read_only = read_only

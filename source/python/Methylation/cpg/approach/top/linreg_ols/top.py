@@ -7,6 +7,8 @@ from infrastructure.load.cpg_data import load_dict_cpg_data
 from infrastructure.save.features import save_features
 from method.clustering.order import *
 
+import pandas as pd
+
 
 def save_top_linreg_ols(config):
     attributes = get_attributes(config)
@@ -15,6 +17,14 @@ def save_top_linreg_ols(config):
     cpg_names = list(dict_cpg_data.keys())
     cpg_values = list(dict_cpg_data.values())
     approved_cpgs = get_approved_cpgs(config)
+
+    if config.method_params is not None:
+        outliers_limit = config.method_params['outliers_limit']
+        outliers_sigma = config.method_params['outliers_sigma']
+    else:
+        outliers_limit = 0.0
+        outliers_sigma = 0.0
+    suffix = 'outliers_limit(' + str(outliers_limit) + ')_outliers_sigma_(' + str(outliers_sigma) + ')'
 
     cpg_names_passed = []
     R2s = []
@@ -27,17 +37,55 @@ def save_top_linreg_ols(config):
     for id in range(0, len(cpg_names)):
         cpg = cpg_names[id]
         if cpg in approved_cpgs:
-            cpg_names_passed.append(cpg)
-            values = cpg_values[id]
-            x = sm.add_constant(attributes)
-            results = sm.OLS(values, x).fit()
-            R2s.append(results.rsquared)
-            intercepts.append(results.params[0])
-            slopes.append(results.params[1])
-            intercepts_std_errors.append(results.bse[0])
-            slopes_std_errors.append(results.bse[1])
-            intercepts_p_values.append(results.pvalues[0])
-            slopes_p_values.append(results.pvalues[1])
+            if np.isclose(outliers_limit, 0.0):
+                values = cpg_values[id]
+                x = sm.add_constant(attributes)
+                results = sm.OLS(values, x).fit()
+                cpg_names_passed.append(cpg)
+                R2s.append(results.rsquared)
+                intercepts.append(results.params[0])
+                slopes.append(results.params[1])
+                intercepts_std_errors.append(results.bse[0])
+                slopes_std_errors.append(results.bse[1])
+                intercepts_p_values.append(results.pvalues[0])
+                slopes_p_values.append(results.pvalues[1])
+            else:
+                values = cpg_values[id]
+                x = sm.add_constant(attributes)
+                results = sm.OLS(values, x).fit()
+
+                slope_plus = results.params[1] + outliers_sigma * results.bse[1]
+                intercept_plus = results.params[0] + outliers_sigma * results.bse[0]
+
+                slope = results.params[1]
+                intercept = results.params[0]
+
+                max_diff = ((slope_plus * max(attributes) + intercept_plus) - (slope * max(attributes) + intercept))
+
+                passed_ids = []
+                for p_id in range(0, len(attributes)):
+                    curr_x = attributes[p_id]
+                    curr_y = values[p_id]
+                    pred_y = results.params[1] * curr_x + results.params[0]
+                    if abs(pred_y - curr_y) < max_diff:
+                        passed_ids.append(p_id)
+
+                if len(passed_ids) > np.floor(len(values) * outliers_limit):
+
+                    values_good = list(np.array(values)[passed_ids])
+                    attributes_good = list(np.array(attributes)[passed_ids])
+
+                    x = sm.add_constant(attributes_good)
+                    results = sm.OLS(values_good, x).fit()
+
+                    cpg_names_passed.append(cpg)
+                    R2s.append(results.rsquared)
+                    intercepts.append(results.params[0])
+                    slopes.append(results.params[1])
+                    intercepts_std_errors.append(results.bse[0])
+                    slopes_std_errors.append(results.bse[1])
+                    intercepts_p_values.append(results.pvalues[0])
+                    slopes_p_values.append(results.pvalues[1])
 
         if id % config.print_rate == 0:
             print('cpg_id: ' + str(id))
@@ -78,12 +126,24 @@ def save_top_linreg_ols(config):
             clusters_mean_shift,
             clusters_affinity_prop,
         ]
-        fn = 'top_with_clustering.txt'
-    else:
-        fn = 'top.txt'
 
+    fn = 'top_' + suffix + '.txt'
     fn = get_result_path(config, fn)
     save_features(fn, features)
+
+    features_dict = dict()
+    features_dict_keys = ['name'] + get_method_metrics(config.method)
+    for feature_id in range(0, len(features_dict_keys)):
+        features_dict[features_dict_keys[feature_id]] = features[feature_id]
+    if config.is_clustering:
+        features_dict['mean_shift'] = clusters_mean_shift
+        features_dict['affinity_prop'] = clusters_affinity_prop
+    df = pd.DataFrame(features_dict)
+    file_xls = 'top_' + suffix + '.xlsx'
+    file_xls = get_result_path(config, file_xls)
+    writer = pd.ExcelWriter(file_xls, engine='xlsxwriter')
+    df.to_excel(writer, index=False)
+    writer.save()
 
     genes_sorted = []
     cpgs_genes = []
@@ -147,16 +207,28 @@ def save_top_linreg_ols(config):
     ]
 
     if config.is_clustering:
-        fn = 'top_with_clustering.txt'
         features = features + [
             clusters_mean_shift_genes,
             clusters_affinity_prop_genes,
         ]
-    else:
-        fn = 'top.txt'
 
+    fn = 'top_' + suffix + '.txt'
     fn = get_result_path(config, fn)
     save_features(fn, features)
+
+    features_dict = dict()
+    features_dict_keys = ['name'] + get_method_metrics(config.method)
+    for feature_id in range(0, len(features_dict_keys)):
+        features_dict[features_dict_keys[feature_id]] = features[feature_id]
+    if config.is_clustering:
+        features_dict['mean_shift'] = clusters_mean_shift_genes
+        features_dict['affinity_prop'] = clusters_affinity_prop_genes
+    df = pd.DataFrame(features_dict)
+    file_xls = 'top_' + suffix + '.xlsx'
+    file_xls = get_result_path(config, file_xls)
+    writer = pd.ExcelWriter(file_xls, engine='xlsxwriter')
+    df.to_excel(writer, index=False)
+    writer.save()
 
     config.gene_data_type = gene_data_type
     config.geo_type = geo_type

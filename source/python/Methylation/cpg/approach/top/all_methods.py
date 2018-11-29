@@ -47,7 +47,11 @@ genders = [Gender.F, Gender.M]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_variance_ols,
+    Method.linreg_ols,
+]
+method_params = [
+    {'outliers_limit': 0.3,
+     'outliers_sigma': 2.0}
 ]
 
 is_clustering = False
@@ -102,7 +106,9 @@ for data_base in data_bases:
                         is_clustering=is_clustering,
 
                         attributes_types=attributes_types,
-                        attribute_target=attribute_target
+                        attribute_target=attribute_target,
+
+                        method_params=method_params[methods.index(method)]
                     )
 
                     top_proc(config)
