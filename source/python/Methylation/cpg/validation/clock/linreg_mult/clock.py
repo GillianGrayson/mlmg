@@ -21,11 +21,14 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
     test_size = math.floor(len(attributes) * config_lvl_2.test_part)
     train_size = len(attributes) - test_size
 
-    keys = ['cpg'] + get_method_metrics(config_lvl_1.method)
+    if config_lvl_1.method is Method.custom:
+        df = pd.read_excel('custom_cpgs.xlsx')
+        cpg_names_tmp = list(df['names'])
+    else:
+        keys = ['cpg'] + get_method_metrics(config_lvl_1.method)
+        top_dict = load_top_dict(config_lvl_1, keys)
+        cpg_names_tmp = top_dict['cpg']
 
-    top_dict = load_top_dict(config_lvl_1, keys)
-
-    cpg_names_tmp = top_dict['cpg']
     cpg_names = []
     cpg_values = []
     for cpg in cpg_names_tmp:
@@ -38,7 +41,7 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
     for key in keys:
         metrics_dict[key] = []
 
-    for num_in_top in range(1, train_size):
+    for num_in_top in range(1, min(train_size, len(cpg_names_tmp))):
         print('num_in_top: ' + str(num_in_top))
 
         metrics_dict['cpg'].append(cpg_names[num_in_top - 1])

@@ -24,6 +24,7 @@ class Method(Enum):
     gender_specific = 'gender_specific'
     moment = 'moment'
     classification = 'classification'
+    custom = 'custom'
 
 def get_top_fn(method, params_dict):
     fn = 'top.txt'

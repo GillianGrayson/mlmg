@@ -50,7 +50,7 @@ for cpg_id = 1:size(cpgs, 1)
         plot_linreg_ols_cpg(config, cpg)
         config.gender = 'versus';
     else
-        plot_linreg_ols_gene(config, cpg)
+        plot_linreg_ols_cpg(config, cpg)
     end
     
     suffix = sprintf('cpg(%s)', cpg);
