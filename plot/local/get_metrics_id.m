@@ -29,6 +29,9 @@ elseif strcmp(config.method, 'moment')
 
 elseif strcmp(config.method, 'linreg_ols')
     metrics_id = 1;
+    
+elseif strcmp(config.method, 'linreg_variance_ols')
+    metrics_id = 8;
 
 elseif strcmp(config.method, 'linreg_ols_wo_outliers')
     metrics_id = 1;

@@ -12,7 +12,7 @@ config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
 config.cross_reactive = 'cross_reactive_excluded';
-config.snp = 'snp_included';
+config.snp = 'snp_excluded';
 config.chromosome_type = 'non_gender';
 
 config.dna_region = 'genic';
@@ -21,7 +21,7 @@ config.info_type = 'result';
 
 config.scenario = 'approach';
 config.approach = 'top';
-config.method = 'linreg_ols';
+config.method = 'linreg_variance_ols';
 
 config.disease = 'any';
 config.gender = 'versus';
