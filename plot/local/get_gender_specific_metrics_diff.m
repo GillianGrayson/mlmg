@@ -109,15 +109,15 @@ elseif strcmp(config.method, 'linreg_variance_ols')
     intercepts_std_2 = config.data_2(:, 4);
     slopes_std_2 = config.data_2(:, 5);
     
-    intercepts_var_1 = config.data_1(:, 2);
-    slopes_1 = config.data_1(:, 3);
-    intercepts_std_1 = config.data_1(:, 4);
-    slopes_std_1 = config.data_1(:, 5);
+    intercepts_var_1 = config.data_1(:, 9);
+    slopes_var_1 = config.data_1(:, 10);
+    intercepts_std_var_1 = config.data_1(:, 11);
+    slopes_std_var_1 = config.data_1(:, 12);
     
-    intercepts_2 = config.data_2(:, 2);
-    slopes_2 = config.data_2(:, 3);
-    intercepts_std_2 = config.data_2(:, 4);
-    slopes_std_2 = config.data_2(:, 5);
+    intercepts_var_2 = config.data_2(:, 9);
+    slopes_var_2 = config.data_2(:, 10);
+    intercepts_std_var_2 = config.data_2(:, 11);
+    slopes_std_var_2 = config.data_2(:, 12);
     
     x = [min(ages), max(ages), max(ages), min(ages)];
     
@@ -125,6 +125,11 @@ elseif strcmp(config.method, 'linreg_variance_ols')
     areas_normed = zeros(size(names, 1), 1);
     variance_diff = zeros(size(names, 1), 1);
     slope_intersection = zeros(size(names, 1), 1);
+    
+    areas_var = zeros(size(names, 1), 1);
+    areas_normed_var = zeros(size(names, 1), 1);
+    variance_diff_var = zeros(size(names, 1), 1);
+    slope_intersection_var = zeros(size(names, 1), 1);
     
     for id = 1 : size(names, 1)  
         intercept_minus_1 = intercepts_1(id) - sigma * intercepts_std_1(id);
@@ -187,10 +192,70 @@ elseif strcmp(config.method, 'linreg_variance_ols')
             slope_intersection(id) = area_intersection / area_union;
         end
         
+        intercept_minus_var_1 = intercepts_var_1(id) - sigma * intercepts_std_var_1(id);
+        slope_minus_var_1 = slopes_var_1(id) - sigma * slopes_std_var_1(id);
+        intercept_plus_var_1 = intercepts_var_1(id) + sigma * intercepts_std_var_1(id);
+        slope_plus_var_1 = slopes_var_1(id) + sigma * slopes_std_var_1(id);
+        
+        intercept_up_var_1 = intercepts_var_1(id) + ((slope_plus_var_1 * x(2) + intercept_plus_var_1) - (slopes_var_1(id) * x(2) + intercepts_var_1(id)));
+        intercept_down_var_1 = intercepts_var_1(id) + ((slope_minus_var_1 * x(2) + intercept_minus_var_1) - (slopes_var_1(id) * x(2) + intercepts_var_1(id)));
+        
+        y1_var = [slopes_var_1(id) * x(1) + intercept_down_var_1, ...
+            slopes_var_1(id) * x(2) + intercept_down_var_1, ...
+            slopes_var_1(id) * x(3) + intercept_up_var_1, ...
+            slopes_var_1(id) * x(4) + intercept_up_var_1];
+        
+        intercept_minus_var_2 = intercepts_var_2(id) - sigma * intercepts_std_var_2(id);
+        slope_minus_var_2 = slopes_var_2(id) - sigma * slopes_std_var_2(id);
+        intercept_plus_var_2 = intercepts_var_2(id) + sigma * intercepts_std_var_2(id);
+        slope_plus_var_2 = slopes_var_2(id) + sigma * slopes_std_var_2(id);
+        
+        intercept_up_var_2 = intercepts_var_2(id) + ((slope_plus_var_2 * x(2) + intercept_plus_var_2) - (slopes_var_2(id) * x(2) + intercepts_var_2(id)));
+        intercept_down_var_2 = intercepts_var_2(id) + ((slope_minus_var_2 * x(2) + intercept_minus_var_2) - (slopes_var_2(id) * x(2) + intercepts_var_2(id)));
+        
+        y2_var = [slopes_var_2(id) * x(1) + intercept_down_var_2, ...
+            slopes_var_2(id) * x(2) + intercept_down_var_2, ...
+            slopes_var_2(id) * x(3) + intercept_up_var_2, ...
+            slopes_var_2(id) * x(4) + intercept_up_var_2];
+        
+        pgon_var_1 = polyshape(x, y1_var);
+        area_pgon_var_1 = polyarea(x, y1_var);
+        pgon_var_2 = polyshape(x, y2_var);
+        area_pgon_var_2 = polyarea(x, y2_var);
+        
+        pgon_intersect_var = intersect(pgon_var_1, pgon_var_2);
+        
+        areas_var(id) = polyarea(pgon_intersect_var.Vertices(:, 1), pgon_intersect_var.Vertices(:, 2));
+        areas_normed_var(id) = areas_var(id) / (area_pgon_var_1 + area_pgon_var_2 - areas_var(id));
+        
+        variance_var_1 = y1_var(4) - y1_var(1);
+        variance_var_2 = y2_var(4) - y2_var(1);
+        variance_diff_var(id) = max(variance_var_1, variance_var_2) / min(variance_var_1, variance_var_2);
+        
+        pgon_slope_var_1_x = [slope_minus_var_1, slope_plus_var_1, slope_plus_var_1, slope_minus_var_1];
+        pgon_slope_var_1_y = [0.0, 0.0, 1.0, 1.0];
+        pgon_slope_var_1 = polyshape(pgon_slope_var_1_x, pgon_slope_var_1_y);
+        
+        pgon_slope_var_2_x = [slope_minus_var_2, slope_plus_var_2, slope_plus_var_2, slope_minus_var_2];
+        pgon_slope_var_2_y = [0.0, 0.0, 1.0, 1.0];
+        pgon_slope_var_2 = polyshape(pgon_slope_var_2_x, pgon_slope_var_2_y);
+        
+        pgon_slope_intersect_var = intersect(pgon_slope_var_1, pgon_slope_var_2);
+        pgon_slope_union_var = union(pgon_slope_var_1, pgon_slope_var_2);
+        
+        area_intersection_var = polyarea(pgon_slope_intersect_var.Vertices(:, 1), pgon_slope_intersect_var.Vertices(:, 2));
+        area_union_var = polyarea(pgon_slope_union_var.Vertices(:, 1), pgon_slope_union_var.Vertices(:, 2));
+        
+        if area_intersection_var < 1e-8
+            slope_intersection_var(id) = 0.0;
+        else
+            slope_intersection_var(id) = area_intersection_var / area_union_var;
+        end
+        
     end
     
-    metrics_diff = horzcat(areas, areas_normed, variance_diff, slope_intersection);
-    metrics_diff_labels = ["area_intersection_abs", "area_intersection_rel", "variance", "slope_intersection"];    
+    metrics_diff = horzcat(areas, areas_normed, variance_diff, slope_intersection, areas_var, areas_normed_var, variance_diff_var, slope_intersection_var);
+    metrics_diff_labels = ["area_intersection_abs", "area_intersection_rel", "variance", "slope_intersection", "area_intersection_abs_var", "area_intersection_rel_var", "variance_var", "slope_intersection_var"];    
     
 else
     
