@@ -26,6 +26,8 @@ config.method = 'linreg_variance_ols';
 config.disease = 'any';
 config.gender = 'versus';
 
+config.suffix = '';
+
 config.is_clustering = 0;
 
 config.up = get_up_data_path(); 
