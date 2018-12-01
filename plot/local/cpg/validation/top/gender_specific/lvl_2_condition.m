@@ -11,20 +11,19 @@ fn = sprintf('%s/%s.xlsx', ...
 
 [num,txt,raw] = xlsread(fn);
 
-
 if config_lvl_2.experiment == 1
     
     if strcmp(method, 'linreg_ols')
         
         names = raw(2:end, 1);
-        area_intersection = cell2mat(raw(2:end, 3));
+        area_intersection_rel = cell2mat(raw(2:end, 3));
         metrics_labels = [raw(1, 3)];
         passed_names = [];
         metrics_map = containers.Map();
         for id = 1:size(names)
-            if area_intersection(id) < 0.5
+            if area_intersection_rel(id) < 0.5
                 passed_names = vertcat(passed_names, names(id));
-                metrics_map(string(names(id))) = area_intersection(id);
+                metrics_map(string(names(id))) = area_intersection_rel(id);
             end
         end
         
@@ -71,16 +70,40 @@ elseif config_lvl_2.experiment == 4
     if strcmp(method, 'linreg_ols')
         
         names = raw(2:end, 1);
-        area_intersection = cell2mat(raw(2:end, 3));
+        area_intersection_rel = cell2mat(raw(2:end, 3));
         metrics_labels = [raw(1, 3)];
         passed_names = [];
         metrics_map = containers.Map();
         for id = 1:size(names)
-            if area_intersection(id) < 0.5
+            if area_intersection_rel(id) < 0.5
                 passed_names = vertcat(passed_names, names(id));
-                metrics_map(string(names(id))) = area_intersection(id);
+                metrics_map(string(names(id))) = area_intersection_rel(id);
             end
         end
+        
+    end
+    
+elseif config_lvl_2.experiment == 5
+    
+    if strcmp(method, 'linreg_ols')
+        
+        names = raw(2:end, 1);
+        area_intersection_rel = cell2mat(raw(2:end, 3));
+        variance = cell2mat(raw(2:end, 4));
+        metrics_labels = [raw(1, 3), raw(1, 4)];
+        passed_names = strings(size(names, 1), 1);
+        num_names = 1;
+        metrics_map = containers.Map();
+        for id = 1:size(names)
+            if area_intersection_rel(id) < 0.5 && variance(id) > 2.0
+                passed_names(num_names) = names(id);
+                metrics_map(string(names(id))) = [area_intersection_rel(id), variance(id)];
+                num_names = num_names + 1;
+            end
+        end
+        num_names = num_names - 1;
+        
+        passed_names = passed_names(1:num_names, :);
         
     end
     

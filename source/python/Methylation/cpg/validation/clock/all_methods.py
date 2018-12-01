@@ -18,7 +18,7 @@ chromosome_type = ChromosomeType.non_gender
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.F, Gender.M, Gender.any]
+genders = [Gender.any, Gender.F, Gender.M]
 
 scenario = Scenario.validation
 approach = Approach.clock

@@ -1,6 +1,6 @@
 clear all;
 
-metric = "r_test";
+metric = "mae_test";
 
 data_base = "GSE87571";
 data_type = "cpg_data";
@@ -14,11 +14,11 @@ dna_region = "genic";
 info_type = "result";
 
 disease = "any";
-gender = "versus";
+gender = "any";
 
 lvl_1_scenario = "approach";
 lvl_1_approach = "top";
-lvl_1_method = "custom";
+lvl_1_method = "linreg_ols";
 lvl_1_suffix = "";
 
 lvl_2_scenario = "validation";
@@ -88,6 +88,7 @@ if strcmp(config_lvl_2.gender, 'versus')
     plot_clock_metrics(config_lvl_1, config_lvl_2, metric)
     config_lvl_2.gender = 'versus';
 else
+    config_lvl_2.color = 'g';
     plot_clock_metrics(config_lvl_1, config_lvl_2, metric)
 end
 

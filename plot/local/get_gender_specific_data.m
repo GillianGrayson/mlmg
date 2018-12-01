@@ -35,22 +35,30 @@ for id = 1:size(names_1, 1)
     map_2(string(names_2(id))) = d_2_tmp(id, :);
 end
 
-all_names = names_1;
-num_names = size(all_names, 1);
+all_names =  strings(size(d_1_tmp, 1), 1);
+num_names = 1;
 
-all_data_1 = d_1_tmp;
-all_data_2 = zeros(num_names, 1);
-for id_1 = 1:num_names
-    name = string(all_names(id_1));
-    data_2_curr = map_2(name);
-    for m_id = 1:size(all_data_1, 2)
-        all_data_2(id_1, m_id) = data_2_curr(m_id);
-    end
-    
-    if mod(id_1, 1000) == 0
-        id_1 = id_1
+all_data_1 = zeros(size(d_1_tmp, 1), size(d_1_tmp, 2));
+all_data_2 = zeros(size(d_2_tmp, 1), size(d_2_tmp, 2));
+for id_1 = 1:size(names_1, 1)
+    name = string(names_1(id_1));
+    if isKey(map_2,name)
+        all_names(num_names) = string(name);
+        data_1_curr = map_1(name);
+        data_2_curr = map_2(name);
+        all_data_1(num_names, :) = data_1_curr;
+        all_data_2(num_names, :) = data_2_curr;
+        num_names = num_names + 1;
+        if mod(id_1, 1000) == 0
+            id_1 = id_1
+        end
     end
 end
+num_names = num_names - 1;
+
+all_names = all_names(1:num_names);
+all_data_1 = all_data_1(1:num_names, :);
+all_data_2 = all_data_2(1:num_names, :);
 
 names = [];
 data_1 = [];

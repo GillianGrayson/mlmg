@@ -1,6 +1,7 @@
 clear all;
 
 cpgs = string(importdata('cpgs.txt'));
+prefix = 'class_5_';
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -74,7 +75,7 @@ for cpg_id = 1:size(cpgs, 1)
     end
     title(sprintf('%s(%s)', cpg, genes), 'FontSize', 16)
     
-    savefig(f, sprintf('%s/%d_linreg_%s.fig', save_path, cpg_id, suffix))
-    saveas(f, sprintf('%s/%d_linreg_%s.png', save_path, cpg_id, suffix))
+    savefig(f, sprintf('%s/%s%d_linreg_%s.fig', save_path, prefix, cpg_id, suffix))
+    saveas(f, sprintf('%s/%s%d_linreg_%s.png', save_path, prefix, cpg_id, suffix))
     
 end
