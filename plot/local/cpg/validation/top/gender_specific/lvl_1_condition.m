@@ -94,7 +94,31 @@ elseif config.experiment == 4
         end
         
     end
+
+elseif config.experiment == 5
     
+    if strcmp(config.method, 'linreg_ols')
+        
+        sigma = 3;
+        slopes_1 = data_1(:, 3);
+        slopes_1_std = data_1(:, 5);
+        slopes_2 = data_2(:, 3);
+        slopes_2_std = data_2(:, 5);
+        metrics_labels = ["slope_f", "slope_m"];
+        passed_names = strings(size(names, 1), 1);
+        num_names = 1;
+        metrics_map = containers.Map();
+        for id = 1:size(names)
+            if slopes_1(id) < sigma * slopes_1_std(id) && slopes_2(id) < sigma * slopes_2_std(id)
+                passed_names(num_names) = names(id);
+                metrics_map(string(names(id))) = [slopes_1(id), slopes_2(id)];
+                num_names = num_names + 1;
+            end
+        end
+        num_names = num_names - 1;
+        
+        passed_names = passed_names(1:num_names, :);
+        
 end
 
 end
