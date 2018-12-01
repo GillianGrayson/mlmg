@@ -1,6 +1,6 @@
 clear all;
 
-metric = "evs_test";
+metric = "r_test";
 
 data_base = "GSE87571";
 data_type = "cpg_data";
