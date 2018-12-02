@@ -1,6 +1,6 @@
 clear all;
 
-metric = "mae_test";
+metric = "r_test";
 
 data_base = "GSE87571";
 data_type = "cpg_data";
@@ -14,11 +14,11 @@ dna_region = "genic";
 info_type = "result";
 
 disease = "any";
-gender = "any";
+gender = "versus";
 
 lvl_1_scenario = "approach";
 lvl_1_approach = "top";
-lvl_1_method = "linreg_ols";
+lvl_1_method = "custom";
 lvl_1_suffix = "";
 
 lvl_2_scenario = "validation";

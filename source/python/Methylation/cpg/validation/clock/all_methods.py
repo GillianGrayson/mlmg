@@ -34,7 +34,7 @@ is_clustering = False
 
 attributes_types = [Attribute.age]
 
-""""
+"""
 attributes_types = [Attribute.gender,
                     Attribute.age,
                     CellPop.plasma_blast,

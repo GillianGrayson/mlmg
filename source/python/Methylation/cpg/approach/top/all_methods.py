@@ -42,7 +42,7 @@ chromosome_type = ChromosomeType.non_gender
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.F, Gender.M]
+genders = [Gender.M, Gender.F]
 
 scenario = Scenario.approach
 approach = Approach.top
