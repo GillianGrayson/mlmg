@@ -38,7 +38,7 @@ elseif config_lvl_2.experiment == 2
         slope_intersection = cell2mat(raw(2:end, 5));
         metrics_labels = [raw(1, 5)];
         passed_names = [];
-        metrics_map = containers.Map(); 
+        metrics_map = containers.Map();
         for id = 1:size(names)
             if slope_intersection(id) < 0.5
                 passed_names = vertcat(passed_names, names(id));
@@ -56,7 +56,7 @@ elseif config_lvl_2.experiment == 3
         slope_intersection = cell2mat(raw(2:end, 5));
         metrics_labels = [raw(1, 5)];
         passed_names = [];
-        metrics_map = containers.Map(); 
+        metrics_map = containers.Map();
         for id = 1:size(names)
             if slope_intersection(id) < 0.5
                 passed_names = vertcat(passed_names, names(id));
@@ -65,7 +65,7 @@ elseif config_lvl_2.experiment == 3
         end
         
     end
-
+    
 elseif config_lvl_2.experiment == 4
     
     if strcmp(config_lvl_1.method, 'linreg_ols')
@@ -108,7 +108,26 @@ elseif config_lvl_2.experiment == 5
         
     end
     
-end
+elseif config_lvl_2.experiment == 6
     
+    if strcmp(method, 'linreg_variance_ols')
+        names = raw(2:end, 1);
+        slope_intersection = cell2mat(raw(2:end, 5));
+        slope_intersection_var = cell2mat(raw(2:end, 9));
+        metrics_labels = [raw(1, 5), raw(1, 9)];
+        passed_names = strings(size(names, 1), 1);
+        num_names = 1;
+        metrics_map = containers.Map();
+        for id = 1:size(names)
+            passed_names(num_names) = names(id);
+            metrics_map(string(names(id))) = [slope_intersection(id), slope_intersection_var(id)];
+            num_names = num_names + 1;
+        end
+        num_names = num_names - 1;
+        passed_names = passed_names(1:num_names, :);
+    end
+    
+end
+
 end
 
