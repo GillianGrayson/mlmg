@@ -41,14 +41,14 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
     for key in keys:
         metrics_dict[key] = []
 
-    for num_in_top in range(1, min(train_size, len(cpg_names_tmp))):
+    for num_in_top in range(0, min(train_size, len(cpg_names))):
         print('num_in_top: ' + str(num_in_top))
 
-        metrics_dict['cpg'].append(cpg_names[num_in_top - 1])
-        metrics_dict['gene'].append(';'.join(dict_cpg_gene[cpg_names[num_in_top - 1]]))
+        metrics_dict['cpg'].append(cpg_names[num_in_top])
+        metrics_dict['gene'].append(';'.join(dict_cpg_gene[cpg_names[num_in_top]]))
         metrics_dict['count'].append(num_in_top)
 
-        curr_values = cpg_values[0:num_in_top]
+        curr_values = cpg_values[0:num_in_top + 1]
 
         reg_res = linreg_mult(attributes, curr_values)
         metrics_dict['R2'].append(reg_res.rsquared)

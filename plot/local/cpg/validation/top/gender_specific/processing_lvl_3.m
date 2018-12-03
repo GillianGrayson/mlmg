@@ -2,7 +2,7 @@ clear all;
 
 num_lvl_1 = 2;
 num_lvl_2 = 1;
-target_method = "linreg_variance_ols";
+target_lvl_1 = 1;
 
 data_base = 'GSE87571';
 data_type = 'cpg_data';
@@ -30,45 +30,47 @@ lvl_2_genders = ["versus"];
 lvl_2_scenario = 'validation';
 lvl_2_approach = 'top';
 lvl_2_methods = ["gender_specific"];
-lvl_2_suffixes = [""];
-lvl_2_experiments = [6];
+lvl_2_suffixes = ["_outliers_limit(0.3)_outliers_sigma_(2.0)"];
+lvl_2_experiments = [5];
 
 all_metrics_labels = [];
 intersection_names = [];
 lvl_1_metrics_map = {};
 lvl_2_metrics_map = {};
+lvl_1_configs = {};
+lvl_2_configs = {};
 
 for lvl_1_id = 1:num_lvl_1
     
-    clearvars config;
+    clearvars config_lvl_1;
     
-    config.data_base = data_base;
-    config.data_type = data_type;
+    config_lvl_1.data_base = data_base;
+    config_lvl_1.data_type = data_type;
     
-    config.cross_reactive = cross_reactive;
-    config.snp = snp;
-    config.chromosome_type = chromosome_type;
+    config_lvl_1.cross_reactive = cross_reactive;
+    config_lvl_1.snp = snp;
+    config_lvl_1.chromosome_type = chromosome_type;
     
-    config.dna_region = dna_region;
+    config_lvl_1.dna_region = dna_region;
     
-    config.info_type = info_type;
+    config_lvl_1.info_type = info_type;
     
-    config.scenario = lvl_1_scenario;
-    config.approach = lvl_1_approach;
-    config.method = lvl_1_methods(lvl_1_id);
+    config_lvl_1.scenario = lvl_1_scenario;
+    config_lvl_1.approach = lvl_1_approach;
+    config_lvl_1.method = lvl_1_methods(lvl_1_id);
     
     config.disease = disease;
     config.gender = lvl_1_genders(lvl_1_id);
     
-    config.is_clustering = 0;
+    config_lvl_1.is_clustering = 0;
     
-    config.up = get_up_data_path();
+    config_lvl_1.up = get_up_data_path();
     
-    config.suffix = lvl_1_suffixes(lvl_1_id);
+    config_lvl_1.suffix = lvl_1_suffixes(lvl_1_id);
     
-    config.experiment = lvl_1_experiments(lvl_1_id);
+    config_lvl_1.experiment = lvl_1_experiments(lvl_1_id);
     
-    [names, metrics_labels, metrics_map] = lvl_1_condition(config);
+    [names, metrics_labels, metrics_map] = lvl_1_condition(config_lvl_1);
     
     if lvl_1_id == 1 
         intersection_names = names;
@@ -78,48 +80,50 @@ for lvl_1_id = 1:num_lvl_1
     
     all_metrics_labels = horzcat(all_metrics_labels, metrics_labels);
     lvl_1_metrics_map{end + 1} = metrics_map;
-        
+    
+    lvl_1_configs{end + 1} = config_lvl_1;
 end
 
 for lvl_2_id = 1:num_lvl_2
     
-    clearvars config;
+    clearvars config_lvl_2;
     
-    config.data_base = data_base;
-    config.data_type = data_type;
+    config_lvl_2.data_base = data_base;
+    config_lvl_2.data_type = data_type;
     
-    config.cross_reactive = cross_reactive;
-    config.snp = snp;
-    config.chromosome_type = chromosome_type;
+    config_lvl_2.cross_reactive = cross_reactive;
+    config_lvl_2.snp = snp;
+    config_lvl_2.chromosome_type = chromosome_type;
     
-    config.dna_region = dna_region;
+    config_lvl_2.dna_region = dna_region;
     
-    config.info_type = info_type;
+    config_lvl_2.info_type = info_type;
     
-    config.scenario = lvl_2_scenario;
-    config.approach = lvl_2_approach;
-    config.method = lvl_2_methods(lvl_2_id);
+    config_lvl_2.scenario = lvl_2_scenario;
+    config_lvl_2.approach = lvl_2_approach;
+    config_lvl_2.method = lvl_2_methods(lvl_2_id);
     
     config.disease = disease;
     config.gender = lvl_2_genders(lvl_2_id);
     
-    config.is_clustering = 0;
+    config_lvl_2.is_clustering = 0;
     
-    config.up = get_up_data_path();
+    config_lvl_2.up = get_up_data_path();
     
-    config.suffix = lvl_2_suffixes(lvl_2_id);
+    config_lvl_2.suffix = lvl_2_suffixes(lvl_2_id);
     
-    config.experiment = lvl_2_experiments(lvl_2_id);
+    config_lvl_2.experiment = lvl_2_experiments(lvl_2_id);
     
-    [names, metrics_labels, metrics_map] = lvl_2_condition(target_method, config);
+    [names, metrics_labels, metrics_map] = lvl_2_condition(lvl_1_configs{target_lvl_1}, config_lvl_2);
     
     intersection_names = intersect(intersection_names, names);
     
     all_metrics_labels = horzcat(all_metrics_labels, metrics_labels);
     lvl_2_metrics_map{end + 1} = metrics_map;
+
+    lvl_2_configs{end + 1} = config_lvl_2;
     
-    save_config = config;
-        
+    save_config = config_lvl_2;
 end
 
 metrics_data = [];
