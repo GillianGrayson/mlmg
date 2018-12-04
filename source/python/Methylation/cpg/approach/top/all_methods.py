@@ -50,8 +50,8 @@ methods = [
     Method.linreg_ols,
 ]
 method_params = [
-    {'outliers_limit': 0.3,
-     'outliers_sigma': 2.0}
+    {'outliers_limit': 0.8,
+     'outliers_sigma': 3.0}
 ]
 
 is_clustering = False

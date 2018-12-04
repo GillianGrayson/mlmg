@@ -18,7 +18,7 @@ config.info_type = 'result';
 config.scenario = 'approach';
 config.approach = 'top';
 config.method = 'linreg_ols';
-config.suffix = '_outliers_limit(0.3)_outliers_sigma_(2.0)';
+config.suffix = '_outliers_limit(0.8)_outliers_sigma_(3.0)';
 
 config.disease = 'any';
 config.gender = 'versus';

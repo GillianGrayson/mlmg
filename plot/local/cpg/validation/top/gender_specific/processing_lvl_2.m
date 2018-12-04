@@ -22,7 +22,7 @@ config_lvl_1.info_type = 'result';
 config_lvl_1.scenario = 'approach';
 config_lvl_1.approach = 'top';
 config_lvl_1.method = 'linreg_ols';
-config_lvl_1.suffix = '_outliers_limit(0.3)_outliers_sigma_(2.0)';
+config_lvl_1.suffix = '_outliers_limit(0.8)_outliers_sigma_(3.0)';
 
 config_lvl_1.disease = 'any';
 config_lvl_1.gender = 'versus';
