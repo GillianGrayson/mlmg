@@ -25,6 +25,11 @@ approach = Approach.clock
 methods = [
     Method.linreg_mult,
 ]
+method_params = [
+    {'all_exog' : False,
+     'num_exog': 10,
+     'num_comb_exog': 3}
+]
 
 scenario_lvl_1 = Scenario.approach
 approach_lvl_1 = Approach.top
@@ -105,7 +110,9 @@ for data_base in data_bases:
                         is_clustering=is_clustering,
 
                         attributes_types=attributes_types,
-                        attribute_target=attribute_target
+                        attribute_target=attribute_target,
+
+                        method_params = method_params[methods.index(method)]
                     )
 
                     clock_proc(config_lvl_2, config_lvl_1)
