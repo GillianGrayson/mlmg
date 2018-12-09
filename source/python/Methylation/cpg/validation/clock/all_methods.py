@@ -18,7 +18,7 @@ chromosome_type = ChromosomeType.non_gender
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.any, Gender.F, Gender.M]
+genders = [Gender.M]
 
 scenario = Scenario.validation
 approach = Approach.clock
@@ -27,8 +27,8 @@ methods = [
 ]
 method_params = [
     {'all_exog' : False,
-     'num_exog': 10,
-     'num_comb_exog': 3}
+     'num_exog' : 10,
+     'num_comb_exog' : 5}
 ]
 
 scenario_lvl_1 = Scenario.approach

@@ -22,14 +22,21 @@ def build_clock(clock):
     num_exog = clock.num_exog
     num_comb_exog = clock.num_comb_exog
 
-    beta_values_comb = combinations(beta_values_all, num_comb_exog)
+    if num_comb_exog > num_exog:
+        num_comb_exog = num_exog
+
+    exog_ids_all = combinations(list(range(0, num_exog)), num_comb_exog)
 
     R2_best = 0
     r_best = 0
     evs_best = 0
-    mae_best = 0
+    mae_best = max(attributes)
 
-    for beta_values in beta_values_comb:
+    num_comb = 0
+    for exog_ids in exog_ids_all:
+        num_comb += 1
+
+        beta_values = [beta_values_all[exog_id] for exog_id in list(exog_ids)]
 
         reg_res = linreg_mult(attributes, beta_values)
         rs = ShuffleSplit(num_bootstrap_runs, test_size, train_size)
@@ -69,6 +76,8 @@ def build_clock(clock):
             evs_best = evs_test
             mae_best = mae_test
 
+        print('num_comb: ' + str(num_comb))
+
     metrics_dict['R2'].append(R2_best)
     metrics_dict['r_test'].append(r_best)
     metrics_dict['evs_test'].append(evs_best)
@@ -105,13 +114,13 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
 
     if config_lvl_2.method_params is not None:
         all_exog = config_lvl_2.method_params['all_exog']
-        num_exog = config_lvl_2.method_params['num_exog']
-        num_comb_exog = config_lvl_2.method_params['num_comb_exog']
+        num_exog =  min(train_size, len(cpg_names), config_lvl_2.method_params['num_exog'])
+        num_comb_exog = min(train_size, len(cpg_names), config_lvl_2.method_params['num_comb_exog'])
     else:
         num_exog = min(train_size, len(cpg_names))
         all_exog = True
         num_comb_exog = num_exog
-    suffix = 'all_exog_(' + str(all_exog) \
+    suffix = 'all_exog(' + str(int(all_exog)) \
              + ')_num_exog(' + str(num_exog) \
              + ')_num_comb_exog(' + str(num_comb_exog) + ')'
 
@@ -123,30 +132,30 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
 
             metrics_dict['cpg'].append(cpg_names[exog_id])
             metrics_dict['gene'].append(';'.join(dict_cpg_gene[cpg_names[exog_id]]))
-            metrics_dict['count'].append(exog_id)
+            metrics_dict['count'].append(exog_id + 1)
 
             clock = Clock(endog=attributes,
                           exog=cpg_values[0:exog_id + 1],
                           metrics_dict=metrics_dict,
                           train_size=train_size,
                           test_size=test_size,
-                          num_exog=num_exog,
+                          num_exog=exog_id + 1,
                           num_comb_exog=num_comb_exog)
 
             build_clock(clock)
 
     else:
 
-        exog_id = num_exog
+        exog_id = num_comb_exog - 1
 
         print('exog_id: ' + str(exog_id))
 
         metrics_dict['cpg'].append(cpg_names[exog_id])
         metrics_dict['gene'].append(';'.join(dict_cpg_gene[cpg_names[exog_id]]))
-        metrics_dict['count'].append(exog_id)
+        metrics_dict['count'].append(exog_id + 1)
 
         clock = Clock(endog=attributes,
-                      exog=cpg_values[0:exog_id + 1],
+                      exog=cpg_values[0:num_exog],
                       metrics_dict=metrics_dict,
                       train_size=train_size,
                       test_size=test_size,
@@ -156,7 +165,7 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
         build_clock(clock)
 
     df = pd.DataFrame(metrics_dict)
-    fn = get_result_path(config_lvl_2, 'clock_method(' + config_lvl_1.method.value + ')_.xlsx')
+    fn = get_result_path(config_lvl_2, 'clock_method(' + config_lvl_1.method.value + ')_' + suffix + '.xlsx')
     writer = pd.ExcelWriter(fn, engine='xlsxwriter')
     df.to_excel(writer, index=False)
     writer.save()

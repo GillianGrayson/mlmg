@@ -147,7 +147,45 @@ if strcmp(config.gender, 'versus')
 elseif strcmp(config.gender, 'any')
     [names, data] = get_gender_neutral_data(config);
     
-    if config.experiment == 6
+    if config.experiment == 3
+        
+        if strcmp(config.method, 'linreg_ols')
+            
+            slopes = data(:, 3);
+            slope_pvals = data(:, 7);
+            metrics_labels = ["slope", "slope_pvals"];
+            passed_names = strings(size(names, 1), 1);
+            num_names = 0;
+            metrics_map = containers.Map();
+            for id = 1:size(names)
+                num_names = num_names + 1;
+                passed_names(num_names) = names(id);
+                metrics_map(string(names(id))) = [slopes(id), slope_pvals(id)];
+            end
+            passed_names = passed_names(1:num_names, :);
+            
+        end
+        
+    elseif config.experiment == 4
+        
+        if strcmp(config.method, 'linreg_ols')
+            
+            slopes = data(:, 3);
+            slope_pvals = data(:, 7);
+            metrics_labels = ["slope", "slope_pvals"];
+            passed_names = strings(size(names, 1), 1);
+            num_names = 0;
+            metrics_map = containers.Map();
+            for id = 1:size(names)
+                num_names = num_names + 1;
+                passed_names(num_names) = names(id);
+                metrics_map(string(names(id))) = [slopes(id), slope_pvals(id)];
+            end
+            passed_names = passed_names(1:num_names, :);
+
+        end
+    
+    elseif config.experiment == 6
         if strcmp(config.method, 'linreg_variance_ols')
             slopes = data(:, 3);
             slopes_var = data(:, 10);

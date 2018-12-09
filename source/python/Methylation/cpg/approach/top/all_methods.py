@@ -4,7 +4,6 @@ from infrastructure.load.top import *
 from cpg.approach.top.enet.top import save_top_enet
 from cpg.approach.top.linreg.top import save_top_linreg
 from cpg.approach.top.linreg_ols.top import save_top_linreg_ols
-from cpg.approach.top.linreg_ols_wo_outliers.top import save_top_linreg_ols_wo_outliers
 from cpg.approach.top.linreg_variance_ols.top import save_top_linreg_variance_ols
 from cpg.approach.top.anova.top import save_top_anova
 from cpg.approach.top.anova_statsmodels.top import save_top_anova_statsmodels
@@ -27,8 +26,6 @@ def top_proc(config):
         save_top_moment(config)
     elif config.method is Method.linreg_ols:
         save_top_linreg_ols(config)
-    elif config.method is Method.linreg_ols_wo_outliers:
-        save_top_linreg_ols_wo_outliers(config)
     elif config.method is Method.linreg_variance_ols:
         save_top_linreg_variance_ols(config)
 
@@ -42,7 +39,7 @@ chromosome_type = ChromosomeType.non_gender
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.M, Gender.F]
+genders = [Gender.any, Gender.M, Gender.F]
 
 scenario = Scenario.approach
 approach = Approach.top
@@ -50,8 +47,8 @@ methods = [
     Method.linreg_ols,
 ]
 method_params = [
-    {'outliers_limit': 0.8,
-     'outliers_sigma': 3.0}
+    {'outliers_limit': 0.0,
+     'outliers_sigma': 0.0}
 ]
 
 is_clustering = False
