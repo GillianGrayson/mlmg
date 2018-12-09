@@ -2,6 +2,7 @@ from config.config import *
 from config.types.attributes.common import Disease, Gender
 from infrastructure.load.top import *
 from cpg.validation.clock.linreg_mult.clock import *
+from config.types.auxiliary import *
 
 
 def clock_proc(config_lvl_2, config_lvl_1):
@@ -18,7 +19,7 @@ chromosome_type = ChromosomeType.non_gender
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.M]
+genders = [Gender.F]
 
 scenario = Scenario.validation
 approach = Approach.clock
@@ -26,9 +27,9 @@ methods = [
     Method.linreg_mult,
 ]
 method_params = [
-    {'all_exog' : False,
-     'num_exog' : 10,
-     'num_comb_exog' : 5}
+    {'exog_type' : ClockExogType.slide,
+     'exog_num' : 30,
+     'exog_num_comb' : 3}
 ]
 
 scenario_lvl_1 = Scenario.approach

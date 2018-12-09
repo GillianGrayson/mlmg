@@ -9,6 +9,7 @@ from infrastructure.load.top import load_top_dict
 from method.linreg_mult.routines import *
 from cpg.validation.clock.clock import *
 from itertools import combinations
+from config.types.auxiliary import *
 import pandas as pd
 
 
@@ -113,20 +114,20 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
         metrics_dict[key] = []
 
     if config_lvl_2.method_params is not None:
-        all_exog = config_lvl_2.method_params['all_exog']
-        num_exog =  min(train_size, len(cpg_names), config_lvl_2.method_params['num_exog'])
-        num_comb_exog = min(train_size, len(cpg_names), config_lvl_2.method_params['num_comb_exog'])
+        exog_type = config_lvl_2.method_params['exog_type']
+        exog_num =  min(train_size, len(cpg_names), config_lvl_2.method_params['exog_num'])
+        exog_num_comb = min(train_size, len(cpg_names), config_lvl_2.method_params['exog_num_comb'])
     else:
-        num_exog = min(train_size, len(cpg_names))
-        all_exog = True
-        num_comb_exog = num_exog
-    suffix = 'all_exog(' + str(int(all_exog)) \
-             + ')_num_exog(' + str(num_exog) \
-             + ')_num_comb_exog(' + str(num_comb_exog) + ')'
+        exog_num = min(train_size, len(cpg_names))
+        exog_type = ClockExogType.all
+        exog_num_comb = exog_num
+    suffix = 'exog_type(' + exog_type.value \
+             + ')_exog_num(' + str(exog_num) \
+             + ')_exog_num_comb(' + str(exog_num_comb) + ')'
 
-    if all_exog:
+    if exog_type is ClockExogType.all:
 
-        for exog_id in range(0, num_exog):
+        for exog_id in range(0, exog_num):
 
             print('exog_id: ' + str(exog_id))
 
@@ -140,29 +141,49 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
                           train_size=train_size,
                           test_size=test_size,
                           num_exog=exog_id + 1,
-                          num_comb_exog=num_comb_exog)
+                          num_comb_exog=exog_num_comb)
 
             build_clock(clock)
 
-    else:
+    elif exog_type is ClockExogType.single:
+        print('exog_num: ' + str(exog_num))
+        print('exog_num_comb: ' + str(exog_num_comb))
 
-        exog_id = num_comb_exog - 1
-
-        print('exog_id: ' + str(exog_id))
-
-        metrics_dict['cpg'].append(cpg_names[exog_id])
-        metrics_dict['gene'].append(';'.join(dict_cpg_gene[cpg_names[exog_id]]))
-        metrics_dict['count'].append(exog_id + 1)
+        metrics_dict['cpg'].append(exog_num_comb)
+        metrics_dict['gene'].append(exog_num_comb)
+        metrics_dict['count'].append(exog_num_comb)
 
         clock = Clock(endog=attributes,
-                      exog=cpg_values[0:num_exog],
+                      exog=cpg_values[0:exog_num],
                       metrics_dict=metrics_dict,
                       train_size=train_size,
                       test_size=test_size,
-                      num_exog=num_exog,
-                      num_comb_exog=num_comb_exog)
+                      num_exog=exog_num,
+                      num_comb_exog=exog_num_comb)
 
         build_clock(clock)
+
+    elif exog_type is ClockExogType.slide:
+        print('exog_num: ' + str(exog_num))
+        print('exog_num_comb: ' + str(exog_num_comb))
+
+        for exog_id in range(0, exog_num, exog_num_comb):
+
+            print('exog_id: ' + str(exog_id))
+
+            metrics_dict['cpg'].append(exog_id)
+            metrics_dict['gene'].append(exog_id)
+            metrics_dict['count'].append(exog_num_comb)
+
+            clock = Clock(endog=attributes,
+                          exog=cpg_values[exog_id : exog_id + exog_num_comb],
+                          metrics_dict=metrics_dict,
+                          train_size=train_size,
+                          test_size=test_size,
+                          num_exog=exog_num_comb,
+                          num_comb_exog=exog_num_comb)
+
+            build_clock(clock)
 
     df = pd.DataFrame(metrics_dict)
     fn = get_result_path(config_lvl_2, 'clock_method(' + config_lvl_1.method.value + ')_' + suffix + '.xlsx')
