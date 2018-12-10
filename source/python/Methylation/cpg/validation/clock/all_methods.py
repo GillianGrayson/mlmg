@@ -29,7 +29,7 @@ methods = [
 method_params = [
     {'exog_type' : ClockExogType.slide,
      'exog_num' : 30,
-     'exog_num_comb' : 3}
+     'exog_num_comb' : 1}
 ]
 
 scenario_lvl_1 = Scenario.approach
