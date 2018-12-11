@@ -1,7 +1,7 @@
 clear all;
 
 % ======== config ========
-config.data_base = 'GSE87571';
+config.data_base = 'liver';
 config.data_type = 'attributes';
 config.color = '';
 config.edge_alpha = 0.5;

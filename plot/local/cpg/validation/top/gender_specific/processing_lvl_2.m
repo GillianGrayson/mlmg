@@ -8,7 +8,7 @@ config_lvl_1.metrics_diff_direction = 'ascend';
 config_lvl_1.part = 0.0005;
 
 % ======== config ========
-config_lvl_1.data_base = 'GSE87571';
+config_lvl_1.data_base = 'liver';
 config_lvl_1.data_type = 'cpg_data';
 
 config_lvl_1.cross_reactive = 'cross_reactive_excluded';
@@ -22,7 +22,7 @@ config_lvl_1.info_type = 'result';
 config_lvl_1.scenario = 'approach';
 config_lvl_1.approach = 'top';
 config_lvl_1.method = 'linreg_ols';
-config_lvl_1.suffix = '_outliers_limit(0.8)_outliers_sigma_(3.0)';
+config_lvl_1.suffix = '_outliers_limit(0.0)_outliers_sigma_(0.0)';
 
 config_lvl_1.disease = 'any';
 config_lvl_1.gender = 'versus';

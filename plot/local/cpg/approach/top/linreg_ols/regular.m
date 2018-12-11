@@ -1,10 +1,11 @@
 clear all;
 
 cpgs = string(importdata('cpgs.txt'));
-prefix = 'class_3_';
+prefix = 'best_';
+config.is_plot_regions = 0;
 
 % ======== config ========
-config.data_base = 'GSE87571';
+config.data_base = 'liver';
 config.data_type = 'cpg_data';
 
 config.cross_reactive = 'cross_reactive_excluded';
@@ -18,7 +19,7 @@ config.info_type = 'result';
 config.scenario = 'approach';
 config.approach = 'top';
 config.method = 'linreg_ols';
-config.suffix = '_outliers_limit(0.0)_outliers_sigma_(0.0)';
+config.suffix = '_outliers_limit(0.0)_outliers_sigma(0.0)';
 
 config.disease = 'any';
 config.gender = 'versus';
@@ -68,6 +69,9 @@ for cpg_id = 1:size(cpgs, 1)
     b = gca;
     legend(b,'off');
     yl = ylim;
+     if yl(1) < 0 && yl(2) > 1
+       ylim([0, 1]); 
+    end
     if yl(1) < 0
        ylim([0, yl(2)]); 
     end

@@ -205,3 +205,12 @@ def metric_processing(method, metric):
         return -math.log10(float(metric))
     else:
         return float(metric)
+
+def get_method_suffix(params_dict):
+    fn = ''
+    params_keys = list(params_dict.keys())
+    if len(params_keys) > 0:
+        params_keys.sort()
+        for key in params_keys:
+            fn += '_' + key + '(' + str(params_dict[key]) + ')'
+    return fn

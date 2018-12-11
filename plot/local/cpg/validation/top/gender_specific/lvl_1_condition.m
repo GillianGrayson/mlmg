@@ -110,11 +110,9 @@ if strcmp(config.gender, 'versus')
             num_names = 1;
             metrics_map = containers.Map();
             for id = 1:size(names)
-                if slopes_1(id) < sigma * slopes_1_std(id) && slopes_2(id) < sigma * slopes_2_std(id)
-                    passed_names(num_names) = names(id);
-                    metrics_map(string(names(id))) = [slopes_1(id), slopes_2(id)];
-                    num_names = num_names + 1;
-                end
+                passed_names(num_names) = names(id);
+                metrics_map(string(names(id))) = [slopes_1(id), slopes_2(id)];
+                num_names = num_names + 1;
             end
             num_names = num_names - 1;
             
