@@ -124,7 +124,11 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
         cpg_names_tmp = list(df['names'])
     else:
         keys = ['cpg'] + get_method_metrics(config_lvl_1.method)
-        top_dict = load_top_dict(config_lvl_1, keys)
+
+        suffix = get_method_suffix(config_lvl_1.method_params)
+        fn = 'top' + suffix + '.txt'
+
+        top_dict = load_top_dict(config_lvl_1, keys, fn=fn)
         cpg_names_tmp = top_dict['cpg']
 
     cpg_names = []
@@ -133,6 +137,8 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
         if cpg in approved_cpgs:
             cpg_names.append(cpg)
             cpg_values.append(dict_cpg_data[cpg])
+            if len(cpg_names) >= train_size:
+                break
 
     keys = ['cpg', 'gene'] + get_method_order_metrics(config_lvl_2.method) + ['summary']
     metrics_dict = {}
@@ -147,6 +153,7 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
         exog_num = min(train_size, len(cpg_names))
         exog_type = ClockExogType.all
         exog_num_comb = exog_num
+
     suffix = 'exog_type(' + exog_type.value \
              + ')_exog_num(' + str(exog_num) \
              + ')_exog_num_comb(' + str(exog_num_comb) + ')'

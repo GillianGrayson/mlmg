@@ -29,7 +29,7 @@ def top_proc(config):
     elif config.method is Method.linreg_variance_ols:
         save_top_linreg_variance_ols(config)
 
-data_bases = [DataBase.GSE87571]
+data_bases = [DataBase.liver]
 data_type = DataType.cpg
 
 cross_reactives = [CrossReactiveType.cross_reactive_excluded]

@@ -74,6 +74,7 @@ plot_data.line_y_down = y_down;
 plot_data.line_y_up = y_up;
 plot_data.line_name = sprintf('%s: %s', cpg, config.gender);
 plot_data.color = config.color;
+plot_data.is_plot_regions = config.is_plot_regions;
 
 plot_linreg_ols(plot_data)
 

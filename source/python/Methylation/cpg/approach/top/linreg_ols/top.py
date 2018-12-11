@@ -22,7 +22,6 @@ def save_top_linreg_ols(config):
     else:
         outliers_limit = 0.0
         outliers_sigma = 0.0
-    suffix = 'outliers_limit(' + str(outliers_limit) + ')_outliers_sigma_(' + str(outliers_sigma) + ')'
 
     cpg_names_passed = []
     R2s = []
@@ -129,7 +128,9 @@ def save_top_linreg_ols(config):
             clusters_affinity_prop,
         ]
 
-    fn = 'top_' + suffix + '.txt'
+    suffix = get_method_suffix(config.method_params)
+
+    fn = 'top' + suffix + '.txt'
     fn = get_result_path(config, fn)
     save_features(fn, features)
 
@@ -141,7 +142,7 @@ def save_top_linreg_ols(config):
         features_dict['mean_shift'] = clusters_mean_shift
         features_dict['affinity_prop'] = clusters_affinity_prop
     df = pd.DataFrame(features_dict)
-    file_xls = 'top_' + suffix + '.xlsx'
+    file_xls = 'top' + suffix + '.xlsx'
     file_xls = get_result_path(config, file_xls)
     writer = pd.ExcelWriter(file_xls, engine='xlsxwriter')
     df.to_excel(writer, index=False)
@@ -214,7 +215,7 @@ def save_top_linreg_ols(config):
             clusters_affinity_prop_genes,
         ]
 
-    fn = 'top_' + suffix + '.txt'
+    fn = 'top' + suffix + '.txt'
     fn = get_result_path(config, fn)
     save_features(fn, features)
 
@@ -226,7 +227,7 @@ def save_top_linreg_ols(config):
         features_dict['mean_shift'] = clusters_mean_shift_genes
         features_dict['affinity_prop'] = clusters_affinity_prop_genes
     df = pd.DataFrame(features_dict)
-    file_xls = 'top_' + suffix + '.xlsx'
+    file_xls = 'top' + suffix + '.xlsx'
     file_xls = get_result_path(config, file_xls)
     writer = pd.ExcelWriter(file_xls, engine='xlsxwriter')
     df.to_excel(writer, index=False)
