@@ -21,17 +21,17 @@ lvl_1_genders = ["versus", "any"];
 
 lvl_1_scenario = 'approach';
 lvl_1_approach = 'top';
-lvl_1_methods = ["linreg_variance_ols", "linreg_variance_ols"];
-lvl_1_suffixes = ["", ""];
-lvl_1_experiments = [6, 6];
+lvl_1_methods = ["linreg_ols", "linreg_ols"];
+lvl_1_suffixes = ["_outliers_limit(0.0)_outliers_sigma_(0.0)", "_outliers_limit(0.0)_outliers_sigma_(0.0)"];
+lvl_1_experiments = [3, 3];
 
 lvl_2_genders = ["versus"];
 
 lvl_2_scenario = 'validation';
 lvl_2_approach = 'top';
 lvl_2_methods = ["gender_specific"];
-lvl_2_suffixes = ["_outliers_limit(0.3)_outliers_sigma_(2.0)"];
-lvl_2_experiments = [5];
+lvl_2_suffixes = ["_outliers_limit(0.0)_outliers_sigma_(0.0)"];
+lvl_2_experiments = [3];
 
 all_metrics_labels = [];
 intersection_names = [];
@@ -59,8 +59,8 @@ for lvl_1_id = 1:num_lvl_1
     config_lvl_1.approach = lvl_1_approach;
     config_lvl_1.method = lvl_1_methods(lvl_1_id);
     
-    config.disease = disease;
-    config.gender = lvl_1_genders(lvl_1_id);
+    config_lvl_1.disease = disease;
+    config_lvl_1.gender = lvl_1_genders(lvl_1_id);
     
     config_lvl_1.is_clustering = 0;
     
@@ -103,8 +103,8 @@ for lvl_2_id = 1:num_lvl_2
     config_lvl_2.approach = lvl_2_approach;
     config_lvl_2.method = lvl_2_methods(lvl_2_id);
     
-    config.disease = disease;
-    config.gender = lvl_2_genders(lvl_2_id);
+    config_lvl_2.disease = disease;
+    config_lvl_2.gender = lvl_2_genders(lvl_2_id);
     
     config_lvl_2.is_clustering = 0;
     

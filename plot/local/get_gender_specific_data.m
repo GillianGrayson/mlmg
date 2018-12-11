@@ -49,9 +49,9 @@ for id_1 = 1:size(names_1, 1)
         all_data_1(num_names, :) = data_1_curr;
         all_data_2(num_names, :) = data_2_curr;
         num_names = num_names + 1;
-        if mod(id_1, 1000) == 0
-            id_1 = id_1
-        end
+    end
+    if mod(id_1, 1000) == 0
+        id_1 = id_1
     end
 end
 num_names = num_names - 1;

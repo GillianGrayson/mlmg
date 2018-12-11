@@ -1,7 +1,7 @@
 clear all;
 
 cpgs = string(importdata('cpgs.txt'));
-prefix = 'class_5_';
+prefix = 'class_3_';
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -18,7 +18,7 @@ config.info_type = 'result';
 config.scenario = 'approach';
 config.approach = 'top';
 config.method = 'linreg_ols';
-config.suffix = '_outliers_limit(0.3)_outliers_sigma_(2.0)';
+config.suffix = '_outliers_limit(0.0)_outliers_sigma_(0.0)';
 
 config.disease = 'any';
 config.gender = 'versus';

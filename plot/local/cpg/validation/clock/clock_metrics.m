@@ -14,7 +14,7 @@ dna_region = "genic";
 info_type = "result";
 
 disease = "any";
-gender = "versus";
+gender = "any";
 
 lvl_1_scenario = "approach";
 lvl_1_approach = "top";
@@ -24,7 +24,7 @@ lvl_1_suffix = "";
 lvl_2_scenario = "validation";
 lvl_2_approach = "clock";
 lvl_2_method = "linreg_mult";
-lvl_2_suffix = "";
+lvl_2_suffix = "_all_exog(1)_num_exog(100)_num_comb_exog(100)";
 
 % ======== config_lvl_1 ========
 config_lvl_1.data_base = data_base;
