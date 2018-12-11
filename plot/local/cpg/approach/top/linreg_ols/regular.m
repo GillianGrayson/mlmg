@@ -1,11 +1,11 @@
 clear all;
 
 cpgs = string(importdata('cpgs.txt'));
-prefix = 'best_';
-config.is_plot_regions = 0;
+prefix = 'class_3_';
+config.is_plot_regions = 1;
 
 % ======== config ========
-config.data_base = 'liver';
+config.data_base = 'GSE87571';
 config.data_type = 'cpg_data';
 
 config.cross_reactive = 'cross_reactive_excluded';

@@ -154,9 +154,9 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
         exog_type = ClockExogType.all
         exog_num_comb = exog_num
 
-    suffix = 'exog_type(' + exog_type.value \
-             + ')_exog_num(' + str(exog_num) \
-             + ')_exog_num_comb(' + str(exog_num_comb) + ')'
+    suffix = 'type(' + exog_type.value \
+             + ')_num(' + str(exog_num) \
+             + ')_num_comb(' + str(exog_num_comb) + ')'
 
     if exog_type is ClockExogType.all:
 
