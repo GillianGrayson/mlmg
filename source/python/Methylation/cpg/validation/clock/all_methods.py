@@ -9,7 +9,7 @@ def clock_proc(config_lvl_2, config_lvl_1):
     if config_lvl_2.method is Method.linreg_mult:
         clock_linreg_mult(config_lvl_2, config_lvl_1)
 
-data_bases = [DataBase.liver]
+data_bases = [DataBase.GSE87571]
 data_type = DataType.cpg
 
 cross_reactives = [CrossReactiveType.cross_reactive_excluded]
@@ -19,7 +19,7 @@ chromosome_type = ChromosomeType.non_gender
 dna_region = DNARegionType.genic
 
 disease = Disease.any
-genders = [Gender.M, Gender.F, Gender.any]
+genders = [Gender.F, Gender.M, Gender.any]
 
 scenario = Scenario.validation
 approach = Approach.clock
@@ -34,7 +34,7 @@ method_params = [
 
 scenario_lvl_1 = Scenario.approach
 approach_lvl_1 = Approach.top
-method_lvl_1 = Method.linreg_ols
+method_lvl_1 = Method.custom
 lvl_1_method_params = {'outliers_limit': 0.0,
                        'outliers_sigma': 0.0}
 

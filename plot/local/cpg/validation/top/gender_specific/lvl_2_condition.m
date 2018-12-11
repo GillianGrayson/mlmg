@@ -53,14 +53,15 @@ elseif config_lvl_2.experiment == 3
     if strcmp(config_lvl_1.method, 'linreg_ols')
         
         names = raw(2:end, 1);
+        area_intersection_rel = cell2mat(raw(2:end, 3));
         slope_intersection = cell2mat(raw(2:end, 5));
-        metrics_labels = [raw(1, 5)];
+        metrics_labels = [raw(1, 3), raw(1, 5)];
         passed_names = [];
         metrics_map = containers.Map();
         for id = 1:size(names)
-            if slope_intersection(id) < 0.5
+            if area_intersection_rel(id) < 0.5 && slope_intersection(id) < 0.5
                 passed_names = vertcat(passed_names, names(id));
-                metrics_map(string(names(id))) = slope_intersection(id);
+                metrics_map(string(names(id))) = [area_intersection_rel(id), slope_intersection(id)];
             end
         end
         
