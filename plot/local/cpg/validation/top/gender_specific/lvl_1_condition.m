@@ -140,6 +140,30 @@ if strcmp(config.gender, 'versus')
             num_names = num_names - 1;
             passed_names = passed_names(1:num_names, :);
         end
+    elseif config.experiment == 7
+        
+        if strcmp(config.method, 'linreg_variance_ols')
+            
+            allowed_slopes_var_diff = 0.0005;
+            slopes_1 = data_1(:, 3);
+            slopes_2 = data_2(:, 3);
+            slope_var_1 = data_1(:, 10);
+            slope_var_2 = data_2(:, 10);
+            metrics_labels = ["slope_f", "slope_m", "slope_var_f", "slope_var_m", "slope_var_diff"];
+            passed_names = strings(size(names, 1), 1);
+            num_names = 1;
+            metrics_map = containers.Map();
+            for id = 1:size(names)
+                if abs(slope_var_1(id)) > allowed_slopes_var_diff || abs(slope_var_2(id)) > allowed_slopes_var_diff
+                    slope_var_diff = abs(slope_var_1(id) - slope_var_2(id));
+                    passed_names(num_names) = names(id);
+                    metrics_map(string(names(id))) = [slopes_1(id), slopes_2(id), slope_var_1(id), slope_var_2(id), slope_var_diff];
+                    num_names = num_names + 1;
+                end
+            end
+            num_names = num_names - 1;
+            passed_names = passed_names(1:num_names, :);
+        end
     end
     
 elseif strcmp(config.gender, 'any')

@@ -110,7 +110,7 @@ elseif config_lvl_2.experiment == 5
     
 elseif config_lvl_2.experiment == 6
     
-    if strcmp(method, 'linreg_variance_ols')
+    if strcmp(config_lvl_1.method, 'linreg_variance_ols')
         names = raw(2:end, 1);
         slope_intersection = cell2mat(raw(2:end, 5));
         slope_intersection_var = cell2mat(raw(2:end, 9));
@@ -126,6 +126,27 @@ elseif config_lvl_2.experiment == 6
         num_names = num_names - 1;
         passed_names = passed_names(1:num_names, :);
     end
+    
+elseif config_lvl_2.experiment == 7
+    
+    if strcmp(config_lvl_1.method, 'linreg_variance_ols')
+        names = raw(2:end, 1);
+        variance = cell2mat(raw(2:end, 4));
+        slope_intersection = cell2mat(raw(2:end, 5));
+        slope_intersection_var = cell2mat(raw(2:end, 9));
+        metrics_labels = [raw(1, 4), raw(1, 5), raw(1, 9)];
+        passed_names = strings(size(names, 1), 1);
+        num_names = 1;
+        metrics_map = containers.Map();
+        for id = 1:size(names)
+            passed_names(num_names) = names(id);
+            metrics_map(string(names(id))) = [variance(id), slope_intersection(id), slope_intersection_var(id)];
+            num_names = num_names + 1;
+        end
+        num_names = num_names - 1;
+        passed_names = passed_names(1:num_names, :);
+    end
+
     
 end
 
