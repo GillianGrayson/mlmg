@@ -27,9 +27,9 @@ methods = [
     Method.linreg_mult,
 ]
 method_params = [
-    {'exog_type' : ClockExogType.slide,
-     'exog_num' : 30,
-     'exog_num_comb' : 1}
+    {'exog_type' : ClockExogType.all,
+     'exog_num' : 100,
+     'exog_num_comb' : 100}
 ]
 
 scenario_lvl_1 = Scenario.approach

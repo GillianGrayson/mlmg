@@ -96,7 +96,7 @@ elseif config_lvl_2.experiment == 5
         num_names = 1;
         metrics_map = containers.Map();
         for id = 1:size(names)
-            if area_intersection_rel(id) < 0.5 && variance(id) > 2.0
+            if area_intersection_rel(id) < 0.5 && variance(id) > 3.0
                 passed_names(num_names) = names(id);
                 metrics_map(string(names(id))) = [area_intersection_rel(id), variance(id)];
                 num_names = num_names + 1;
