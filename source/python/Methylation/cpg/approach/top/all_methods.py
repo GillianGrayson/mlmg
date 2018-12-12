@@ -9,6 +9,7 @@ from cpg.approach.top.anova.top import save_top_anova
 from cpg.approach.top.anova_statsmodels.top import save_top_anova_statsmodels
 from cpg.approach.top.spearman.top import save_top_spearman
 from cpg.approach.top.moment.top import save_top_moment
+from cpg.approach.top.cluster_DBSCAN.top import save_top_cluster_DBSCAN
 
 
 def top_proc(config):
@@ -28,8 +29,10 @@ def top_proc(config):
         save_top_linreg_ols(config)
     elif config.method is Method.linreg_variance_ols:
         save_top_linreg_variance_ols(config)
+    elif config.method is Method.cluster_DBSCAN:
+        save_top_cluster_DBSCAN(config)
 
-data_bases = [DataBase.liver]
+data_bases = [DataBase.GSE87571]
 data_type = DataType.cpg
 
 cross_reactives = [CrossReactiveType.cross_reactive_excluded]
@@ -44,12 +47,9 @@ genders = [Gender.any, Gender.M, Gender.F]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_variance_ols,
+    Method.cluster_DBSCAN,
 ]
-method_params = [
-    {'outliers_limit': 0.0,
-     'outliers_sigma': 0.0}
-]
+method_params = [{}]
 
 is_clustering = False
 

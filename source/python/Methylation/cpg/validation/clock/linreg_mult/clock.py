@@ -43,11 +43,13 @@ def build_clock(clock):
         num_comb += 1
 
         exog_dict = {}
+        exog_arg_list = ['const']
         for exog_id in list(exog_ids):
             exog_dict[exog_names[exog_id]] = exog_data[exog_id]
+            exog_arg_list += [exog_names[exog_id]]
         exog_df = pd.DataFrame(exog_dict)
         exog_df['const'] = 1
-        exog_arg_list = ['const'] + exog_names
+
 
         reg_res = sm.OLS(endog=endog_df[endog_name], exog=exog_df[exog_arg_list]).fit()
 
@@ -177,6 +179,27 @@ def clock_linreg_mult(config_lvl_2, config_lvl_1):
                           test_size=test_size,
                           exog_num=exog_id + 1,
                           exog_num_comb=exog_num_comb)
+
+            build_clock(clock)
+
+    elif exog_type is ClockExogType.deep:
+
+        for exog_id in range(0, exog_num):
+            print('exog_id: ' + str(exog_id))
+
+            metrics_dict['cpg'].append(exog_id + 1)
+            metrics_dict['gene'].append(exog_id + 1)
+            metrics_dict['count'].append(exog_id + 1)
+
+            clock = Clock(endog_data=attributes,
+                          endog_names='age',
+                          exog_data=cpg_values[0:exog_num + 1],
+                          exog_names=cpg_names[0:exog_num + 1],
+                          metrics_dict=metrics_dict,
+                          train_size=train_size,
+                          test_size=test_size,
+                          exog_num=exog_num,
+                          exog_num_comb=exog_id + 1)
 
             build_clock(clock)
 

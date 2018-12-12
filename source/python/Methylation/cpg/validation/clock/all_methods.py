@@ -28,8 +28,8 @@ methods = [
 ]
 method_params = [
     {'exog_type' : ClockExogType.all,
-     'exog_num' : 100,
-     'exog_num_comb' : 100}
+     'exog_num' : 15,
+     'exog_num_comb' : 15}
 ]
 
 scenario_lvl_1 = Scenario.approach
