@@ -1,6 +1,7 @@
 clear all;
 
 cpgs = string(importdata('cpgs.txt'));
+config.is_plot_regions = 1;
 
 % ======== config ========
 config.data_base = 'GSE87571';
@@ -39,10 +40,25 @@ for cpg_id = 1:size(cpgs, 1)
     genes = unique(genes);
     genes = strjoin(genes, ';');
     
+    if strcmp(getenv('computername'), 'MSI')
+        up_save = 'C:/Users/user/Google Drive/mlmg/figures';
+    elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS')
+        up_save = 'D:/Aaron/Bio/mlmg/figures';
+    else
+        up_save = 'C:/Users/user/Google Drive/mlmg/figures';
+    end
+    
+    save_path = sprintf('%s/%s', ...
+        up_save, ...
+        get_result_path(config));
+    mkdir(save_path);
+    
+    suffix = sprintf('cpg(%s)', cpg);
+    
     % ======== processing ========
     f = figure;
-    subplot(2,1,1);
     if strcmp(config.gender, 'versus')
+        config.is_plot_regions = 1;
         config.gender = 'F';
         config.color = 'r';
         plot_linreg_ols_cpg(config, cpg)
@@ -66,8 +82,12 @@ for cpg_id = 1:size(cpgs, 1)
     end
     title(sprintf('%s(%s)', cpg, genes), 'FontSize', 16)
     
-    subplot(2,1,2);
+    savefig(f, sprintf('%s/%d_linreg_variance_%s.fig', save_path, cpg_id, suffix))
+    saveas(f, sprintf('%s/%d_linreg_variance_%s.png', save_path, cpg_id, suffix))
+    
+    f = figure;
     if strcmp(config.gender, 'versus')
+        config.is_plot_regions = 0;
         config.gender = 'F';
         config.color = 'r';
         plot_linreg_variance_ols_cpg(config, cpg)
@@ -91,22 +111,7 @@ for cpg_id = 1:size(cpgs, 1)
     end
     title(sprintf('%s(%s)', cpg, genes), 'FontSize', 16)
     
-    if strcmp(getenv('computername'), 'MSI')
-        up_save = 'C:/Users/user/Google Drive/mlmg/figures';
-    elseif strcmp(getenv('computername'), 'DESKTOP-4BEQ7MS')
-        up_save = 'D:/Aaron/Bio/mlmg/figures';
-    else
-        up_save = 'C:/Users/user/Google Drive/mlmg/figures';
-    end
-    
-    save_path = sprintf('%s/%s', ...
-        up_save, ...
-        get_result_path(config));
-    mkdir(save_path);
-    
-    suffix = sprintf('cpg(%s)', cpg);
-    
-    savefig(f, sprintf('%s/%d_linreg_variance_%s.fig', save_path, cpg_id, suffix))
-    saveas(f, sprintf('%s/%d_linreg_variance_%s.png', save_path, cpg_id, suffix))
+    savefig(f, sprintf('%s/%d_linreg_variance_diff_%s.fig', save_path, cpg_id, suffix))
+    saveas(f, sprintf('%s/%d_linreg_variance_diff_%s.png', save_path, cpg_id, suffix))
     
 end

@@ -1,6 +1,6 @@
 clear all;
 
-num_lvl_1 = 2;
+num_lvl_1 = 1;
 num_lvl_2 = 1;
 target_lvl_1 = 1;
 
@@ -17,7 +17,7 @@ info_type = 'result';
 
 disease = 'any';
 
-lvl_1_genders = ["versus", "any"];
+lvl_1_genders = ["versus"];
 
 lvl_1_scenario = 'approach';
 lvl_1_approach = 'top';

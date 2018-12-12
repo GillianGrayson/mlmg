@@ -10,8 +10,9 @@ cpgs = string(top_data.textdata);
 
 intercepts = top_data.data(:, 2);
 slopes = top_data.data(:, 3);
-intercepts_std = top_data.data(:, 4);
-slopes_std = top_data.data(:, 5);
+
+intercepts_var = top_data.data(:, 9);
+slopes_var = top_data.data(:, 10);
 
 indexes = get_attributes_indexes(config);
 ages = get_ages(config);
@@ -45,26 +46,17 @@ sigma = 3;
 
 slope = slopes(cpg_id);
 intercept = intercepts(cpg_id);
-intercept_std = intercepts_std(cpg_id);
-slope_std = slopes_std(cpg_id);
+slope_var = slopes_var(cpg_id);
+intercept_var = intercepts_var(cpg_id);
 
 x_lin = [min(ages), max(ages)];
 y_lin = [slope * x_lin(1) + intercept, slope * x_lin(2) + intercept];
 
-slope_minus = slope - sigma * slope_std;
-intercept_minus = intercept - sigma * intercept_std;
+y1_diff = slope_var * x_lin(1) + intercept_var;
+y2_diff = slope_var * x_lin(2) + intercept_var;
 
-slope_plus = slope + sigma * slope_std;
-intercept_plus = intercept + sigma * intercept_std;
-
-intercept_up = intercept + ((slope_plus * x_lin(2) + intercept_plus) - (slope * x_lin(2) + intercept));
-slope_up = slope;
-
-intercept_down = intercept + ((slope_minus * x_lin(2) + intercept_minus) - (slope * x_lin(2) + intercept));
-slope_down = slope;
-
-y_up = [slope_up * x_lin(1) + intercept_up, slope_up * x_lin(2) + intercept_up];
-y_down = [slope_down * x_lin(1) + intercept_down, slope_down * x_lin(2) + intercept_down];
+y_up = [y_lin(1) + y1_diff, y_lin(2) + y2_diff];
+y_down = [y_lin(1) - y1_diff, y_lin(2) - y2_diff];
 
 plot_data.scatter_x = ages_passed;
 plot_data.scatter_y = cpg_data_passed;
@@ -74,6 +66,7 @@ plot_data.line_y_down = y_down;
 plot_data.line_y_up = y_up;
 plot_data.line_name = sprintf('%s: %s', cpg, config.gender);
 plot_data.color = config.color;
+plot_data.is_plot_regions = config.is_plot_regions;
 
 plot_linreg_ols(plot_data)
 

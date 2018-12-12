@@ -44,7 +44,7 @@ genders = [Gender.any, Gender.M, Gender.F]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_ols,
+    Method.linreg_variance_ols,
 ]
 method_params = [
     {'outliers_limit': 0.0,
