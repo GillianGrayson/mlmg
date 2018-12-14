@@ -16,12 +16,10 @@ def save_top_linreg_ols(config):
     dict_cpg_data = load_dict_cpg_data(config)
     approved_cpgs = get_approved_cpgs(config)
 
-    if config.method_params is not None:
-        outliers_limit = config.method_params['outliers_limit']
-        outliers_sigma = config.method_params['outliers_sigma']
-    else:
-        outliers_limit = 0.0
-        outliers_sigma = 0.0
+    if config.method_params is None:
+        config.method_params = {}
+        config.method_params['outliers_limit'] = 0.0
+        config.method_params['outliers_sigma'] = 0.0
 
     cpg_names_passed = []
     R2s = []
@@ -43,7 +41,7 @@ def save_top_linreg_ols(config):
             x = sm.add_constant(attributes)
             results = sm.OLS(values, x).fit()
 
-            if np.isclose(outliers_limit, 0.0):
+            if np.isclose(config.method_params['outliers_limit'], 0.0):
                 cpg_names_passed.append(cpg)
                 R2s.append(results.rsquared)
                 intercepts.append(results.params[0])
@@ -54,8 +52,8 @@ def save_top_linreg_ols(config):
                 slopes_p_values.append(results.pvalues[1])
                 num_passed += 1
             else:
-                slope_plus = results.params[1] + outliers_sigma * results.bse[1]
-                intercept_plus = results.params[0] + outliers_sigma * results.bse[0]
+                slope_plus = results.params[1] + config.method_params['outliers_sigma'] * results.bse[1]
+                intercept_plus = results.params[0] + config.method_params['outliers_sigma'] * results.bse[0]
 
                 slope = results.params[1]
                 intercept = results.params[0]
@@ -70,7 +68,7 @@ def save_top_linreg_ols(config):
                     if abs(pred_y - curr_y) < max_diff:
                         passed_ids.append(p_id)
 
-                if len(passed_ids) > np.floor(len(values) * outliers_limit):
+                if len(passed_ids) > np.floor(len(values) * config.method_params['outliers_limit']):
 
                     values_good = list(np.array(values)[passed_ids])
                     attributes_good = list(np.array(attributes)[passed_ids])

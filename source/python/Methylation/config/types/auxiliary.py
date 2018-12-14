@@ -10,5 +10,6 @@ class MANOVATest(Enum):
 
 class ClockExogType(Enum):
     all = 'all'
+    deep = 'deep'
     single = 'single'
     slide = 'slide'

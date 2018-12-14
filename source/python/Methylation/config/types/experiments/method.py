@@ -25,6 +25,7 @@ class Method(Enum):
     moment = 'moment'
     classification = 'classification'
     custom = 'custom'
+    cluster_DBSCAN = 'cluster_DBSCAN'
 
 def get_top_fn(method, params_dict):
     fn = 'top.txt'
@@ -53,8 +54,6 @@ def get_method_metrics(method, is_clustering=False):
             'slope',
             'intercept'
         ]
-        if is_clustering:
-            metrics = metrics + clustering_metrics
     elif method is Method.linreg_ols:
         metrics = [
             'R2',
@@ -65,8 +64,6 @@ def get_method_metrics(method, is_clustering=False):
             'intercepts_p_values',
             'slopes_p_values'
         ]
-        if is_clustering:
-            metrics += clustering_metrics
     elif method is Method.linreg_variance_ols:
         metrics = [
             'R2',
@@ -84,8 +81,11 @@ def get_method_metrics(method, is_clustering=False):
             'intercepts_p_values_var',
             'slopes_p_values_var'
         ]
-        if is_clustering:
-            metrics += clustering_metrics
+    elif method is Method.cluster_DBSCAN:
+        metrics = [
+            'estimated_number_of_clusters',
+            'estimated_of_noise_points'
+        ]
     elif method is Method.linreg_with_rejection:
         metrics = [
             'r_value',
@@ -93,8 +93,6 @@ def get_method_metrics(method, is_clustering=False):
             'slope',
             'intercept'
         ]
-        if is_clustering:
-            metrics = metrics + clustering_metrics
     elif method is Method.linreg_with_rejection:
         metrics = [
             'r_value',
@@ -102,8 +100,6 @@ def get_method_metrics(method, is_clustering=False):
             'slope',
             'intercept'
         ]
-        if is_clustering:
-            metrics = metrics + clustering_metrics
     elif method is Method.linreg_bend:
         metrics = [
             'angles',
@@ -142,10 +138,11 @@ def get_method_metrics(method, is_clustering=False):
             'slope_diff',
             'intercept_diff'
         ]
-        if is_clustering:
-            metrics = metrics + clustering_metrics
     elif method is Method.manova:
         metrics = ['pval']
+
+    if is_clustering:
+        metrics = metrics + clustering_metrics
 
     return metrics
 

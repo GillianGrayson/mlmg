@@ -1,6 +1,6 @@
 clear all;
 
-metric = "mae_test";
+metric = "r_test";
 
 data_base = "GSE87571";
 data_type = "cpg_data";
@@ -18,13 +18,13 @@ gender = "versus";
 
 lvl_1_scenario = "approach";
 lvl_1_approach = "top";
-lvl_1_method = "linreg_ols";
+lvl_1_method = "custom";
 lvl_1_suffix = "";
 
 lvl_2_scenario = "validation";
 lvl_2_approach = "clock";
 lvl_2_method = "linreg_mult";
-lvl_2_suffix = "_type(all)_num(100)_num_comb(100)";
+lvl_2_suffix = "_type(all)_num(15)_num_comb(15)";
 
 % ======== config_lvl_1 ========
 config_lvl_1.data_base = data_base;
