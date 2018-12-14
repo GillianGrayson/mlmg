@@ -20,7 +20,7 @@ def save_top_cluster_DBSCAN(config):
 
     if config.method_params is None or not bool(config.method_params):
         config.method_params = {}
-        config.method_params['eps'] = 0.1
+        config.method_params['eps'] = 0.2
         config.method_params['min_samples'] = int(max(1, np.floor(len(attributes) * 0.01)))
 
     cpg_names_passed = []
