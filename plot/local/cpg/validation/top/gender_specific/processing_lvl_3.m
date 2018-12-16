@@ -8,7 +8,7 @@ data_base = 'GSE87571';
 data_type = 'cpg_data';
 
 cross_reactive = 'cross_reactive_excluded';
-snp = 'snp_excluded';
+snp = 'snp_cluster';
 chromosome_type = 'non_gender';
 
 dna_region = 'genic';
@@ -21,17 +21,17 @@ lvl_1_genders = ["versus"];
 
 lvl_1_scenario = 'approach';
 lvl_1_approach = 'top';
-lvl_1_methods = ["linreg_ols", "linreg_ols"];
-lvl_1_suffixes = ["_outliers_limit(0.0)_outliers_sigma(0.0)", "_outliers_limit(0.0)_outliers_sigma(0.0)"];
-lvl_1_experiments = [3, 3];
+lvl_1_methods = ["linreg_variance_ols"];
+lvl_1_suffixes = [""];
+lvl_1_experiments = [7];
 
 lvl_2_genders = ["versus"];
 
 lvl_2_scenario = 'validation';
 lvl_2_approach = 'top';
 lvl_2_methods = ["gender_specific"];
-lvl_2_suffixes = ["_outliers_limit(0.0)_outliers_sigma(0.0)"];
-lvl_2_experiments = [3];
+lvl_2_suffixes = [""];
+lvl_2_experiments = [7];
 
 all_metrics_labels = [];
 intersection_names = [];

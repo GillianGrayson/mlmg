@@ -7,12 +7,13 @@ import numpy as np
 
 def cpg_condition(config, annotation):
     match = False
-    if cross_reactive_condition(config, annotation):
-        if snp_condition(config, annotation):
-            if chromosome_condition(config, annotation):
-                if cpg_name_condition(config, annotation):
-                    if dna_region_condition(config, annotation):
-                        match = True
+    if is_included(config, annotation):
+        if cross_reactive_condition(config, annotation):
+            if snp_condition(config, annotation):
+                if chromosome_condition(config, annotation):
+                    if cpg_name_condition(config, annotation):
+                        if dna_region_condition(config, annotation):
+                            match = True
     return match
 
 
