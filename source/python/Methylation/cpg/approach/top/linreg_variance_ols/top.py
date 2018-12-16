@@ -14,9 +14,10 @@ def save_top_linreg_variance_ols(config):
     attributes = get_attributes(config)
     dict_cpg_gene = get_dict_cpg_gene(config)
     dict_cpg_data = load_dict_cpg_data(config)
-    cpg_names = list(dict_cpg_data.keys())
-    cpg_values = list(dict_cpg_data.values())
     approved_cpgs = get_approved_cpgs(config)
+
+    print('len(dict_cpg_data): ' + str(len(dict_cpg_data)))
+    print('len(approved_cpgs): ' + str(len(approved_cpgs)))
 
     cpg_names_passed = []
 
@@ -36,11 +37,14 @@ def save_top_linreg_variance_ols(config):
     intercepts_p_values_var = []
     slopes_p_values_var = []
 
-    for id in range(0, len(cpg_names)):
-        cpg = cpg_names[id]
-        if cpg in approved_cpgs:
+    num_passed = 0
+
+    for cpg in approved_cpgs:
+
+        if cpg in dict_cpg_data:
+
+            values = dict_cpg_data[cpg]
             cpg_names_passed.append(cpg)
-            values = cpg_values[id]
             x = sm.add_constant(attributes)
             results = sm.OLS(values, x).fit()
             R2s.append(results.rsquared)
@@ -66,9 +70,10 @@ def save_top_linreg_variance_ols(config):
             slopes_std_errors_var.append(results_var.bse[1])
             intercepts_p_values_var.append(results_var.pvalues[0])
             slopes_p_values_var.append(results_var.pvalues[1])
+            num_passed += 1
 
-        if id % config.print_rate == 0:
-            print('cpg_id: ' + str(id))
+        if num_passed % config.print_rate == 0:
+            print('cpg_id: ' + str(num_passed))
 
     order = np.argsort(list(map(abs, R2s)))[::-1]
     cpgs_sorted = list(np.array(cpg_names_passed)[order])

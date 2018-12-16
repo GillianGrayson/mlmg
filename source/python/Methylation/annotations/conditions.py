@@ -35,7 +35,7 @@ def snp_condition(config, annotation):
 
     match = True
     if data_type is DataType.cpg:
-        if snp is SNPType.snp_excluded or snp is SNPType.snp_excluded_weak:
+        if snp is SNPType.snp_excluded or snp is SNPType.snp_excluded_weak or SNPType.snp_cluster:
             if curr_snp != '' or curr_snp_10 != '':
                 match = False
     elif data_type is DataType.gene or data_type is DataType.bop:
@@ -128,4 +128,12 @@ def geo_type_condition(config, annotation):
 
     return match
 
+def is_included(config, annotation):
+    excluded = config.excluded
+    cpg = annotation[Annotation.cpg.value]
 
+    match = True
+    if cpg in excluded:
+        match = False
+
+    return match

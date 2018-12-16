@@ -18,6 +18,7 @@ from config.types.attributes.cell_pop import *
 from infrastructure.load.annotations import *
 from infrastructure.load.attributes import *
 from infrastructure.load.cell_pop import *
+from infrastructure.load.excluded import *
 from infrastructure.load.indexes import get_indexes
 import socket
 import getpass
@@ -126,6 +127,7 @@ class Config:
             self.annotations = load_annotations(self)
             self.attributes = load_attributes(self)
             self.cell_pop = load_cell_pop(self)
+            self.excluded = load_excluded(self)
             self.indexes = get_indexes(self)
 
         # Aux data

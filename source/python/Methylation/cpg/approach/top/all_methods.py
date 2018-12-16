@@ -47,7 +47,7 @@ genders = [Gender.any, Gender.M, Gender.F]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.cluster_DBSCAN,
+    Method.linreg_variance_ols,
 ]
 method_params = [{}]
 
