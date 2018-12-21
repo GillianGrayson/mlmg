@@ -3,7 +3,7 @@ from config.types.attributes.common import Disease, Gender
 
 
 def get_indexes(config):
-    geo_accessions = config.attributes[Attribute.geo_accession.value]
+    geo_accessions = config.attributes[Attribute.age.value]
     indexes = list(range(0, len(geo_accessions)))
 
     if Attribute.gender.value in config.attributes:

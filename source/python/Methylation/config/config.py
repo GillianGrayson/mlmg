@@ -133,6 +133,6 @@ class Config:
         # Aux data
         self.print_rate = 10000
         self.num_skip_lines = 1
-        self.miss_tag = 'NULL'
+        self.miss_tag = 'NA'
         self.test_part = 0.25
         self.shift = 5

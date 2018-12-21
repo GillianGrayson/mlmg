@@ -16,6 +16,7 @@ class DataBase(Enum):
     GSE30870 = 'GSE30870'
     GSE61256 = 'GSE61256'
     GSE63347 = 'GSE63347'
+    GSE74486 = 'GSE74486'
     GSE52588_TEST = 'GSE52588_TEST'
     GSE87571 = 'GSE87571'
     liver = 'liver'
