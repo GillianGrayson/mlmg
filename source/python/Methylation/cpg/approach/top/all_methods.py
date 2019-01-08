@@ -32,7 +32,7 @@ def top_proc(config):
     elif config.method is Method.cluster_DBSCAN:
         save_top_cluster_DBSCAN(config)
 
-data_bases = [DataBase.GSE87571]
+data_bases = [DataBase.GSE40279]
 data_type = DataType.cpg
 
 cross_reactives = [CrossReactiveType.cross_reactive_excluded]
@@ -47,7 +47,7 @@ genders = [Gender.any, Gender.M, Gender.F]
 scenario = Scenario.approach
 approach = Approach.top
 methods = [
-    Method.linreg_variance_ols,
+    Method.linreg_ols,
 ]
 method_params = [{}]
 

@@ -1,11 +1,11 @@
 clear all;
 
 cpgs = string(importdata('cpgs.txt'));
-prefix = 'class_3_';
+prefix = 'tmp_';
 config.is_plot_regions = 1;
 
 % ======== config ========
-config.data_base = 'GSE87571';
+config.data_base = 'GSE40279';
 config.data_type = 'cpg_data';
 
 config.cross_reactive = 'cross_reactive_excluded';
@@ -22,7 +22,7 @@ config.method = 'linreg_ols';
 config.suffix = '_outliers_limit(0.0)_outliers_sigma(0.0)';
 
 config.disease = 'any';
-config.gender = 'versus';
+config.gender = 'any';
 
 config.is_clustering = 0;
 
@@ -53,6 +53,8 @@ for cpg_id = 1:size(cpgs, 1)
         plot_linreg_ols_cpg(config, cpg)
         config.gender = 'versus';
     else
+        config.gender = 'any';
+        config.color = 'k';
         plot_linreg_ols_cpg(config, cpg)
     end
     

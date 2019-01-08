@@ -19,7 +19,7 @@ def save_top_linreg_ols(config):
     print('len(dict_cpg_data): ' + str(len(dict_cpg_data)))
     print('len(approved_cpgs): ' + str(len(approved_cpgs)))
 
-    if config.method_params is None:
+    if not bool(config.method_params):
         config.method_params = {}
         config.method_params['outliers_limit'] = 0.0
         config.method_params['outliers_sigma'] = 0.0
