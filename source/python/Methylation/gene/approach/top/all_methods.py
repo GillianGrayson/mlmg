@@ -37,10 +37,10 @@ def top_proc(config):
     elif config.method is Method.linreg_ols:
         save_top_linreg_ols(config)
 
-data_base = DataBase.GSE87571
+data_base = DataBase.GSE40279
 data_type = DataType.gene
 
-cross_reactives = [CrossReactiveType.cross_reactive_excluded]
+cross_reactives = [CrossReactiveType.cross_reactive_excluded_weak]
 snps = [SNPType.snp_excluded_weak]
 
 chromosome_type = ChromosomeType.non_gender
